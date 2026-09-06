@@ -1,0 +1,834 @@
+:root {
+  /* Warm Kindergarten Palette */
+  --primary-coral: #FF6B4A;
+  --primary-coral-soft: #FFEFEA;
+  --secondary-yellow: #FFD23F;
+  --secondary-yellow-soft: #FFF9E6;
+  --kids-mint: #2EC4B6;
+  --kids-mint-soft: #E6FAF8;
+  --kids-sky: #4EA8DE;
+  --kids-sky-soft: #EDF6FC;
+  --kids-purple: #9D4EDD;
+  
+  --bg-cream: #FDFBF7;
+  --surface-white: #FFFFFF;
+  --text-main: #2D3142;
+  --text-muted: #6C757D;
+  --text-light: #9EA5B0;
+  
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 20px 45px rgba(255, 107, 74, 0.12);
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-full: 9999px;
+  
+  --font-display: 'Jua', sans-serif;
+  --font-body: 'Noto Sans KR', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-cream);
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Global Top Navigation */
+.global-header {
+  background: var(--surface-white);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color: var(--primary-coral);
+}
+
+.logo-badge {
+  background: var(--primary-coral-soft);
+  color: var(--primary-coral);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.mode-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: #F1F3F5;
+  color: var(--text-main);
+}
+
+.mode-switch-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.mode-switch-btn.active-teacher {
+  background: var(--primary-coral-soft);
+  color: var(--primary-coral);
+}
+
+.mode-switch-btn.active-kids {
+  background: var(--kids-mint-soft);
+  color: var(--kids-mint);
+}
+
+/* Main Container Views */
+.view-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.view-section {
+  display: none;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.view-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   VIEW 1: Role Selector (첫 화면 대문)
+   ========================================================================== */
+.selector-hero {
+  text-align: center;
+  padding: 4.5rem 1.5rem 2.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.welcome-badge {
+  display: inline-block;
+  background: var(--surface-white);
+  border: 2px dashed var(--secondary-yellow);
+  color: #D97706;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.4rem 1.2rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 1.2rem;
+}
+
+.selector-title {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  line-height: 1.3;
+  margin-bottom: 0.8rem;
+  color: #1F2937;
+}
+
+.selector-title span {
+  color: var(--primary-coral);
+}
+
+.selector-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+}
+
+.cards-grid {
+  max-width: 1000px;
+  margin: 1.5rem auto 5rem;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+}
+
+.role-card {
+  background: var(--surface-white);
+  border-radius: var(--radius-lg);
+  padding: 3rem 2.2rem;
+  box-shadow: var(--shadow-md);
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+}
+
+.role-card.teacher-card::before {
+  background: linear-gradient(90deg, #FF6B4A, #FFB26B);
+}
+
+.role-card.kids-card::before {
+  background: linear-gradient(90deg, #2EC4B6, #4EA8DE);
+}
+
+.role-card:hover {
+  transform: translateY(-12px);
+}
+
+.role-card.teacher-card:hover {
+  border-color: var(--primary-coral-soft);
+  box-shadow: 0 24px 50px rgba(255, 107, 74, 0.16);
+}
+
+.role-card.kids-card:hover {
+  border-color: var(--kids-mint-soft);
+  box-shadow: 0 24px 50px rgba(46, 196, 182, 0.2);
+}
+
+.role-avatar {
+  font-size: 4.8rem;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+  animation: floatBounce 3s ease-in-out infinite;
+}
+
+.role-card.kids-card .role-avatar {
+  animation-delay: 1.5s;
+}
+
+@keyframes floatBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.role-heading {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  color: var(--text-main);
+}
+
+.role-desc {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 1.8rem;
+  line-height: 1.6;
+}
+
+.feature-pill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  margin-bottom: 2.2rem;
+  text-align: left;
+}
+
+.feature-pill-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  background: #F8F9FA;
+  font-size: 0.95rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.role-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 1.1rem 1.8rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.role-btn.teacher-btn {
+  background: var(--primary-coral);
+  color: white;
+  box-shadow: 0 8px 20px rgba(255, 107, 74, 0.35);
+}
+
+.role-btn.teacher-btn:hover {
+  background: #E85535;
+  box-shadow: 0 12px 28px rgba(255, 107, 74, 0.45);
+}
+
+.role-btn.kids-btn {
+  background: var(--kids-mint);
+  color: white;
+  box-shadow: 0 8px 20px rgba(46, 196, 182, 0.35);
+}
+
+.role-btn.kids-btn:hover {
+  background: #25A296;
+  box-shadow: 0 12px 28px rgba(46, 196, 182, 0.45);
+}
+
+/* ==========================================================================
+   VIEW 2: Teacher Portal (교사 전용 뷰)
+   ========================================================================== */
+.portal-hero {
+  background: linear-gradient(180deg, var(--surface-white) 0%, rgba(255, 239, 234, 0.3) 100%);
+  padding: 3rem 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.portal-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.portal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--primary-coral-soft);
+  color: var(--primary-coral);
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.8rem;
+}
+
+.portal-title {
+  font-family: var(--font-display);
+  font-size: 2.3rem;
+  color: #1F2937;
+  margin-bottom: 0.5rem;
+}
+
+.portal-desc {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+/* Teacher Classroom Utilities (타이머 & 뽑기) */
+.tools-grid {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.8rem;
+}
+
+.tool-card {
+  background: var(--surface-white);
+  border-radius: var(--radius-md);
+  padding: 1.8rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.tool-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.tool-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1F2937;
+}
+
+/* Timer Widget */
+.timer-display {
+  font-family: var(--font-display);
+  font-size: 3.6rem;
+  color: var(--primary-coral);
+  text-align: center;
+  margin: 1rem 0;
+  letter-spacing: 2px;
+}
+
+.timer-presets {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.preset-btn {
+  background: #F1F3F5;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.preset-btn:hover {
+  background: var(--primary-coral-soft);
+  color: var(--primary-coral);
+}
+
+.timer-controls {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.control-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.control-btn.primary {
+  background: var(--primary-coral);
+  color: white;
+}
+
+.control-btn.secondary {
+  background: #E9ECEF;
+  color: var(--text-main);
+}
+
+/* Random Picker Widget */
+.picker-display {
+  height: 110px;
+  background: var(--secondary-yellow-soft);
+  border: 2px dashed var(--secondary-yellow);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  color: #B45309;
+  margin-bottom: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.picker-display.spinning {
+  animation: pulse 0.3s infinite alternate;
+}
+
+/* Materials Section */
+.materials-section {
+  max-width: 1200px;
+  margin: 1.5rem auto 5rem;
+  padding: 0 1.5rem;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color: #1F2937;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--surface-white);
+  padding: 0.3rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+.tab-btn {
+  border: none;
+  background: transparent;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: var(--primary-coral);
+  color: white;
+}
+
+.materials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.material-card {
+  background: var(--surface-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.material-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.material-preview {
+  height: 160px;
+  background: #F8F9FA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.badge-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary-coral);
+  box-shadow: var(--shadow-sm);
+}
+
+.material-body {
+  padding: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.material-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-bottom: 0.4rem;
+  color: #1F2937;
+}
+
+.material-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+  flex: 1;
+}
+
+.print-btn {
+  background: var(--primary-coral-soft);
+  color: var(--primary-coral);
+  border: none;
+  padding: 0.65rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.print-btn:hover {
+  background: var(--primary-coral);
+  color: white;
+}
+
+/* ==========================================================================
+   VIEW 3: Kids Playground (어린이 놀이터 뷰)
+   ========================================================================== */
+.kids-hero {
+  background: linear-gradient(180deg, #E6FAF8 0%, var(--bg-cream) 100%);
+  padding: 3rem 1.5rem 2rem;
+  text-align: center;
+}
+
+.kids-tag {
+  display: inline-block;
+  background: var(--kids-mint);
+  color: white;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  padding: 0.4rem 1.4rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(46, 196, 182, 0.3);
+}
+
+.kids-title {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  color: #0E7C7B;
+  margin-bottom: 0.8rem;
+}
+
+.kids-desc {
+  font-size: 1.25rem;
+  color: #4A5568;
+}
+
+.kids-content {
+  max-width: 1100px;
+  margin: 1.5rem auto 5rem;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+.kids-game-box {
+  background: var(--surface-white);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  box-shadow: 0 12px 35px rgba(46, 196, 182, 0.12);
+  border: 3px solid #E6FAF8;
+  text-align: center;
+}
+
+.kids-game-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: #172A3A;
+  margin-bottom: 0.5rem;
+}
+
+.kids-game-sub {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+/* Animal Quiz Grid */
+.animals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.2rem;
+}
+
+.animal-card {
+  background: #F8FBFB;
+  border: 3px solid #E0F2F1;
+  border-radius: var(--radius-md);
+  padding: 1.8rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.animal-card:hover {
+  transform: scale(1.1) translateY(-6px);
+  background: #E8F8F5;
+  border-color: var(--kids-mint);
+  box-shadow: 0 12px 24px rgba(46, 196, 182, 0.25);
+}
+
+.animal-emoji {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.animal-name {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: #172A3A;
+}
+
+/* Rainbow Piano */
+.piano-keys {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.piano-key {
+  width: 90px;
+  height: 180px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 1.2rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.piano-key:hover {
+  transform: translateY(-8px);
+}
+
+.piano-key:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.key-c { background: #FF5964; }
+.key-d { background: #F49D37; }
+.key-e { background: #E2B808; }
+.key-f { background: #35A7FF; }
+.key-g { background: #38B000; }
+.key-a { background: #7209B7; }
+.key-b { background: #F72585; }
+
+/* Sticker Board */
+.sticker-board {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.sticker-slot {
+  width: 75px;
+  height: 75px;
+  border-radius: var(--radius-full);
+  background: #FFF9E6;
+  border: 3px dashed var(--secondary-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sticker-slot:hover {
+  transform: scale(1.15) rotate(8deg);
+}
+
+/* Global Footer */
+.global-footer {
+  margin-top: auto;
+  background: var(--surface-white);
+  border-top: 1px solid var(--border-subtle);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Toast Message */
+.toast-notice {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #1F2937;
+  color: white;
+  padding: 0.8rem 1.6rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 9999;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.toast-notice.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 768px) {
+  .selector-title { font-size: 2.2rem; }
+  .kids-title { font-size: 2.5rem; }
+  .piano-key { width: 55px; height: 140px; font-size: 1.2rem; }
+}
