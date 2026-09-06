@@ -69,9 +69,9 @@
           <p class="role-desc">선생님, 친구들과 함께 큰 화면을 터치하며 신나게 배우고 노는 공간</p>
           
           <div class="feature-pill-list">
+            <div class="feature-pill-item">🍔 냠냠 버거랜드 키오스크 주문 연습</div>
             <div class="feature-pill-item">🦁 으르렁! 동물 소리 퀴즈 놀이</div>
             <div class="feature-pill-item">🎹 알록달록 딩동댕 무지개 건반</div>
-            <div class="feature-pill-item">⭐ 반짝반짝 참 잘했어요 칭찬 스티커</div>
           </div>
 
           <button class="role-btn kids-btn">
@@ -213,6 +213,20 @@
       </div>
 
       <div class="kids-content">
+
+        <!-- HIGHLIGHT: Burger Kiosk Entry Banner -->
+        <div class="kiosk-hero-banner" onclick="openKiosk()">
+          <div class="kiosk-banner-text">
+            <span class="kiosk-badge">⭐ 만 5세 실전 생활 체험 놀이</span>
+            <h2 class="kiosk-banner-title">🍔 냠냠 버거랜드<br>키오스크 주문 연습하기</h2>
+            <p class="kiosk-banner-sub">혼자서도 씩씩하게! 먹고 갈지 고르고, 맛있는 햄버거 세트를 터치해서 카드를 쏙 넣어볼까요?</p>
+            <button class="kiosk-start-btn">
+              <span>주문하러 가기</span> ➔
+            </button>
+          </div>
+          <div class="kiosk-banner-icon">🍔</div>
+        </div>
+
         <!-- Game 1: Animal Sounds -->
         <div class="kids-game-box">
           <h2 class="kids-game-title">🦁 으르렁! 동물 친구들 소리 듣기</h2>
@@ -278,6 +292,162 @@
     </section>
 
   </main>
+
+  <!-- ================================================================= -->
+  <!-- KIOSK SIMULATOR MODAL (햄버거 키오스크 실전 연습 모달)             -->
+  <!-- ================================================================= -->
+  <div id="kiosk-modal" class="kiosk-overlay">
+    <div class="kiosk-machine">
+      
+      <!-- Top Red Brand Bar -->
+      <div class="kiosk-header">
+        <div class="kiosk-brand">
+          <span>🍔</span>
+          <span>냠냠 버거랜드</span>
+        </div>
+        <div id="kiosk-step-pill" class="kiosk-step-pill">1단계: 식사 장소 선택</div>
+        <button class="kiosk-close-btn" onclick="closeKiosk()" title="키오스크 닫기">✖</button>
+      </div>
+
+      <!-- Kiosk Screen Area -->
+      <div class="kiosk-screen">
+
+        <!-- STEP 1: Dine-in or Takeout -->
+        <div id="kiosk-step-1" class="kiosk-step-box active">
+          <h2 class="kiosk-prompt-title">어디서 드실 건가요? 😋</h2>
+          <p class="kiosk-prompt-sub">원하는 버튼을 콕 눌러주세요!</p>
+
+          <div class="choice-cards-row">
+            <div class="choice-big-card" onclick="selectDining('매장')">
+              <span class="choice-icon">🍽️</span>
+              <span class="choice-name">매장에서<br>먹고 갈래요</span>
+            </div>
+            <div class="choice-big-card" onclick="selectDining('포장')">
+              <span class="choice-icon">🛍️</span>
+              <span class="choice-name">포장해서<br>가져갈래요</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Menu Selection & Cart -->
+        <div id="kiosk-step-2" class="kiosk-step-box">
+          <div class="kiosk-menu-layout">
+            <!-- Category Tabs -->
+            <div class="kiosk-tabs">
+              <button class="kiosk-tab-btn active" onclick="filterKioskCategory('burger')">🍔 햄버거</button>
+              <button class="kiosk-tab-btn" onclick="filterKioskCategory('side')">🍟 사이드</button>
+              <button class="kiosk-tab-btn" onclick="filterKioskCategory('drink')">🥤 음료수</button>
+            </div>
+
+            <!-- Food Grid -->
+            <div id="kiosk-food-grid" class="kiosk-food-grid">
+              <!-- Dynamically populated via app.js -->
+            </div>
+
+            <!-- Bottom Cart Bar -->
+            <div class="kiosk-cart-bar">
+              <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                <span style="font-family: var(--font-display); font-size: 1.1rem; color: #1F2937;">
+                  🧺 내가 담은 메뉴 (<span id="cart-total-count" style="color: #D90429;">0</span>개)
+                </span>
+                <div id="cart-items-preview" class="cart-items-preview">
+                  <span style="color: #9CA3AF; font-size: 1rem;">메뉴를 골라 담아보세요!</span>
+                </div>
+              </div>
+
+              <button id="kiosk-pay-next-btn" class="kiosk-pay-next-btn" onclick="goToPayment()" disabled>
+                <span>결제하기 ➔</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: Card Payment Simulation -->
+        <div id="kiosk-step-3" class="kiosk-step-box">
+          <div class="kiosk-payment-box">
+            <h2 class="kiosk-prompt-title">카드를 쏙 넣어주세요! 💳</h2>
+            <p class="kiosk-prompt-sub">아래 파란색 카드를 터치하면 리더기 속으로 쏙 들어갑니다.</p>
+
+            <div class="card-reader-mockup">
+              <div class="reader-slot">
+                <span class="reader-light"></span>
+              </div>
+
+              <div id="credit-card-item" class="credit-card-item" onclick="handleCardInsert()">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div class="card-chip"></div>
+                  <span style="font-size: 1.5rem;">📶</span>
+                </div>
+                <div class="card-label">어린이 튼튼카드</div>
+                <div style="font-size: 0.85rem; opacity: 0.9;">터치해서 카드 넣기 👆</div>
+              </div>
+            </div>
+
+            <div class="payment-guide-badge">
+              👆 카드를 콕 터치해 보세요!
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: SERVING FINALE ANIMATION (직원 서빙 연출) -->
+        <div id="kiosk-step-4" class="kiosk-step-box">
+          <div class="kiosk-serving-stage">
+            <div id="serving-order-number" class="order-number-banner">
+              주문 번호 : 77번
+            </div>
+
+            <h2 class="kiosk-prompt-title" style="margin-bottom: 0.5rem;">
+              맛있는 햄버거 나왔습니다! 🍔✨
+            </h2>
+            <p class="kiosk-prompt-sub" style="margin-bottom: 1.5rem;">
+              친절한 크루 선생님이 정성껏 만든 음식을 가져다 주셨어요.
+            </p>
+
+            <!-- Animated Crew Graphic Scene -->
+            <div class="crew-scene">
+              <div class="crew-head">
+                <div class="crew-cap">
+                  🍔 버거랜드
+                  <div class="crew-visor"></div>
+                </div>
+                <div class="crew-eyes">
+                  <div class="crew-eye"></div>
+                  <div class="crew-eye"></div>
+                </div>
+                <div class="crew-cheeks">
+                  <div class="crew-cheek"></div>
+                  <div class="crew-cheek"></div>
+                </div>
+                <div class="crew-smile"></div>
+              </div>
+
+              <div class="crew-body">
+                <span class="crew-nametag">친절 크루</span>
+              </div>
+
+              <!-- Food Tray held by Crew -->
+              <div class="serving-tray" id="serving-tray-items">
+                <span class="tray-food-item">🍔</span>
+                <span class="tray-food-item">🍟</span>
+                <span class="tray-food-item">🍊</span>
+              </div>
+            </div>
+
+            <div class="serving-finish-actions">
+              <button class="serving-action-btn replay" onclick="resetKiosk()">
+                🔄 다시 한 번 주문 연습하기
+              </button>
+              <button class="serving-action-btn exit" onclick="closeKiosk()">
+                ✨ 놀이터로 돌아가기
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
 
   <!-- Global Toast Notification -->
   <div id="toast-notice" class="toast-notice"></div>

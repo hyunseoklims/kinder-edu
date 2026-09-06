@@ -33,6 +33,18 @@ function playChime(freq = 523.25, duration = 0.4, type = 'sine') {
   }
 }
 
+// Speak Korean TTS helper
+function speakText(text, pitch = 1.3) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'ko-KR';
+    utter.rate = 1.0;
+    utter.pitch = pitch;
+    window.speechSynthesis.speak(utter);
+  }
+}
+
 // Global View Switching
 function switchView(viewName) {
   const views = ['selector', 'teacher', 'kids'];
@@ -117,6 +129,7 @@ function startTimer() {
       setTimeout(() => playChime(659.25, 0.4), 200);
       setTimeout(() => playChime(783.99, 0.8), 400);
       showToast('🎉 시간이 다 되었습니다! 정리해 볼까요?');
+      speakText('시간이 다 되었습니다! 우리 모두 스스로 정리해 보아요.');
     }
   }, 1000);
 }
@@ -170,10 +183,10 @@ function pickRandomStudent() {
       const finalWinner = studentNames[Math.floor(Math.random() * studentNames.length)];
       display.textContent = `⭐ ${finalWinner} ⭐`;
       
-      // Celebration sound
       playChime(587.33, 0.2);
       setTimeout(() => playChime(880, 0.5), 150);
       showToast(`✨ 오늘의 발표 대장은 [${finalWinner}] 당첨!`);
+      speakText(`오늘의 발표 대장은 ${finalWinner} 입니다!`);
     }
   }, 100);
 }
@@ -218,21 +231,11 @@ function playAnimal(animalKey) {
   const info = animalVoices[animalKey];
   if (!info) return;
 
-  // Sound effect
   playChime(info.freq, 0.4, 'triangle');
   setTimeout(() => playChime(info.freq * 1.2, 0.4, 'triangle'), 150);
   
   showToast(info.sound);
-
-  // SpeechSynthesis TTS
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(info.speech);
-    utter.lang = 'ko-KR';
-    utter.rate = 1.0;
-    utter.pitch = 1.3; // Cute high pitch for children
-    window.speechSynthesis.speak(utter);
-  }
+  speakText(info.speech);
 }
 
 // ==========================================
@@ -261,9 +264,229 @@ function toggleSticker(element) {
   const randomStar = stars[Math.floor(Math.random() * stars.length)];
   element.textContent = randomStar;
   
-  // High cheerful harp tone
   playChime(880 + Math.random() * 400, 0.35, 'sine');
   showToast('칭찬 스티커 쾅! 참 잘했어요! 👍');
+}
+
+// ==========================================================================
+// KIDS BURGER KIOSK SIMULATOR (만 5세 햄버거 키오스크 체험)
+// ==========================================================================
+const kioskData = {
+  diningType: '', // '매장' or '포장'
+  cart: [],
+  orderNumber: 77,
+  isCardInserted: false
+};
+
+const kioskMenuItems = {
+  burger: [
+    { id: 'b1', name: '불고기 버거', tag: '달콤 짭짤 최고 인기', emoji: '🍔' },
+    { id: 'b2', name: '치즈 버거', tag: '고소한 치즈가 듬뿍', emoji: '🧀🍔' },
+    { id: 'b3', name: '바삭 치킨 버거', tag: '바삭바삭 맛있는', emoji: '🍗🍔' }
+  ],
+  side: [
+    { id: 's1', name: '감자 튀김', tag: '바삭바삭 갓 튀긴', emoji: '🍟' },
+    { id: 's2', name: '치즈 스틱', tag: '치즈가 쭈욱~', emoji: '🧀' },
+    { id: 's3', name: '치킨 너겟', tag: '바삭 고소 4조각', emoji: '🍗' }
+  ],
+  drink: [
+    { id: 'd1', name: '오렌지 주스', tag: '상큼 달콤 비타민', emoji: '🍊' },
+    { id: 'd2', name: '딸기 우유', tag: '달콤하고 부드러운', emoji: '🍓' },
+    { id: 'd3', name: '시원한 물', tag: '깨끗하고 시원한', emoji: '💧' }
+  ]
+};
+
+function openKiosk() {
+  const overlay = document.getElementById('kiosk-modal');
+  if (!overlay) return;
+  
+  getAudioContext();
+  resetKiosk();
+  overlay.classList.add('active');
+  playChime(587, 0.3);
+  speakText('어서오세요! 냠냠 버거랜드입니다. 어디서 드실 건가요?');
+}
+
+function closeKiosk() {
+  const overlay = document.getElementById('kiosk-modal');
+  if (overlay) overlay.classList.remove('active');
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+function resetKiosk() {
+  kioskData.diningType = '';
+  kioskData.cart = [];
+  kioskData.orderNumber = Math.floor(Math.random() * 40) + 60; // 60~99
+  kioskData.isCardInserted = false;
+
+  showKioskStep(1);
+  renderKioskMenu('burger');
+  updateCartDisplay();
+  
+  const card = document.getElementById('credit-card-item');
+  if (card) card.classList.remove('inserting');
+}
+
+function showKioskStep(stepNum) {
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById(`kiosk-step-${i}`);
+    if (el) el.classList.remove('active');
+  }
+  const current = document.getElementById(`kiosk-step-${stepNum}`);
+  if (current) current.classList.add('active');
+
+  const stepPill = document.getElementById('kiosk-step-pill');
+  if (stepPill) {
+    const titles = ['', '1단계: 장소 선택', '2단계: 맛있는 메뉴 고르기', '3단계: 카드 결제하기', '4단계: 주문 완료!'];
+    stepPill.textContent = titles[stepNum] || '주문하기';
+  }
+}
+
+// Step 1: Select Dining Type
+function selectDining(type) {
+  kioskData.diningType = type;
+  playChime(659.25, 0.3);
+  
+  const msg = type === '매장' ? '매장에서 먹고 가기를 선택했어요! 맛있는 메뉴를 골라볼까요?' : '포장해서 가져가기를 선택했어요! 맛있는 메뉴를 골라볼까요?';
+  speakText(msg);
+  
+  setTimeout(() => {
+    showKioskStep(2);
+  }, 600);
+}
+
+// Step 2: Menu Rendering & Cart
+function filterKioskCategory(cat) {
+  const buttons = document.querySelectorAll('.kiosk-tab-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  renderKioskMenu(cat);
+  playChime(523, 0.15);
+}
+
+function renderKioskMenu(category) {
+  const container = document.getElementById('kiosk-food-grid');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const items = kioskMenuItems[category] || [];
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'kiosk-food-card';
+    card.onclick = () => addToCart(item);
+    card.innerHTML = `
+      <div class="kiosk-food-emoji">${item.emoji}</div>
+      <h3 class="kiosk-food-title">${item.name}</h3>
+      <span class="kiosk-food-tag">${item.tag}</span>
+      <button class="kiosk-add-btn">담기 ➕</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function addToCart(item) {
+  kioskData.cart.push(item);
+  playChime(784, 0.2);
+  speakText(`${item.name}를 담았어요!`);
+  updateCartDisplay();
+}
+
+function removeFromCart(index) {
+  kioskData.cart.splice(index, 1);
+  playChime(440, 0.15);
+  updateCartDisplay();
+}
+
+function updateCartDisplay() {
+  const tray = document.getElementById('cart-items-preview');
+  const countSpan = document.getElementById('cart-total-count');
+  const payBtn = document.getElementById('kiosk-pay-next-btn');
+  
+  if (!tray) return;
+  tray.innerHTML = '';
+
+  if (kioskData.cart.length === 0) {
+    tray.innerHTML = '<span style="color: #9CA3AF; font-size: 1.05rem;">메뉴를 골라 담아보세요!</span>';
+    if (countSpan) countSpan.textContent = '0';
+    if (payBtn) payBtn.disabled = true;
+    return;
+  }
+
+  if (countSpan) countSpan.textContent = kioskData.cart.length;
+  if (payBtn) payBtn.disabled = false;
+
+  kioskData.cart.forEach((item, idx) => {
+    const chip = document.createElement('div');
+    chip.className = 'cart-item-chip';
+    chip.innerHTML = `
+      <span>${item.emoji}</span>
+      <span>${item.name}</span>
+      <button class="cart-item-remove" onclick="event.stopPropagation(); removeFromCart(${idx})">✖</button>
+    `;
+    tray.appendChild(chip);
+  });
+}
+
+// Step 3: Go to Payment
+function goToPayment() {
+  if (kioskData.cart.length === 0) {
+    showToast('메뉴를 먼저 골라주세요!');
+    return;
+  }
+  showKioskStep(3);
+  playChime(659, 0.3);
+  speakText('카드를 리더기에 쏙 넣어주세요!');
+}
+
+// Step 3 -> 4: Insert Card Interaction
+function handleCardInsert() {
+  if (kioskData.isCardInserted) return;
+  kioskData.isCardInserted = true;
+
+  const card = document.getElementById('credit-card-item');
+  if (card) card.classList.add('inserting');
+
+  // Realistic terminal chime '삑-!'
+  playChime(1046.5, 0.4, 'sine');
+  showToast('💳 삑-! 결제가 완료되었습니다!');
+  speakText('결제가 완료되었습니다! 카드를 챙겨주세요.');
+
+  setTimeout(() => {
+    startServingFinale();
+  }, 1600);
+}
+
+// Step 4: The Grand Finale - Serving Animation!
+function startServingFinale() {
+  showKioskStep(4);
+  
+  const orderNumberEl = document.getElementById('serving-order-number');
+  if (orderNumberEl) orderNumberEl.textContent = `주문 번호 : ${kioskData.orderNumber}번`;
+
+  // Render ordered items on the waiter's tray
+  const tray = document.getElementById('serving-tray-items');
+  if (tray) {
+    tray.innerHTML = '';
+    const sampleItems = kioskData.cart.slice(0, 3); // show up to 3 items on tray
+    sampleItems.forEach(item => {
+      const span = document.createElement('span');
+      span.className = 'tray-food-item';
+      span.textContent = item.emoji;
+      tray.appendChild(span);
+    });
+  }
+
+  // Chimes
+  playChime(523.25, 0.3);
+  setTimeout(() => playChime(659.25, 0.3), 150);
+  setTimeout(() => playChime(783.99, 0.3), 300);
+  setTimeout(() => playChime(1046.5, 0.6), 450);
+
+  // Crew welcoming Korean voice
+  setTimeout(() => {
+    speakText(`주문하신 ${kioskData.orderNumber}번 손님, 맛있는 햄버거 나왔습니다! 맛있게 드세요!`, 1.15);
+  }, 500);
 }
 
 // Initialize on load
