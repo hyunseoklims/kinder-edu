@@ -16,16 +16,16 @@ function playChime(freq = 523.25, duration = 0.4, type = 'sine') {
     const ctx = getAudioContext();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    
+
     osc.type = type;
     osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    
+
     gain.gain.setValueAtTime(0.3, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    
+
     osc.connect(gain);
     gain.connect(ctx.destination);
-    
+
     osc.start();
     osc.stop(ctx.currentTime + duration);
   } catch (e) {
@@ -62,11 +62,11 @@ function switchView(viewName) {
   // Header Nav buttons update
   const teacherBtn = document.getElementById('nav-teacher-btn');
   const kidsBtn = document.getElementById('nav-kids-btn');
-  
+
   if (teacherBtn && kidsBtn) {
     teacherBtn.classList.remove('active-teacher');
     kidsBtn.classList.remove('active-kids');
-    
+
     if (viewName === 'teacher') teacherBtn.classList.add('active-teacher');
     if (viewName === 'kids') kidsBtn.classList.add('active-kids');
   }
@@ -111,7 +111,7 @@ function startTimer() {
   if (isTimerRunning) return;
   isTimerRunning = true;
   getAudioContext();
-  
+
   const startBtn = document.getElementById('timer-start-btn');
   if (startBtn) startBtn.textContent = '⏸️ 일시정지';
 
@@ -123,7 +123,7 @@ function startTimer() {
       clearInterval(timerInterval);
       isTimerRunning = false;
       if (startBtn) startBtn.textContent = '▶️ 시작하기';
-      
+
       // Ring celebration chimes
       playChime(523.25, 0.4);
       setTimeout(() => playChime(659.25, 0.4), 200);
@@ -166,23 +166,23 @@ const studentNames = [
 function pickRandomStudent() {
   const display = document.getElementById('picker-display');
   if (!display) return;
-  
+
   getAudioContext();
   display.classList.add('spinning');
-  
+
   let counter = 0;
   const shuffleInterval = setInterval(() => {
     const randomIdx = Math.floor(Math.random() * studentNames.length);
     display.textContent = `🎯 ${studentNames[randomIdx]}`;
     playChime(400 + counter * 20, 0.08);
     counter++;
-    
+
     if (counter >= 15) {
       clearInterval(shuffleInterval);
       display.classList.remove('spinning');
       const finalWinner = studentNames[Math.floor(Math.random() * studentNames.length)];
       display.textContent = `⭐ ${finalWinner} ⭐`;
-      
+
       playChime(587.33, 0.2);
       setTimeout(() => playChime(880, 0.5), 150);
       showToast(`✨ 오늘의 발표 대장은 [${finalWinner}] 당첨!`);
@@ -233,7 +233,7 @@ function playAnimal(animalKey) {
 
   playChime(info.freq, 0.4, 'triangle');
   setTimeout(() => playChime(info.freq * 1.2, 0.4, 'triangle'), 150);
-  
+
   showToast(info.sound);
   speakText(info.speech);
 }
@@ -263,7 +263,7 @@ function toggleSticker(element) {
   const stars = ['⭐', '🌟', '💖', '🎈', '🌻', '🍭'];
   const randomStar = stars[Math.floor(Math.random() * stars.length)];
   element.textContent = randomStar;
-  
+
   playChime(880 + Math.random() * 400, 0.35, 'sine');
   showToast('칭찬 스티커 쾅! 참 잘했어요! 👍');
 }
@@ -299,7 +299,7 @@ const kioskMenuItems = {
 function openKiosk() {
   const overlay = document.getElementById('kiosk-modal');
   if (!overlay) return;
-  
+
   getAudioContext();
   resetKiosk();
   overlay.classList.add('active');
@@ -322,7 +322,7 @@ function resetKiosk() {
   showKioskStep(1);
   renderKioskMenu('burger');
   updateCartDisplay();
-  
+
   const card = document.getElementById('credit-card-item');
   if (card) card.classList.remove('inserting');
 }
@@ -346,10 +346,10 @@ function showKioskStep(stepNum) {
 function selectDining(type) {
   kioskData.diningType = type;
   playChime(659.25, 0.3);
-  
+
   const msg = type === '매장' ? '매장에서 먹고 가기를 선택했어요! 맛있는 메뉴를 골라볼까요?' : '포장해서 가져가기를 선택했어요! 맛있는 메뉴를 골라볼까요?';
   speakText(msg);
-  
+
   setTimeout(() => {
     showKioskStep(2);
   }, 600);
@@ -402,7 +402,7 @@ function updateCartDisplay() {
   const tray = document.getElementById('cart-items-preview');
   const countSpan = document.getElementById('cart-total-count');
   const payBtn = document.getElementById('kiosk-pay-next-btn');
-  
+
   if (!tray) return;
   tray.innerHTML = '';
 
@@ -460,7 +460,7 @@ function handleCardInsert() {
 // Step 4: The Grand Finale - Serving Animation!
 function startServingFinale() {
   showKioskStep(4);
-  
+
   const orderNumberEl = document.getElementById('serving-order-number');
   if (orderNumberEl) orderNumberEl.textContent = `주문 번호 : ${kioskData.orderNumber}번`;
 
