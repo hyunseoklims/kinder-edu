@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아이꿈터 게임 | 유치원 아이들을 위한 신나는 교육 게임</title>
+  <meta name="description" content="한글 자모 맞추기, 숫자 퀴즈, 색깔 맞추기 등 유치원 아이들을 위한 재미있는 교육 게임 모음">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo" id="logo-home" onclick="showHub()">
+        <span class="logo-icon">🎮</span>
+        <span class="logo-text">아이꿈터 게임</span>
+      </div>
+      <div class="header-score" id="header-score-area" style="display:none;">
+        <span class="score-label">⭐ 점수</span>
+        <span class="score-value" id="global-score">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast"></div>
+
+  <!-- ============================================================ -->
+  <!--  HUB: 게임 선택 화면                                          -->
+  <!-- ============================================================ -->
+  <main id="view-hub" class="view active">
+    <div class="hub-hero">
+      <div class="hub-badge">🌟 유치원 교육 게임 모음</div>
+      <h1 class="hub-title">어떤 게임<br><span>할까요?</span></h1>
+      <p class="hub-sub">재미있는 게임으로 공부해요! 카드를 콕 눌러보세요</p>
+    </div>
+
+    <div class="game-cards-grid">
+
+      <!-- Game 1: 한글 자모 맞추기 -->
+      <div class="game-card card-hangul" id="card-hangul" onclick="startGame('hangul')">
+        <div class="game-card-icon">🔤</div>
+        <div class="game-card-body">
+          <h2 class="game-card-title">한글 자모 맞추기</h2>
+          <p class="game-card-desc">ㄱ ㄴ ㄷ… 자음과 모음을 찾아보아요!</p>
+          <div class="game-card-tags">
+            <span class="tag">언어</span>
+            <span class="tag">초급</span>
+          </div>
+        </div>
+        <button class="game-card-btn">게임 시작 ➔</button>
+      </div>
+
+      <!-- Game 2: 숫자 세기 퀴즈 -->
+      <div class="game-card card-number" id="card-number" onclick="startGame('number')">
+        <div class="game-card-icon">🔢</div>
+        <div class="game-card-body">
+          <h2 class="game-card-title">숫자 세기 퀴즈</h2>
+          <p class="game-card-desc">이모지를 세고 숫자를 골라봐요!</p>
+          <div class="game-card-tags">
+            <span class="tag">수학</span>
+            <span class="tag">초급</span>
+          </div>
+        </div>
+        <button class="game-card-btn">게임 시작 ➔</button>
+      </div>
+
+      <!-- Game 3: 색깔 맞추기 -->
+      <div class="game-card card-color" id="card-color" onclick="startGame('color')">
+        <div class="game-card-icon">🎨</div>
+        <div class="game-card-body">
+          <h2 class="game-card-title">색깔 맞추기</h2>
+          <p class="game-card-desc">글자가 말하는 색깔을 빨리 눌러요!</p>
+          <div class="game-card-tags">
+            <span class="tag">인지</span>
+            <span class="tag">중급</span>
+          </div>
+        </div>
+        <button class="game-card-btn">게임 시작 ➔</button>
+      </div>
+
+      <!-- Game 4: 동물 이름 맞추기 -->
+      <div class="game-card card-animal" id="card-animal" onclick="startGame('animal')">
+        <div class="game-card-icon">🐾</div>
+        <div class="game-card-body">
+          <h2 class="game-card-title">동물 이름 맞추기</h2>
+          <p class="game-card-desc">동물 소리를 듣고 이름을 골라봐요!</p>
+          <div class="game-card-tags">
+            <span class="tag">언어</span>
+            <span class="tag">초급</span>
+          </div>
+        </div>
+        <button class="game-card-btn">게임 시작 ➔</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ============================================================ -->
+  <!--  GAME VIEW: 실제 게임 화면 (공통 레이아웃)                    -->
+  <!-- ============================================================ -->
+  <main id="view-game" class="view">
+    <div class="game-top-bar">
+      <button class="back-btn" onclick="showHub()">← 게임 목록</button>
+      <div class="game-info-bar">
+        <span class="game-info-label" id="game-title-bar">게임</span>
+        <span class="score-pill">⭐ <span id="current-score">0</span>점</span>
+        <span class="round-pill">🎯 <span id="current-round">1</span> / <span id="total-rounds">10</span></span>
+      </div>
+    </div>
+
+    <!-- 진행 바 -->
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <!-- 게임 콘텐츠 영역 (JS로 채움) -->
+    <div id="game-content" class="game-content"></div>
+
+    <!-- 결과 화면 -->
+    <div id="result-screen" class="result-screen" style="display:none;">
+      <div class="result-inner">
+        <div class="result-emoji" id="result-emoji">🎉</div>
+        <h2 class="result-title" id="result-title">완료!</h2>
+        <p class="result-score-text">획득 점수: <strong id="result-score">0</strong>점</p>
+        <div class="result-stars" id="result-stars"></div>
+        <div class="result-actions">
+          <button class="result-btn retry" onclick="retryGame()">🔄 다시 하기</button>
+          <button class="result-btn home" onclick="showHub()">🏠 게임 목록</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
