@@ -1,6 +1,6 @@
 # Kinder Edu — Common UI Design System
 
-**Version: v1.3**  
+**Version: v1.4**  
 **Status: Current / Approved**
 
 > This document is the source of truth for shared visual rules across the Kinder Edu ecosystem. Service-specific UIs may differ, but they must preserve this common brand DNA.
@@ -146,6 +146,11 @@ Responsive behavior is a functional requirement, not an optional polish step.
 - Validate Main, 놀며자라, and 프로그램 pages at wide desktop, notebook/compact desktop, tablet/Desktop-site mode, and mobile widths after meaningful layout changes.
 
 ## Change Log
+
+### v1.4 — 2026-09-20
+- Shifted the brand surface from generic colored-pencil decoration toward the established webtoon visual language.
+- Use webtoon-style character drawings as the primary visual asset; UI color uses pastel fills with visible colored-pencil texture.
+- Added initial Games, Creator, and Webtoon page structures. Games intentionally omits search/categories/new-game sections until real games exist. Creator places Our Class in the sidebar. Webtoon uses a three-character hover/tap hero and three vertical episode streams.
 
 ### v1.3 — 2026-09-20
 - Adopted colored-pencil / scanned-paper editorial styling as the shared visual expression for branded surfaces.
