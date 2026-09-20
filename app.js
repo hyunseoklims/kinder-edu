@@ -1,0 +1,5 @@
+document.querySelectorAll('.nav-toggle').forEach(btn=>btn.addEventListener('click',()=>{const nav=document.querySelector('.site-nav');const open=nav.classList.toggle('open');btn.setAttribute('aria-expanded',String(open));}));
+document.querySelectorAll('a[href="#"]').forEach(a=>a.addEventListener('click',e=>e.preventDefault()));
+const apps=document.querySelectorAll('.app');const title=document.querySelector('#program-title');const msg=document.querySelector('#character-message');
+apps.forEach(app=>app.addEventListener('click',()=>{apps.forEach(x=>x.classList.remove('active'));app.classList.add('active');if(title)title.textContent=app.dataset.app;if(msg)msg.innerHTML=app.dataset.app==='Photo TwinSweep'?'와! 이번 사진도<br>잘 찍었는데?':'이 도구도 곧<br>여기서 만나요!';}));
+const analyze=document.querySelector('#analyze');if(analyze)analyze.addEventListener('click',()=>{analyze.disabled=true;analyze.textContent='분석 중…';if(msg)msg.innerHTML='사진을 차근차근<br>살펴보고 있어요.';setTimeout(()=>{analyze.disabled=false;analyze.textContent='분석 시작';if(msg)msg.innerHTML='정리가 끝났어요!<br>한번 확인해볼까요?';},1400);});
