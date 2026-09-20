@@ -1,6 +1,6 @@
 # Kinder Edu — Common UI Design System
 
-**Version: v1.1**  
+**Version: v1.2**  
 **Status: Current / Approved**
 
 > This document is the source of truth for shared visual rules across the Kinder Edu ecosystem. Service-specific UIs may differ, but they must preserve this common brand DNA.
@@ -27,8 +27,11 @@
 - Surface: white or very light warm gray.
 - Primary text: black / charcoal.
 - Secondary text: gray.
-- Brand accent: restrained, natural green.
-- Supporting colors: limited and content-dependent.
+- Primary brand: **지니쌤의 킨더에듀**. The primary audience is adult educators, especially teachers in their 30s–40s.
+- Primary UI: Charcoal `#2E2E2E` + Off White `#FAF8F4`.
+- Supporting reference accents: Pink Beige `#E7B8B0`, Sky Blue `#A7B8D9`, Warm Yellow `#F2C94C`.
+- The previous green-led visual direction is retired.
+- Accent colors must remain restrained; avoid childish rainbow palettes and cosmetics/lifestyle-brand styling.
 - Avoid excessive saturated primary colors.
 - UI remains restrained; content imagery and illustrations provide most of the color.
 
@@ -143,6 +146,12 @@ Responsive behavior is a functional requirement, not an optional polish step.
 - Validate Main, 놀며자라, and 프로그램 pages at wide desktop, notebook/compact desktop, tablet/Desktop-site mode, and mobile widths after meaningful layout changes.
 
 ## Change Log
+
+### v1.2 — 2026-09-20
+- Set the main brand name to **지니쌤의 킨더에듀** and clarified the adult-teacher audience.
+- Replaced the green-led palette with the approved reference palette: charcoal, off-white, pink beige, sky blue, and warm yellow.
+- Refined the visual target toward a professional education/editorial platform; Polychromos-like color is limited to small analogue accents.
+- Avoid childish and cosmetics/lifestyle-brand aesthetics.
 
 ### v1.1 — 2026-09-20
 - Added viewport-safety requirements.
