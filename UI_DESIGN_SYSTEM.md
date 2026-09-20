@@ -1,6 +1,6 @@
 # Kinder Edu — Common UI Design System
 
-**Version: v1.2**  
+**Version: v1.3**  
 **Status: Current / Approved**
 
 > This document is the source of truth for shared visual rules across the Kinder Edu ecosystem. Service-specific UIs may differ, but they must preserve this common brand DNA.
@@ -146,6 +146,11 @@ Responsive behavior is a functional requirement, not an optional polish step.
 - Validate Main, 놀며자라, and 프로그램 pages at wide desktop, notebook/compact desktop, tablet/Desktop-site mode, and mobile widths after meaningful layout changes.
 
 ## Change Log
+
+### v1.3 — 2026-09-20
+- Adopted colored-pencil / scanned-paper editorial styling as the shared visual expression for branded surfaces.
+- Homepage uses visible pencil strokes, paper texture, hand-drawn accents, and the Kinder Edu open-page logo while keeping functional UI readable and restrained.
+- Character and content artwork should carry the strongest colored-pencil texture; product controls remain clean.
 
 ### v1.2 — 2026-09-20
 - Set the main brand name to **지니쌤의 킨더에듀** and clarified the adult-teacher audience.
