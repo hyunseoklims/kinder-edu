@@ -1,6 +1,6 @@
 # Kinder Edu — Common UI Design System
 
-**Version: v1.0**  
+**Version: v1.1**  
 **Status: Current / Approved**
 
 > This document is the source of truth for shared visual rules across the Kinder Edu ecosystem. Service-specific UIs may differ, but they must preserve this common brand DNA.
@@ -126,14 +126,29 @@ The 프로그램 service may use a shared shell:
 
 Product UI and Brand/IP Layer remain separate. System status and errors must be communicated clearly in the product UI, not only through character dialogue.
 
-## 11. Responsive principle
+## 11. Responsive and viewport safety
 
-- Desktop fidelity is the first priority for the initial implementation.
-- Preserve the usable content/workspace area as width decreases.
-- Ratios are allowed to adapt.
-- Avoid over-designing mobile behavior before the desktop system is validated.
+Responsive behavior is a functional requirement, not an optional polish step.
+
+- No supported viewport may produce unintended horizontal page scrolling, clipped primary content, or inaccessible controls.
+- Browser zoom at 100% must be usable without requiring the user to reduce zoom.
+- Tablet browsers using **Desktop site mode** are explicitly supported. Galaxy Tab A9-class widths are part of the regression target.
+- Desktop ratios such as Main 25:50:25 and Program 1:6:3 are preferred proportions, not hard minimum widths.
+- Use fluid sizing (`minmax(0,...)`, `clamp()`, percentages, flexible gaps/padding) before changing the information architecture.
+- Grid/flex children that contain long content must be allowed to shrink (`min-width: 0`) where appropriate.
+- At compact-desktop/tablet widths, preserve the desktop composition when it remains readable by reducing gaps, padding, secondary copy, and decorative elements.
+- If the composition can no longer remain usable, switch to a tablet/mobile layout rather than allowing clipping.
+- Mobile layouts may stack content vertically.
+- Decorative artwork may crop; primary text, navigation, actions, and product workspace must not.
+- Validate Main, 놀며자라, and 프로그램 pages at wide desktop, notebook/compact desktop, tablet/Desktop-site mode, and mobile widths after meaningful layout changes.
 
 ## Change Log
+
+### v1.1 — 2026-09-20
+- Added viewport-safety requirements.
+- Added explicit support for tablet browsers in Desktop site mode, including Galaxy Tab A9-class widths.
+- Defined no-clipping/no-horizontal-scroll behavior at 100% browser zoom.
+- Clarified that desktop layout ratios must remain fluid rather than impose fixed minimum widths.
 
 ### v1.0 — 2026-09-20
 - Established the initial approved common UI design system.
