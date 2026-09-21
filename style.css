@@ -50,3 +50,12 @@ body{background:var(--toon-paper)}.main-hero{background:#fbfaf6;box-shadow:inset
 @media(max-width:650px){.creator-shell{display:block}.creator-side{position:static;height:auto;padding:24px}.creator-side nav{grid-template-columns:repeat(3,1fr)}.side-sketch{display:none}.creator-main{padding:34px 20px}.creator-head{align-items:flex-start;gap:18px}.template-grid{grid-template-columns:1fr 1fr}.classroom-panel{grid-template-columns:1fr}.toon-hero{min-height:520px}.toon-trio{height:290px}.toon-person{width:32%;height:260px!important}.toon-person i{inset:0 5px}.toon-person span{width:150px;font-size:11px}.toon-streams{display:block;padding:36px 20px}.toon-column{margin-bottom:55px}.episode.latest .episode-art{height:230px}.hero-hover-note{display:none}.subhero{padding:50px 24px}.sketch-mascot{opacity:.25;right:-80px}.content-wrap{padding:36px 20px}}
 
 .toon-person.show-info span{opacity:1;transform:translate(-50%,0)}
+
+
+/* homepage pastel-blue surface revision */
+body{background:#eaf3f9}
+.site-header{background:rgba(234,243,249,.94)}
+.main-hero{background:transparent!important;box-shadow:none;border-bottom:0}
+.main-hero:after{display:none}
+.service-grid{background:transparent!important}
+.site-footer{background:rgba(245,250,253,.78)}
