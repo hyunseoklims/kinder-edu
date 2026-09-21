@@ -59,3 +59,15 @@ body{background:#eaf3f9}
 .main-hero:after{display:none}
 .service-grid{background:transparent!important}
 .site-footer{background:rgba(245,250,253,.78)}
+
+
+/* homepage hero v1.4.1 — pastel blue + transparent character art */
+body{background:#d7eaf6}
+.site-header{background:rgba(215,234,246,.94)}
+.main-hero{height:40vh;min-height:390px;grid-template-columns:minmax(300px,34%) minmax(0,66%);padding:30px clamp(28px,6vw,100px) 0;background:transparent!important;border:0!important;box-shadow:none!important;overflow:hidden}
+.main-hero:after,.pencil-sky,.pencil-leaves,.hero-portrait,.hero-side-note,.pencil-strokes{display:none!important}
+.hero-copy{align-self:center}.hero-copy h1{font-size:clamp(40px,4.2vw,68px);line-height:1.08;letter-spacing:-.06em;margin:8px 0 16px;color:#233746}.hero-copy .lead{color:#557084;line-height:1.7}
+.hero-scene{min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center;overflow:visible}.home-hero-art{display:block;width:min(100%,1050px);height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 22px rgba(65,105,135,.10))}
+.service-grid{background:transparent!important}
+@media(max-width:950px){.main-hero{height:auto;min-height:560px;grid-template-columns:1fr;padding-top:42px}.hero-scene{height:320px}.home-hero-art{height:100%;width:100%}}
+@media(max-width:600px){body{background:#d7eaf6}.main-hero{min-height:510px;padding-left:22px;padding-right:22px}.hero-copy h1{font-size:38px}.hero-scene{height:270px;margin-left:-40px;margin-right:-40px}.home-hero-art{width:115%;max-width:none}}
