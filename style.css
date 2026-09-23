@@ -47,6 +47,17 @@ h1,h2,h3,.brand,.rail-label,.feature-copy h2,.dashboard-top h1,.block-head h2,.s
 @media(max-width:950px){.home-dashboard{grid-template-columns:70px 1fr}.home-rail{padding-left:8px;padding-right:8px}.rail-note{display:none}.home-columns{grid-template-columns:1fr}.feature-board{grid-template-columns:1fr 1fr}.feature-copy{padding:27px}.season-art{margin-right:0}}
 @media(max-width:600px){.home-dashboard{display:block}.home-rail{display:none}.home-content{padding:25px 18px 45px}.dashboard-top{align-items:center;margin-bottom:22px}.dashboard-top h1{font-size:29px}.dashboard-lead{font-size:12px}.profile-chip{padding-right:8px}.profile-chip small{display:none}.profile-chip strong{margin-left:0}.feature-board{display:block;min-height:0}.feature-copy{padding:27px 23px 25px}.feature-copy h2{font-size:34px}.feature-art{height:230px;min-height:0}.home-columns{gap:30px;margin-bottom:30px}.quick-grid{gap:7px}.quick-card{min-height:125px;padding:12px 10px}.quick-card b{font-size:12px}.quick-card small{font-size:9px}.story-feature{grid-template-columns:94px minmax(0,1fr) 18px;gap:10px}.story-feature img{width:94px;height:94px}.story-feature strong{font-size:15px}.season-strip{padding:19px;min-height:145px}.season-art{width:135px;height:95px;margin-left:8px}.season-art span{font-size:14px;right:-11px}.site-footer{display:none}}
 
+/* App-window composition: attached rail + separated main workspace */
+body.home-body{background:#eef1f7;min-height:100vh}
+body.home-body .site-header{display:none}
+body.home-body .site-footer{display:none}
+.home-dashboard{width:min(1420px,calc(100% - 72px));min-height:calc(100vh - 64px);margin:32px auto;background:transparent;grid-template-columns:92px minmax(0,1fr);align-items:stretch;box-shadow:0 22px 60px rgba(83,96,115,.12);border-radius:30px}
+.home-rail{border-radius:30px 0 0 30px;position:relative;z-index:2}
+.home-content{background:#fff;border-radius:0 30px 30px 0;padding:42px clamp(28px,4vw,66px) 62px;box-shadow:inset 1px 0 rgba(255,255,255,.8);overflow:hidden}
+.home-content:before{content:"";display:block;position:absolute;pointer-events:none}
+@media(max-width:950px){.home-dashboard{width:calc(100% - 32px);margin:16px auto;min-height:calc(100vh - 32px)}.home-content{padding:32px 28px 50px}}
+@media(max-width:600px){body.home-body .site-header{display:flex}.home-dashboard{width:100%;margin:0;display:block;min-height:0;border-radius:0;box-shadow:none}.home-content{border-radius:0;padding:25px 18px 45px}.home-rail{display:none}}
+
 * {
   box-sizing: border-box;
 }
