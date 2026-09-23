@@ -10,7 +10,7 @@
 <body class="home-body prototype-home">
   <main class="home-prototype" aria-label="킨더에듀 서비스 탐색">
     <aside class="prototype-rail" aria-label="서비스 미리보기">
-      <a class="prototype-rail-home" href="./index.html" aria-label="홈"><span aria-hidden="true">J</span></a>
+      <a class="prototype-rail-home" href="./index.html" aria-label="홈"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="m4 14 12-10 12 10M7 12v15h7v-9h5v9h6V12"/></svg></a>
       <nav class="prototype-rail-nav" aria-label="서비스">
         <a href="./programs.html" class="prototype-rail-link" data-section="programs" aria-label="프로그램" title="프로그램"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="6" width="24" height="17" rx="2"/><path d="M2 27h28M12 23l-1 4m10-4 1 4M12 14h8m-8 4h5"/></svg></a>
         <a href="./play.html" class="prototype-rail-link" data-section="magazine" aria-label="놀자 매거진" title="놀자 매거진"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 8c-4-3-8-3-12-2v19c4-1 8-1 12 2 4-3 8-3 12-2V6c-4-1-8-1-12 2ZM16 8v19M7 12c2-.4 4-.2 6 .7m-6 4c2-.4 4-.2 6 .7m6-4.7c2-1 4-1.1 6-.7m-6 5.4c2-1 4-1.1 6-.7"/></svg></a>
@@ -19,36 +19,39 @@
         <a href="./webtoon.html" class="prototype-rail-link" data-section="webtoon" aria-label="웹툰" title="웹툰"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 5h24v16h-9l-4 5-2-5H4z"/><circle cx="11" cy="12" r="2"/><circle cx="21" cy="12" r="2"/><path d="M7 18c.5-2 2-3 4-3m7 3c.5-2 1.5-3 3-3s2.5 1 3 3"/></svg></a>
         <a href="./blog.html" class="prototype-rail-link" data-section="blog" aria-label="블로그" title="블로그"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="4" width="22" height="24" rx="2"/><path d="M10 10h12m-12 5h12m-12 5h8"/></svg></a>
       </nav>
+      <span class="prototype-rail-logo" aria-hidden="true"><img src="./assets/brand/jinni-kinder-edu-direction-1.png" alt=""></span>
       <span class="prototype-rail-end" aria-hidden="true">✳</span>
     </aside>
 
+    <header class="prototype-chrome" aria-label="홈페이지 상단">
+      <span class="prototype-chrome-brand"><img src="./assets/brand/jinni-kinder-edu-direction-1.png" alt="JINNI KINDER EDU"></span>
+    </header>
+
     <section class="prototype-stage" aria-label="서비스 미리보기 화면" data-active-section="">
       <div class="prototype-scene" aria-hidden="true">
-        <img class="prototype-background" src="./assets/homepage-ui/sections/programs-background.png" alt="">
-        <img class="prototype-character" src="./assets/homepage-ui/sections/programs-character.png" alt="">
+        <img class="prototype-background" src="./assets/homepage-ui/homepage-grid-2-background-v2.png" alt="">
       </div>
-      <div class="prototype-stage-top"><span>THE TEACHER'S CREATIVE SPACE</span><span>01 — 06</span></div>
-      <div class="prototype-welcome"><p>JINNI'S KINDER EDU</p><h1>좋은 교실의<br>다음 장면을<br><em>함께 만들어요.</em></h1><span>교사를 위한 여섯 가지 이야기</span></div>
+      <img class="prototype-character prototype-character--main" src="./assets/homepage-ui/homepage-grid-2-character-bright.png" alt="" aria-hidden="true">
+      <img class="prototype-character prototype-character--programs" src="./assets/homepage-ui/sections/programs-character.png" alt="" aria-hidden="true">
+      <div class="prototype-welcome"><h1>Good Teachers<br>Brighter Tomorrows</h1><p>Small Classroom Changes<br>Make a Bigger World</p></div>
       <div class="prototype-focus-wash" aria-hidden="true"></div>
       <article class="prototype-preview" aria-live="polite" aria-label="서비스 미리보기">
         <div class="prototype-preview-head"><span id="preview-number">01 / 06</span><span>PREVIEW <i></i></span></div>
-        <div class="prototype-preview-hero"><img id="preview-image" src="./assets/brand/cards/programs-art.png" alt=""><div><small id="preview-kicker">FOR TEACHERS</small><h2 id="preview-title">프로그램</h2><p id="preview-description">교실의 하루를 돕는 도구를 만나보세요.</p></div></div>
+        <div class="prototype-preview-hero"><img id="preview-image" src="./assets/brand/cards/programs-card-art-v3.png" alt=""><div><small id="preview-kicker">FOR TEACHERS</small><h2 id="preview-title">프로그램</h2><p id="preview-description">교실의 하루를 돕는 도구를 만나보세요.</p></div></div>
         <div class="prototype-preview-bottom"><span id="preview-hint">교사를 위한 업무 도구</span><a id="preview-open" href="./programs.html" aria-label="프로그램 페이지 열기">바로가기 <span aria-hidden="true">↗</span></a></div>
       </article>
-      <div class="prototype-stage-foot"><span>EXPLORE THE SIX STORIES</span><span>✦</span></div>
     </section>
 
     <section class="prototype-services" aria-labelledby="services-title">
-      <div class="prototype-services-head"><div><p>WELCOME TO JINNI</p><h2 id="services-title">무엇을 함께<br>해볼까요?</h2></div><span>6 SERVICES · ONE CREATIVE CLASSROOM</span></div>
+      <h2 id="services-title" class="prototype-visually-hidden">서비스 바로가기</h2>
       <div class="prototype-card-grid">
-        <a class="prototype-card programs" href="./programs.html" data-section="programs"><div class="prototype-card-art"><img src="./assets/brand/cards/programs-art.png" alt=""></div><div class="prototype-card-text"><div><span>01 · FOR TEACHERS</span><h3>프로그램</h3><p>교실의 하루를 돕는 실용적인 도구</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
-        <a class="prototype-card magazine" href="./play.html" data-section="magazine"><div class="prototype-card-art"><img src="./assets/brand/cards/play-magazine-cover.png" alt=""></div><div class="prototype-card-text"><div><span>02 · PLAY & IDEAS</span><h3>놀자 매거진</h3><p>다음 주의 놀이를 미리 골라드려요</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
-        <a class="prototype-card games" href="./games.html" data-section="games"><div class="prototype-card-art"><img src="./assets/brand/cards/games-art.png" alt="" loading="lazy"></div><div class="prototype-card-text"><div><span>03 · PLAY TOGETHER</span><h3>게임</h3><p>아이들과 함께 즐기는 놀이 시간</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
-        <a class="prototype-card making" href="./create.html" data-section="making"><div class="prototype-card-art"><img src="./assets/brand/cards/making-art.png" alt="" loading="lazy"></div><div class="prototype-card-text"><div><span>04 · MAKE & SHARE</span><h3>만들기</h3><p>이름표와 카드, 우리 반의 작은 작품</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
-        <a class="prototype-card webtoon" href="./webtoon.html" data-section="webtoon"><div class="prototype-card-art"><img src="./assets/brand/cards/webtoon-art.png" alt="" loading="lazy"></div><div class="prototype-card-text"><div><span>05 · ORIGINAL STORIES</span><h3>웹툰</h3><p>《공무가》 속 인물들의 이야기</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
-        <a class="prototype-card blog" href="./blog.html" data-section="blog"><div class="prototype-card-art"><img src="./assets/brand/cards/blog-art-clean.png" alt="" loading="lazy"></div><div class="prototype-card-text"><div><span>06 · NOTES & IDEAS</span><h3>블로그</h3><p>교실과 일상에서 발견한 생각들</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
+        <a class="prototype-card programs" href="./programs.html" data-section="programs"><div class="prototype-card-art"><img src="./assets/brand/cards/programs-card-art-v3.png" alt=""></div><div class="prototype-card-text"><div><span>01 · FOR TEACHERS</span><h3>프로그램</h3><p>교실의 하루를 돕는 실용적인 도구</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
+        <a class="prototype-card magazine" href="./play.html" data-section="magazine"><div class="prototype-card-art"><img src="./assets/brand/cards/play-magazine-card-art-v2.png" alt=""></div><div class="prototype-card-text"><div><span>02 · PLAY & IDEAS</span><h3>놀자 매거진</h3><p>다음 주의 놀이를 미리 골라드려요</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
+        <a class="prototype-card games" href="./games.html" data-section="games"><div class="prototype-card-art"><img src="./assets/brand/cards/games-card-art-v2.png" alt="" loading="lazy"></div><div class="prototype-card-text"><div><span>03 · PLAY TOGETHER</span><h3>게임</h3><p>아이들과 함께 즐기는 놀이 시간</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
+        <a class="prototype-card making" href="./create.html" data-section="making"><div class="prototype-card-art"><img src="./assets/brand/cards/making-card-art-v2.png" alt="" loading="lazy"></div><div class="prototype-card-text"><div><span>04 · MAKE & SHARE</span><h3>만들기</h3><p>이름표와 카드, 우리 반의 작은 작품</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
+        <a class="prototype-card webtoon" href="./webtoon.html" data-section="webtoon"><div class="prototype-card-art"><img src="./assets/brand/cards/webtoon-card-art-v2.png" alt="" loading="lazy"></div><div class="prototype-card-text"><div><span>05 · ORIGINAL STORIES</span><h3>웹툰</h3><p>《공무가》 속 인물들의 이야기</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
+        <a class="prototype-card blog" href="./blog.html" data-section="blog"><div class="prototype-card-art"><img src="./assets/brand/cards/blog-card-art-v2.png" alt="" loading="lazy"></div><div class="prototype-card-text"><div><span>06 · NOTES & IDEAS</span><h3>블로그</h3><p>교실과 일상에서 발견한 생각들</p></div><span class="prototype-card-arrow" aria-hidden="true">↗</span></div></a>
       </div>
-      <div class="prototype-services-foot"><span>JINNI / KINDER EDU</span><span>FOR A BETTER TOMORROW</span></div>
     </section>
   </main>
   <script src="./app.js"></script>

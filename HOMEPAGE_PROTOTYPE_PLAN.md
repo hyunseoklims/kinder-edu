@@ -20,6 +20,29 @@
 
 화면은 세 개의 그리드로 나눈다.
 
+### 확정된 데스크톱 비율 기준 (HOMEPAGE_UI.png)
+
+- 시안에서 읽은 원래 수치는 전체 1672×941px, 앱 프레임 약 1607×874px, 사이드바 약 102px, 상단 바 약 64px, Grid 2 약 881×810px, Grid 3 약 624×810px이다. 이는 측정 근거이지 실제 제작 치수가 아니다.
+- **실제 제작 치수는 모두 끝자리를 0으로 맞춘다.** 데스크톱 기준 화면 1680×940px, 앱 프레임 1600×870px로 확정한다. 브라우저 100% 확대에서 이 비율을 기준으로 삼되, 다른 화면에서는 찌그러뜨리지 않고 반응형으로 대응한다.
+- 실제 Grid 2 배경은 **880×810px(약 1.09:1)**이다. 전체 화면 비율 16:9 또는 기존 4:3 배경을 Grid 2의 비율로 혼동하지 않는다.
+- 실제 앱 프레임 가로 비율은 사이드바 100px + Grid 2 880px + Grid 3 620px = 1600px이다. 사이드바 제외 본문에서 Grid 2 / Grid 3은 약 58.7% / 41.3%다.
+- 실제 앱 프레임 세로 비율은 상단 공통 창 바 60px + 콘텐츠 810px = 870px이다. 기준 화면의 프레임 바깥 여백은 좌우 40px, 위 30px, 아래 40px이다.
+- 상단은 실제 창 바 영역이다. 전신 인물은 배경과 분리된 오버레이로 이 창 바 위까지 돌출한다. 하단은 별도 카드 그리드가 아니라 앱 프레임 바깥의 인물 돌출 여백이다. Grid 2의 `overflow:hidden`으로 머리나 다리를 자르지 않는다.
+
+| 실제 화면 요소 | 표시 크기 | 세부 기준 |
+|---|---:|---|
+| Grid 1 사이드바 | 100×870px | 아이콘 클릭 영역 50×50px, 세로 간격 30px |
+| 상단 공통 창 바 | 1500×60px | Grid 2와 Grid 3 위에 걸침; 검색 200×40px, 벨·프로필 각각 40×40px |
+| Grid 2 배경 영역 | 880×810px | 전신 캐릭터를 별도 오버레이로 배치 |
+| 인물 오버레이 표시 상자 | 600×900px | 상단 바 60px, 프레임 하단 30px까지 돌출 |
+| Grid 3 독립 흰 창 | 620×810px | 카드 2열×3행 |
+| 카드 그리드 내부 | 580×760px | 좌우 여백 20px, 위 20px, 아래 30px |
+| 카드 1장 | 280×240px | 가로·세로 간격 각각 20px |
+| 카드 그림 표시 영역 | 260×130px | 카드 내부 별도 텍스트 영역 확보 |
+| hover 미리보기 창 | 500×360px | Grid 2 폭의 약 57% |
+
+이미지 제작 원본은 표시 크기의 2배를 기준으로 한다: Grid 2 배경 1760×1620px, 투명 전신 인물 1200×1800px, 카드 그림 520×260px. 도면은 `assets/homepage-ui/HOMEPAGE_UI_DIMENSIONS.png`에 저장한다. 원본 시안은 카드 4장이지만 현재 확정 요구에 맞춰 6장으로 재계산했다.
+
 ```text
 ┌────────────┬────────────────────────┬──────────────────────┐
 │ Grid 1     │ Grid 2                 │ Grid 3               │
@@ -112,7 +135,7 @@ easing: cubic-bezier(.22, 1, .36, 1)
 6개 서비스마다 배경 1장과 인물 1장을 제작한다. 총 12개 에셋이다.
 
 ```text
-배경: 1600×1200px, 4:3, PNG 또는 최종 웹 최적화 이미지
+배경: Grid 2 표시 880×810px, 제작 원본 1760×1620px (약 1.09:1), PNG 또는 최종 웹 최적화 이미지
 인물: 1200×1800px 기준, 투명 PNG
 ```
 
@@ -179,7 +202,7 @@ assets/homepage-ui/sections/
 ## 8. 구현 순서
 
 1. `index.html`에 3그리드 골격과 6개 아이콘·카드를 구성한다.
-2. Grid 2 기본 상태에 프로그램 배경과 전신 캐릭터를 연결한다.
+2. Grid 2 기본 상태에 메인 배경과 메인 전신 캐릭터를 연결한다. 프로그램용 배경·캐릭터를 홈 기본 상태로 대체하지 않는다.
 3. 아이콘 hover/focus 상태와 Grid 2 미리보기 데이터 교체를 구현한다.
 4. blur·focus·parallax 애니메이션을 CSS로 추가한다.
 5. 프로그램 미리보기와 `programs.html` 이동을 먼저 검증한다.
@@ -203,9 +226,22 @@ assets/homepage-ui/sections/
 
 ## 10. 현재 제작 상태
 
+- 로컬 홈 기본 화면은 메인용 배경 `assets/homepage-ui/homepage-grid-2-background-v2.png` (1760×1620)과 메인용 투명 전신 인물 `assets/homepage-ui/homepage-grid-2-character-bright.png`을 별도 레이어로 사용한다. 프로그램용 에셋은 홈 기본 상태에서 제거했다.
+- 로컬 레이아웃은 1680×940 기준의 100/880/620 가로 구획, 60/810 세로 구획을 비율로 구현했다. 인물은 상단 창 바와 하단 프레임 밖으로 돌출한다. 6개 카드는 2열×3행으로 배치한다.
+- 현재 변경은 로컬 작업본이며 아직 Git push/Vercel 배포 상태를 뜻하지 않는다.
 - 프로그램용 배경: `assets/homepage-ui/sections/programs-background.png` (1448×1086, 4:3)
 - 프로그램용 투명 전신 캐릭터: `assets/homepage-ui/sections/programs-character.png` (1024×1536, 2:3). 바깥 픽셀의 알파값 0 확인.
 - `index.html`, `style.css`, `app.js`에 3그리드, 6개 카드, hover 미리보기와 블러 전환을 구현했다.
 - 블로그는 글을 지어내지 않은 준비 중 페이지로 연결한다.
 - 나머지 5개 섹션의 배경·인물 에셋은 아직 제작하지 않았다. 현재 미리보기는 공통 프로그램 배경·인물 위에서 카테고리별 콘텐츠만 바뀐다.
 - 폭 1024px 이상은 3그리드, 그 이하는 읽기 쉬운 세로 배치로 전환한다.
+
+### 2026-09-24 homepage refinement
+
+- Grid 1 home control uses a simple house line icon; the standalone `J` is removed.
+- Direction 1 logo is placed at the upper-right of the desktop frame and in the mobile rail. The previous `JINNI / KINDER EDU` text is removed.
+- Program hover crossfades the main character into `assets/homepage-ui/sections/programs-character.png`; both character layers use the same 1024×1536 frame, and the program layer is clipped at the lower edge for a knee-up composition. Leaving hover clears the active section and restores the main character.
+- New transparent 1774×887 card illustrations are saved in `assets/brand/cards/*-card-art-v2.png`. The six cards place the HTML title/copy on the left and art on the right with a diagonal clip; each uses its established pastel color. The magazine artwork uses the existing SD heroine as the cover model.
+- `index.html`, `app.js`, and `style.css` point to the Direction 1 logo and six v2 artworks and implement the updated layout/transitions.
+- Browser appearance and pointer-motion check remain pending. These changes are local and are not a commit or deployment.
+- Programs artwork was revised once more after review to remove unintended props; the selected single-laptop version is `assets/brand/cards/programs-card-art-v3.png` and is referenced by the card and hover preview. The v2 file is preserved as an earlier draft.

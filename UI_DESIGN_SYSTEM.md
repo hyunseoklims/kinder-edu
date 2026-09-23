@@ -1,6 +1,6 @@
 # Kinder Edu — Common UI Design System
 
-**Version: v1.4**  
+**Version: v1.5**  
 **Status: Current / Approved**
 
 > This document is the source of truth for shared visual rules across the Kinder Edu ecosystem. Service-specific UIs may differ, but they must preserve this common brand DNA.
@@ -23,17 +23,16 @@
 
 ## 2. Color
 
-- Background: white / warm white / off-white.
-- Surface: white or very light warm gray.
-- Primary text: black / charcoal.
-- Secondary text: gray.
+- **Approved 3 Core Brand Colors:**
+  - **SEASHELL (`#FAF0EA`)**: Base Canvas & Warm Paper Surface
+  - **OLD ROSE (`#E19AA6`)**: Primary Warm Accent, Highlights, Warm Badges/Borders
+  - **SKY BLUE (`#82B0CE`)**: Primary Cool Accent, Dock/Tool Accents, Interaction Links
+- **Primary Text:** Charcoal `#2E2E2E`
+- **Secondary Text:** Warm Gray `#7E7872`
+- **Line/Border:** Soft Warm Gray `#E8DDD5`
 - Primary brand: **지니쌤의 킨더에듀**. The primary audience is adult educators, especially teachers in their 30s–40s.
-- Primary UI: Charcoal `#2E2E2E` + Off White `#FAF8F4`.
-- Supporting reference accents: Pink Beige `#E7B8B0`, Sky Blue `#A7B8D9`, Warm Yellow `#F2C94C`.
-- The previous green-led visual direction is retired.
-- Accent colors must remain restrained; avoid childish rainbow palettes and cosmetics/lifestyle-brand styling.
-- Avoid excessive saturated primary colors.
-- UI remains restrained; content imagery and illustrations provide most of the color.
+- Accent colors must remain strictly grounded in the approved 3-color palette (Old Rose, Seashell, Sky Blue). Avoid childish rainbow palettes.
+- UI remains restrained; content imagery and illustrations provide visual warmth.
 
 ## 3. Panels and cards
 
@@ -146,6 +145,11 @@ Responsive behavior is a functional requirement, not an optional polish step.
 - Validate Main, 놀며자라, and 프로그램 pages at wide desktop, notebook/compact desktop, tablet/Desktop-site mode, and mobile widths after meaningful layout changes.
 
 ## Change Log
+
+### v1.5 — 2026-09-23
+- Unified color palette strictly around the 3 core brand colors: **OLD ROSE (`#E19AA6`)**, **SEASHELL (`#FAF0EA`)**, and **SKY BLUE (`#82B0CE`)**.
+- Replaced fragmented background blue/green overrides with cohesive Seashell canvas and Old Rose / Sky Blue accents across all 6 services.
+- Cleaned and consolidated `style.css` without altering existing frame/component layout structures.
 
 ### v1.4 — 2026-09-20
 - Shifted the brand surface from generic colored-pencil decoration toward the established webtoon visual language.

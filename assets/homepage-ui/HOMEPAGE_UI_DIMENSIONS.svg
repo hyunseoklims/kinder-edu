@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1400" viewBox="0 0 2400 1400" role="img" aria-labelledby="title desc">
+  <title id="title">킨더에듀 홈페이지 데스크톱 치수 도면</title>
+  <desc id="desc">1680×940 화면에 1600×870 프레임. 사이드바 100×870, 상단바 1500×60, 중앙 880×810, 우측 620×810. 우측 6개 카드는 각각 280×240.</desc>
+  <defs>
+    <style>
+      text{font-family:"Malgun Gothic","Noto Sans KR",Arial,sans-serif;fill:#243043}
+      .title{font-size:48px;font-weight:700}
+      .sub{font-size:26px;fill:#657284}
+      .section{font-size:31px;font-weight:700}
+      .metric{font-size:28px;font-weight:700}
+      .small{font-size:23px}
+      .tiny{font-size:19px}
+      .soft{fill:#718093}
+      .white{fill:white}
+      .line{stroke:#506274;stroke-width:3;fill:none}
+      .dash{stroke:#8a5fa8;stroke-width:4;stroke-dasharray:13 9;fill:#b386cf12}
+      .dim{stroke:#486274;stroke-width:3;fill:none;marker-start:url(#arrow);marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 Z" fill="#486274"/></marker>
+    <filter id="shadow"><feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#3f5160" flood-opacity=".14"/></filter>
+  </defs>
+
+  <rect width="2400" height="1400" fill="#f6f8fb"/>
+  <text x="80" y="90" class="title">홈페이지 100% 화면 기준 · 치수 도면</text>
+  <text x="80" y="135" class="sub">HOMEPAGE_UI.png의 비율을 반영한 10px 단위 구현값 · 데스크톱 기준 1680×940</text>
+
+  <!-- Scaled 1680 x 940 canvas at 80%, origin 80,210. -->
+  <rect x="80" y="210" width="1344" height="752" rx="22" fill="#e9eef5"/>
+  <rect x="112" y="234" width="1280" height="696" rx="24" fill="#fff" filter="url(#shadow)"/>
+
+  <!-- Grid 1: 100 x 870. -->
+  <path d="M136 234H192V930H136Q112 930 112 906V258Q112 234 136 234Z" fill="#e99a98"/>
+  <text x="152" y="275" text-anchor="middle" class="small white">1</text>
+  <text x="152" y="310" text-anchor="middle" class="tiny white">100</text>
+  <g fill="none" stroke="#fff" stroke-width="3">
+    <rect x="132" y="330" width="40" height="40" rx="12"/>
+    <rect x="132" y="394" width="40" height="40" rx="12"/>
+    <rect x="132" y="458" width="40" height="40" rx="12"/>
+    <rect x="132" y="522" width="40" height="40" rx="12"/>
+    <rect x="132" y="586" width="40" height="40" rx="12"/>
+    <rect x="132" y="650" width="40" height="40" rx="12"/>
+  </g>
+  <text x="152" y="875" text-anchor="middle" class="tiny white">아이콘</text>
+
+  <!-- Top chrome 1500 x 60. -->
+  <rect x="192" y="234" width="1200" height="48" fill="#fff"/>
+  <circle cx="224" cy="258" r="7" fill="#ea9997"/>
+  <circle cx="247" cy="258" r="7" fill="#f0c779"/>
+  <circle cx="270" cy="258" r="7" fill="#87bca9"/>
+  <text x="480" y="266" class="small" font-weight="700">상단 창 바 1500 × 60</text>
+  <rect x="1076" y="242" width="160" height="32" rx="16" fill="#f1f3f7"/>
+  <text x="1148" y="265" text-anchor="middle" class="tiny soft">검색 200×40</text>
+  <circle cx="1285" cy="258" r="16" fill="#f2f3f6"/>
+  <circle cx="1345" cy="258" r="16" fill="#f5d7d2"/>
+  <text x="1370" y="265" class="tiny soft" text-anchor="end">40×40</text>
+
+  <!-- Grid 2 880 x 810. -->
+  <rect x="192" y="282" width="704" height="648" fill="#f8f0e9"/>
+  <rect x="192" y="282" width="704" height="648" fill="none" stroke="#e5d9d0" stroke-width="2"/>
+  <text x="218" y="325" class="section">2번 그리드</text>
+  <text x="218" y="361" class="metric">880 × 810</text>
+  <text x="218" y="400" class="small soft">배경 1.09:1</text>
+  <path d="M192 840Q330 826 440 844T700 848T896 840V930H192Z" fill="#e8d4c3" opacity=".66"/>
+
+  <!-- Grid 3 620 x 810 and six cards. -->
+  <rect x="896" y="282" width="496" height="648" rx="22" fill="#fff" stroke="#e0e5eb" stroke-width="2"/>
+  <rect x="912" y="298" width="224" height="192" rx="16" fill="#fde9e9"/>
+  <rect x="1152" y="298" width="224" height="192" rx="16" fill="#fff1d9"/>
+  <rect x="912" y="506" width="224" height="192" rx="16" fill="#e7f1ff"/>
+  <rect x="1152" y="506" width="224" height="192" rx="16" fill="#e6f5ed"/>
+  <rect x="912" y="714" width="224" height="192" rx="16" fill="#efe9fa"/>
+  <rect x="1152" y="714" width="224" height="192" rx="16" fill="#f8eddf"/>
+  <g class="small" text-anchor="middle" font-weight="700">
+    <text x="1024" y="328">카드 1</text><text x="1264" y="328">카드 2</text>
+    <text x="1024" y="536">카드 3</text><text x="1264" y="536">카드 4</text>
+    <text x="1024" y="744">카드 5</text><text x="1264" y="744">카드 6</text>
+  </g>
+  <g class="small" text-anchor="middle">
+    <text x="1024" y="356">280 × 240</text><text x="1264" y="356">280 × 240</text>
+    <text x="1024" y="564">280 × 240</text><text x="1264" y="564">280 × 240</text>
+    <text x="1024" y="772">280 × 240</text><text x="1264" y="772">280 × 240</text>
+  </g>
+  <g opacity=".66">
+    <rect x="920" y="378" width="208" height="104" rx="10" fill="#f0c9c8"/>
+    <rect x="1160" y="378" width="208" height="104" rx="10" fill="#f1dfb5"/>
+    <rect x="920" y="586" width="208" height="104" rx="10" fill="#cbdff4"/>
+    <rect x="1160" y="586" width="208" height="104" rx="10" fill="#cbe9d9"/>
+    <rect x="920" y="794" width="208" height="104" rx="10" fill="#dcd0ef"/>
+    <rect x="1160" y="794" width="208" height="104" rx="10" fill="#eddbc8"/>
+  </g>
+
+  <!-- Separate character overlay; intentionally extends past chrome and frame. -->
+  <rect x="392" y="234" width="480" height="720" rx="22" class="dash"/>
+  <rect x="430" y="576" width="405" height="99" rx="17" fill="#fff" opacity=".90"/>
+  <text x="633" y="613" text-anchor="middle" class="metric" fill="#714c86">별도 투명 인물 레이어</text>
+  <text x="633" y="653" text-anchor="middle" class="metric" fill="#714c86">600 × 900</text>
+  <text x="218" y="922" class="tiny soft">창 하단</text>
+  <text x="430" y="950" class="tiny" fill="#714c86">다리 30px 돌출</text>
+
+  <!-- Main dimension arrows. -->
+  <path d="M112 994H1392" class="dim"/>
+  <text x="752" y="1035" text-anchor="middle" class="metric">앱 프레임 1600 × 870</text>
+  <path d="M192 1084H896" class="dim"/>
+  <text x="544" y="1125" text-anchor="middle" class="small">2번 폭 880</text>
+  <path d="M896 1084H1392" class="dim"/>
+  <text x="1144" y="1125" text-anchor="middle" class="small">3번 폭 620</text>
+  <text x="112" y="1185" class="small soft">가로 합계: 사이드바 100 + 중앙 880 + 우측 620 = 1600</text>
+  <text x="112" y="1235" class="small soft">세로 합계: 상단 바 60 + 콘텐츠 810 = 870 · 하단 여백 40</text>
+
+  <!-- Right-side specification. -->
+  <text x="1500" y="220" class="section">고정 제작 수치</text>
+  <path d="M1500 245H2300" class="line" opacity=".22"/>
+  <g class="small">
+    <text x="1500" y="295">기준 화면</text><text x="2280" y="295" text-anchor="end" class="metric">1680 × 940</text>
+    <text x="1500" y="350">앱 프레임</text><text x="2280" y="350" text-anchor="end" class="metric">1600 × 870</text>
+    <text x="1500" y="405">1번 사이드바</text><text x="2280" y="405" text-anchor="end" class="metric">100 × 870</text>
+    <text x="1500" y="460">상단 창 바</text><text x="2280" y="460" text-anchor="end" class="metric">1500 × 60</text>
+    <text x="1500" y="515">2번 배경 영역</text><text x="2280" y="515" text-anchor="end" class="metric">880 × 810</text>
+    <text x="1500" y="570">3번 카드 창</text><text x="2280" y="570" text-anchor="end" class="metric">620 × 810</text>
+    <text x="1500" y="625">카드 1장 · 총 6장</text><text x="2280" y="625" text-anchor="end" class="metric">280 × 240</text>
+    <text x="1500" y="680">카드 사이 간격</text><text x="2280" y="680" text-anchor="end" class="metric">20 × 20</text>
+  </g>
+  <path d="M1500 715H2300" class="line" opacity=".22"/>
+  <text x="1500" y="770" class="section">이미지 제작 수치 · 2배 해상도</text>
+  <g class="small">
+    <text x="1500" y="830">2번 배경 원본</text><text x="2280" y="830" text-anchor="end" class="metric">1760 × 1620</text>
+    <text x="1500" y="885">전신 인물 투명 PNG</text><text x="2280" y="885" text-anchor="end" class="metric">1200 × 1800</text>
+    <text x="1500" y="940">카드 그림 표시 영역</text><text x="2280" y="940" text-anchor="end" class="metric">260 × 130</text>
+    <text x="1500" y="995">카드 그림 원본</text><text x="2280" y="995" text-anchor="end" class="metric">520 × 260</text>
+    <text x="1500" y="1050">호버 미리보기 창</text><text x="2280" y="1050" text-anchor="end" class="metric">500 × 360</text>
+    <text x="1500" y="1105">사이드바 클릭 영역</text><text x="2280" y="1105" text-anchor="end" class="metric">50 × 50</text>
+  </g>
+  <rect x="1500" y="1160" width="800" height="138" rx="18" fill="#e7edf5"/>
+  <text x="1530" y="1208" class="small" font-weight="700">시안의 4카드는 최신 요구에 맞춰 2열 × 3행, 6카드로 재계산</text>
+  <text x="1530" y="1257" class="small">위 수치는 데스크톱 기준값이며 좁은 화면은 비율 유지·반응형 재배치</text>
+</svg>
