@@ -1,4 +1,9 @@
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+
+/* Softer editorial type pairing for the dashboard UI */
+body{font-family:"Noto Sans KR",sans-serif}
+h1,h2,h3,.brand,.rail-label,.feature-copy h2,.dashboard-top h1,.block-head h2,.season-strip h2{font-family:"Gowun Dodum","Noto Sans KR",sans-serif;font-weight:400}
+.site-nav,.kicker,.quick-card b,.profile-chip,.dark-button,.feature-tag,.story-feature b{font-family:"Noto Sans KR",sans-serif}
 
 /* ==========================================================================
    Kinder Edu — Unified Design System
