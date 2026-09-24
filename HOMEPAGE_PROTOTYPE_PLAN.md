@@ -244,4 +244,4 @@ assets/homepage-ui/sections/
 - New transparent 1774×887 card illustrations are saved in `assets/brand/cards/*-card-art-v2.png`. The six cards place the HTML title/copy on the left and art on the right with a diagonal clip; each uses its established pastel color. The magazine artwork uses the existing SD heroine as the cover model.
 - `index.html`, `app.js`, and `style.css` point to the Direction 1 logo and six v2 artworks and implement the updated layout/transitions.
 - Browser appearance and pointer-motion check remain pending. These changes are local and are not a commit or deployment.
-- Programs artwork was revised once more after review to remove unintended props; the selected single-laptop version is `assets/brand/cards/programs-card-art-v3.png` and is referenced by the card and hover preview. The v2 file is preserved as an earlier draft.
+- Programs artwork uses the user-provided single-laptop reference `assets/brand/cards/programs-laptop-reference.jpg`; the previous `programs-card-art-v3.png` remains preserved but is no longer referenced.
