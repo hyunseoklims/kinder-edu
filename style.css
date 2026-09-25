@@ -1483,31 +1483,24 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-character--section{clip-path:none}
 
 .prototype-card::before{content:none}
-.prototype-card-art{inset:24% -2% -4% 18%;width:auto;height:auto;margin:0;overflow:visible;clip-path:none;border-radius:0}
-.prototype-card-art img{--art-scale:1.25;--art-hover-scale:1.29;position:absolute;inset:auto 0 0 auto;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;object-position:right bottom;transform:scale(var(--art-scale));transform-origin:right bottom;mix-blend-mode:normal;transition:transform .55s var(--ease)}
-.prototype-card.programs .prototype-card-art img{--art-scale:1.2;--art-hover-scale:1.24}
-.prototype-card.games .prototype-card-art img{--art-scale:1.25;--art-hover-scale:1.3}
-.prototype-card.magazine .prototype-card-art img{--art-scale:1.05;--art-hover-scale:1.1;transform:scale(var(--art-scale))}
-.prototype-card.making .prototype-card-art img{--art-scale:1.28;--art-hover-scale:1.33}
-.prototype-card.webtoon .prototype-card-art img{--art-scale:1.3;--art-hover-scale:1.35}
-.prototype-card.blog .prototype-card-art img{--art-scale:1.45;--art-hover-scale:1.5}
-/* Design Mode card-art adjustments, converted from the 242.917 × 199.552px desktop reference box. */
-@media(min-width:1201px){
-  .prototype-card.magazine{--art-left:-19.41%;--art-top:-2.51%;--art-width:118.11%;--art-height:164.19%}
-  .prototype-card.programs{--art-left:19.19%;--art-top:-8.24%;--art-width:85.42%;--art-height:99.73%}
-  .prototype-card.games{--art-left:-4.53%;--art-top:-1.50%;--art-width:100%;--art-height:100%}
-  .prototype-card.making{--art-left:-1.23%;--art-top:-5.01%;--art-width:100%;--art-height:100%}
-  .prototype-card.webtoon{--art-left:17.63%;--art-top:-3.31%;--art-width:76.54%;--art-height:94.41%}
-  .prototype-card.blog{--art-left:.64%;--art-top:10.74%;--art-width:93.13%;--art-height:85.37%}
-  .prototype-card-art img{inset:var(--art-top) auto auto var(--art-left);width:var(--art-width);height:var(--art-height)}
-}
+/* All six 2:1 transparent canvases sit against measured desktop card edges.
+   Keep clear space above the art for card text as card height changes. */
+.prototype-card{--art-clearance:104px;--art-right:12px;--art-bottom:12px}
+.prototype-card.programs{--art-clearance:110px;--art-right:-6px;--art-bottom:12px}
+.prototype-card.games{--art-clearance:105px;--art-right:15px;--art-bottom:10px}
+.prototype-card.making{--art-clearance:100px;--art-right:8px;--art-bottom:11px}
+.prototype-card.webtoon{--art-clearance:130px;--art-right:14px;--art-bottom:15px}
+.prototype-card.blog{--art-clearance:120px;--art-right:16px;--art-bottom:15px}
+.prototype-card-art{inset:0;width:auto;height:auto;margin:0;overflow:visible;clip-path:none;border-radius:0;pointer-events:none}
+.prototype-card-art img{position:absolute;inset:auto var(--art-right) var(--art-bottom) auto;width:auto;height:calc(100% - var(--art-clearance) - var(--art-bottom));max-width:none;max-height:none;object-fit:contain;transform:none;transition:none;mix-blend-mode:normal}
+.prototype-card.magazine .prototype-card-art img{transform:none}
 .prototype-card.magazine{--card-button:#79b4d3;--card-button-hover:#609ebf;--card-button-shadow:#5f9ebd45}
 .prototype-card.programs{--card-button:#d88991;--card-button-hover:#c86f7a;--card-button-shadow:#bd717a42}
 .prototype-card.games{--card-button:#dfb64f;--card-button-hover:#ca9f32;--card-button-shadow:#b98c2545}
 .prototype-card.making{--card-button:#7dbb91;--card-button-hover:#63a879;--card-button-shadow:#5b9a7045}
 .prototype-card.webtoon{--card-button:#a492d2;--card-button-hover:#8d7abe;--card-button-shadow:#826fb145}
 .prototype-card.blog{--card-button:#c7a06e;--card-button-hover:#b28a58;--card-button-shadow:#a67e4e45}
-.prototype-card:hover .prototype-card-art img,.prototype-card:focus-visible .prototype-card-art img,.prototype-card.is-active .prototype-card-art img{transform:translate3d(-4px,-4px,0) scale(var(--art-hover-scale))}
+.prototype-card:hover .prototype-card-art img,.prototype-card:focus-visible .prototype-card-art img,.prototype-card.is-active .prototype-card-art img{transform:none}
 .prototype-card-text{position:absolute;inset:0 auto auto 0;width:72%;height:auto;display:block;padding:15px 8px 10px 15px;background:transparent}
 .prototype-card-text>div{max-width:100%}
 .prototype-card-text span:first-child{font-size:clamp(8px,.62cqw,10px);letter-spacing:.08em}
@@ -1519,11 +1512,12 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 
 @media(max-width:1200px){
   .prototype-services{border-radius:0}
-  .prototype-card-art{inset:26% -2% -5% 18%}
   .prototype-card-text{width:72%;padding:15px 8px 10px 14px}
 }
+@media(min-width:601px) and (max-width:1200px){
+  .prototype-card-grid{grid-auto-rows:minmax(clamp(240px,24vw,280px),auto)}
+}
 @media(max-width:600px){
-  .prototype-card-art{inset:25% -2% -5% 18%}
   .prototype-card-text{width:72%;padding:17px 8px 10px 16px}
   .prototype-rail{padding-right:10px}
   .prototype-rail-home{width:48px;height:48px;flex-basis:48px}
@@ -1582,4 +1576,6 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 
 @media(hover:none){
   .prototype-stage.is-previewing .prototype-character--section.is-active{transition:opacity .12s ease,filter .12s ease,transform .12s ease}
+  .prototype-card:not(.is-active) .prototype-card-open{opacity:0;transform:translateY(6px);pointer-events:none}
+  .prototype-card.is-active .prototype-card-open{opacity:1;transform:translateY(0);pointer-events:auto}
 }
