@@ -1352,8 +1352,8 @@ body.prototype-home{background:#edf0f5;color:#29313b;min-height:100vh}
 .prototype-services-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-end;margin-bottom:20px}.prototype-services-head p{font:800 10px "Manrope",sans-serif;color:#d78682;letter-spacing:.17em;margin:0 0 8px}.prototype-services-head h2{font:750 clamp(25px,2.6vw,41px) "Manrope","Noto Sans KR",sans-serif;letter-spacing:-.07em;line-height:1.2;margin:0}.prototype-services-head>span{font:800 9px "Manrope",sans-serif;letter-spacing:.09em;color:#aaaab2;max-width:135px;text-align:right;line-height:1.5}
 .prototype-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:12px;flex:1;min-height:590px}
 .prototype-card{min-width:0;min-height:0;overflow:hidden;border-radius:20px;background:#f6f5f2;border:1px solid #f1f0ee;display:flex;flex-direction:column;box-shadow:0 3px 9px #5c6c780b;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
-.prototype-card:hover,.prototype-card:focus-visible{transform:translateY(-5px);box-shadow:0 14px 28px #72818b2e;outline:none}.prototype-card-art{height:53%;min-height:86px;overflow:hidden;position:relative}.prototype-card-art img{width:100%;height:100%;object-fit:cover;object-position:center 54%;display:block;transform:scale(1.27);transition:transform .6s var(--ease)}.prototype-card:hover img,.prototype-card:focus-visible img{transform:scale(1.34) translateY(-3px)}
-.prototype-card.magazine .prototype-card-art img{object-position:center 29%;transform:scale(1.05)}.prototype-card.magazine:hover img{transform:scale(1.1) translateY(-3px)}
+.prototype-card:hover,.prototype-card:focus-visible,.prototype-card.is-active{transform:translateY(-5px);box-shadow:0 14px 28px #72818b2e;outline:none}.prototype-card-art{height:53%;min-height:86px;overflow:hidden;position:relative}.prototype-card-art img{width:100%;height:100%;object-fit:cover;object-position:center 54%;display:block;transform:scale(1.27);transition:transform .6s var(--ease)}.prototype-card:hover img,.prototype-card:focus-visible img,.prototype-card.is-active img{transform:scale(1.34) translateY(-3px)}
+.prototype-card.magazine .prototype-card-art img{object-position:center 29%;transform:scale(1.05)}.prototype-card.magazine:hover img,.prototype-card.magazine:focus-visible img,.prototype-card.magazine.is-active img{transform:scale(1.1) translateY(-3px)}
 .prototype-card-text{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;flex:1;padding:12px 13px 13px;background:#fff}.prototype-card-text>div{min-width:0}.prototype-card-text span:first-child{font:800 8px "Manrope",sans-serif;letter-spacing:.11em;color:#d08d87}.prototype-card-text h3{font:750 clamp(15px,1.45vw,21px) "Manrope","Noto Sans KR",sans-serif;letter-spacing:-.055em;margin:5px 0 3px}.prototype-card-text p{font-size:10px;color:#86909a;margin:0;line-height:1.35;word-break:keep-all}.prototype-card-arrow{width:28px;height:28px;flex:0 0 28px;display:grid;place-items:center;border-radius:50%;background:#f4f5f7;color:#5f626b;font-size:14px;transition:background .25s,color .25s,transform .25s}.prototype-card:hover .prototype-card-arrow{background:#e99894;color:#fff;transform:rotate(45deg)}
 .prototype-services-foot{display:flex;justify-content:space-between;gap:10px;padding-top:18px;font:800 9px "Manrope",sans-serif;letter-spacing:.1em;color:#b2b6bb}
 @media(max-width:1100px){.home-prototype{grid-template-columns:70px minmax(0,1fr) minmax(0,.93fr);width:calc(100% - 28px);margin:14px auto}.prototype-services{padding:28px 18px 18px}.prototype-card-grid{gap:8px}.prototype-card-text{padding:9px}.prototype-card-text p{font-size:9px}.prototype-card-art{min-height:76px}.prototype-preview{width:70%}}
@@ -1448,12 +1448,15 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card.programs{background:#fbe2e4}.prototype-card.magazine{background:#e3f2fd}.prototype-card.games{background:#fff1c9}.prototype-card.making{background:#e5f3e7}.prototype-card.webtoon{background:#eee9ff}.prototype-card.blog{background:#faf2e3}
 .prototype-card-art{position:absolute;z-index:1;inset:0 0 0 25%;width:auto;height:auto;min-height:0;margin:0;overflow:hidden;clip-path:polygon(34% 0,100% 0,100% 100%,0 100%)}
 .prototype-card-art img{position:absolute;top:-6%;right:-27%;display:block;width:auto;height:112%;max-width:none;object-fit:contain;object-position:center;transform:translate3d(0,0,0);transition:transform .68s var(--ease)}
-.prototype-card:hover .prototype-card-art img,.prototype-card:focus-visible .prototype-card-art img{transform:translate3d(-8px,-4px,0) scale(1.045)}
+.prototype-card:hover .prototype-card-art img,.prototype-card:focus-visible .prototype-card-art img,.prototype-card.is-active .prototype-card-art img{transform:translate3d(-8px,-4px,0) scale(1.045)}
 .prototype-card-text{position:relative;z-index:2;width:69%;height:100%;min-height:0;display:flex;align-items:center;justify-content:space-between;padding:12px 10px 12px 16px;background:transparent}
 .prototype-card-text>div{max-width:calc(100% - 30px)}
 .prototype-card-text span:first-child{font-size:clamp(7px,.47cqw,9px);letter-spacing:.08em}
 .prototype-card-text h3{font-size:clamp(14px,1.05cqw,18px);margin:6px 0 4px}
 .prototype-card-text p{font-size:clamp(9px,.58cqw,11px);line-height:1.35}
+.prototype-card-open{display:inline-flex;align-items:center;gap:6px;width:max-content;margin-top:9px;padding:8px 12px;border-radius:999px;background:#e99894;color:#fff;font:800 11px/1 "Manrope","Noto Sans KR",sans-serif;letter-spacing:0;opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .24s ease,transform .28s var(--ease),background .2s ease}
+.prototype-card-open:hover,.prototype-card-open:focus-visible{background:#d77f7e;outline:none}
+.prototype-card:hover .prototype-card-open,.prototype-card:focus-within .prototype-card-open,.prototype-card.is-active .prototype-card-open{opacity:1;transform:translateY(0);pointer-events:auto}
 .prototype-card-arrow{width:24px;height:24px;flex:0 0 24px}
 @media(max-width:1200px){
   .prototype-rail-logo{display:block;width:112px;height:auto;flex:0 0 112px;overflow:visible;margin-left:auto}
@@ -1488,12 +1491,13 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card.making .prototype-card-art img{--art-scale:1.28;--art-hover-scale:1.33}
 .prototype-card.webtoon .prototype-card-art img{--art-scale:1.3;--art-hover-scale:1.35}
 .prototype-card.blog .prototype-card-art img{--art-scale:1.45;--art-hover-scale:1.5}
-.prototype-card:hover .prototype-card-art img,.prototype-card:focus-visible .prototype-card-art img{transform:translate3d(-4px,-4px,0) scale(var(--art-hover-scale))}
+.prototype-card:hover .prototype-card-art img,.prototype-card:focus-visible .prototype-card-art img,.prototype-card.is-active .prototype-card-art img{transform:translate3d(-4px,-4px,0) scale(var(--art-hover-scale))}
 .prototype-card-text{position:absolute;inset:0 auto auto 0;width:72%;height:auto;display:block;padding:15px 8px 10px 15px;background:transparent}
 .prototype-card-text>div{max-width:100%}
 .prototype-card-text span:first-child{font-size:clamp(8px,.62cqw,10px);letter-spacing:.08em}
 .prototype-card-text h3{font-size:clamp(17px,1.25cqw,20px);margin:6px 0 4px}
 .prototype-card-text p{font-size:clamp(10px,.72cqw,12px);line-height:1.4}
+.prototype-card-open{font-size:clamp(10px,.68cqw,12px)}
 .prototype-card-arrow{position:absolute;top:12px;right:12px;width:28px;height:28px;transform:none}
 .prototype-card:hover .prototype-card-arrow{transform:rotate(45deg)}
 

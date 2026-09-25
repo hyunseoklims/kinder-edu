@@ -19,6 +19,7 @@ if(prototypeStage){
     blog:{number:'06 / 06',kicker:'NOTES & IDEAS',title:'블로그',description:'교실과 일상에서 발견한 생각을 기록해요.',hint:'브랜드 노트',image:'./assets/brand/cards/blog-card-art-v2.png',href:'./blog.html'}
   };
   const railLinks=[...document.querySelectorAll('.prototype-rail-link')];
+  const serviceCards=[...document.querySelectorAll('.prototype-card')];
   const sectionCharacters=[...document.querySelectorAll('.prototype-character--section')];
   const preview={number:document.querySelector('#preview-number'),kicker:document.querySelector('#preview-kicker'),title:document.querySelector('#preview-title'),description:document.querySelector('#preview-description'),hint:document.querySelector('#preview-hint'),image:document.querySelector('#preview-image'),open:document.querySelector('#preview-open')};
   let showTimer=0;
@@ -43,6 +44,9 @@ if(prototypeStage){
   }
   function hidePreview(){clearTimers();prototypeStage.classList.remove('is-previewing');prototypeStage.dataset.activeSection='';sectionCharacters.forEach(character=>character.classList.remove('is-active'));railLinks.forEach(link=>link.classList.remove('is-active'));}
   function scheduleHide(){window.clearTimeout(hideTimer);hideTimer=window.setTimeout(hidePreview,450);}
+  function setActiveCard(card){
+    serviceCards.forEach(item=>item.classList.toggle('is-active',item===card));
+  }
   railLinks.forEach(link=>{
     link.addEventListener('pointerenter',event=>{if(event.pointerType==='touch')return;clearTimers();showTimer=window.setTimeout(()=>showSection(link.dataset.section),140);});
     link.addEventListener('pointerdown',event=>{if(!isTouch()&&event.pointerType!=='touch')return;clearTimers();showSection(link.dataset.section);event.preventDefault();});
@@ -52,6 +56,12 @@ if(prototypeStage){
   });
   prototypeStage.addEventListener('pointerenter',()=>window.clearTimeout(hideTimer));
   prototypeStage.addEventListener('pointerleave',scheduleHide);
+  serviceCards.forEach(card=>{
+    card.addEventListener('pointerenter',event=>{if(event.pointerType==='touch')return;setActiveCard(card);});
+    card.addEventListener('focusin',()=>setActiveCard(card));
+    card.addEventListener('click',event=>{if(event.target.closest('.prototype-card-open'))return;event.preventDefault();setActiveCard(card);});
+    card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setActiveCard(card);}});
+  });
   document.addEventListener('keydown',event=>{if(event.key==='Escape')hidePreview();});
-  document.addEventListener('pointerdown',event=>{if(isTouch()&&!event.target.closest('.prototype-rail,.prototype-stage'))hidePreview();});
+  document.addEventListener('pointerdown',event=>{if(!event.target.closest('.prototype-card'))serviceCards.forEach(card=>card.classList.remove('is-active'));if(isTouch()&&!event.target.closest('.prototype-rail,.prototype-stage'))hidePreview();});
 }
