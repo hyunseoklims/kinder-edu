@@ -19,6 +19,7 @@ if(prototypeStage){
     blog:{number:'06 / 06',kicker:'NOTES & IDEAS',title:'블로그',description:'교실과 일상에서 발견한 생각을 기록해요.',hint:'브랜드 노트',image:'./assets/brand/cards/blog-card-art-v2.png',href:'./blog.html'}
   };
   const railLinks=[...document.querySelectorAll('.prototype-rail-link')];
+  const sectionCharacters=[...document.querySelectorAll('.prototype-character--section')];
   const preview={number:document.querySelector('#preview-number'),kicker:document.querySelector('#preview-kicker'),title:document.querySelector('#preview-title'),description:document.querySelector('#preview-description'),hint:document.querySelector('#preview-hint'),image:document.querySelector('#preview-image'),open:document.querySelector('#preview-open')};
   let showTimer=0;
   let hideTimer=0;
@@ -37,9 +38,10 @@ if(prototypeStage){
     preview.open.setAttribute('aria-label',`${item.title} 페이지 열기`);
     prototypeStage.dataset.activeSection=key;
     prototypeStage.classList.add('is-previewing');
+    sectionCharacters.forEach(character=>character.classList.toggle('is-active',character.dataset.character===key));
     railLinks.forEach(link=>link.classList.toggle('is-active',link.dataset.section===key));
   }
-  function hidePreview(){clearTimers();prototypeStage.classList.remove('is-previewing');prototypeStage.dataset.activeSection='';railLinks.forEach(link=>link.classList.remove('is-active'));}
+  function hidePreview(){clearTimers();prototypeStage.classList.remove('is-previewing');prototypeStage.dataset.activeSection='';sectionCharacters.forEach(character=>character.classList.remove('is-active'));railLinks.forEach(link=>link.classList.remove('is-active'));}
   function scheduleHide(){window.clearTimeout(hideTimer);hideTimer=window.setTimeout(hidePreview,450);}
   railLinks.forEach(link=>{
     link.addEventListener('pointerenter',event=>{if(event.pointerType==='touch')return;clearTimers();showTimer=window.setTimeout(()=>showSection(link.dataset.section),140);});
