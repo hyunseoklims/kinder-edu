@@ -1530,6 +1530,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 @media(max-width:600px){
   .prototype-stage.is-previewing .prototype-character--main,
   .prototype-stage[data-active-section] .prototype-character--main{transform:translateX(-50%)}
+  .prototype-stage.is-previewing .prototype-character--main{filter:drop-shadow(8px 15px 14px #5c49322b);opacity:.2}
 }
 
 /* All character art shares a 1024×1536 canvas. These are measured visual

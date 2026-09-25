@@ -63,5 +63,11 @@ if(prototypeStage){
     card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setActiveCard(card);}});
   });
   document.addEventListener('keydown',event=>{if(event.key==='Escape')hidePreview();});
-  document.addEventListener('pointerdown',event=>{if(!event.target.closest('.prototype-card'))serviceCards.forEach(card=>card.classList.remove('is-active'));if(isTouch()&&prototypeStage.classList.contains('is-previewing')&&!event.target.closest('.prototype-rail-link,.prototype-preview'))hidePreview();});
+  function handleDocumentPress(event){
+    if(!event.target.closest('.prototype-card'))serviceCards.forEach(card=>card.classList.remove('is-active'));
+    if(isTouch()&&prototypeStage.classList.contains('is-previewing')&&!event.target.closest('.prototype-rail-link,.prototype-preview'))hidePreview();
+  }
+  document.addEventListener('pointerdown',handleDocumentPress);
+  document.addEventListener('touchstart',handleDocumentPress,{passive:true});
+  document.addEventListener('click',handleDocumentPress);
 }
