@@ -45,7 +45,8 @@ if(prototypeStage){
   function scheduleHide(){window.clearTimeout(hideTimer);hideTimer=window.setTimeout(hidePreview,450);}
   railLinks.forEach(link=>{
     link.addEventListener('pointerenter',event=>{if(event.pointerType==='touch')return;clearTimers();showTimer=window.setTimeout(()=>showSection(link.dataset.section),140);});
-    link.addEventListener('pointerleave',()=>{window.clearTimeout(showTimer);scheduleHide();});
+    link.addEventListener('pointerdown',event=>{if(!isTouch()&&event.pointerType!=='touch')return;clearTimers();showSection(link.dataset.section);event.preventDefault();});
+    link.addEventListener('pointerleave',event=>{if(isTouch()||event.pointerType==='touch')return;window.clearTimeout(showTimer);scheduleHide();});
     link.addEventListener('focus',()=>{if(!isTouch())showSection(link.dataset.section);});
     link.addEventListener('click',event=>{if(!isTouch())return;if(prototypeStage.dataset.activeSection!==link.dataset.section){event.preventDefault();showSection(link.dataset.section);}});
   });
