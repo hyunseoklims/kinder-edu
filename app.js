@@ -11,8 +11,8 @@ document.querySelectorAll('.toon-person').forEach(p=>p.addEventListener('click',
 const prototypeStage=document.querySelector('.prototype-stage');
 if(prototypeStage){
   const services={
-    programs:{number:'01 / 06',kicker:'FOR TEACHERS',title:'프로그램',description:'교실의 하루를 돕는 도구를 만나보세요.',hint:'교사를 위한 업무 도구',image:'./assets/brand/cards/programs-laptop-reference.jpg',href:'./programs.html'},
-    magazine:{number:'02 / 06',kicker:'PLAY & IDEAS',title:'놀자 매거진',description:'다음 주의 놀이를 한눈에 살펴보세요.',hint:'주간 놀이 큐레이션',image:'./assets/brand/cards/play-magazine-card-art-v2.png',href:'./play.html'},
+    magazine:{number:'01 / 06',kicker:'PLAY & IDEAS',title:'놀자 매거진',description:'다음 주의 놀이를 한눈에 살펴보세요.',hint:'주간 놀이 큐레이션',image:'./assets/brand/cards/play-magazine-card-art-v2.png',href:'./play.html'},
+    programs:{number:'02 / 06',kicker:'FOR TEACHERS',title:'프로그램',description:'교실의 하루를 돕는 도구를 만나보세요.',hint:'교사를 위한 업무 도구',image:'./assets/brand/cards/programs-laptop-transparent.png',href:'./programs.html'},
     games:{number:'03 / 06',kicker:'PLAY TOGETHER',title:'게임',description:'아이들과 함께하는 놀이의 문을 열어요.',hint:'게임 탐색',image:'./assets/brand/cards/games-card-art-v2.png',href:'./games.html'},
     making:{number:'04 / 06',kicker:'MAKE & SHARE',title:'만들기',description:'우리 반에 필요한 결과물을 만들어보세요.',hint:'이름표 · 카드 · 스티커',image:'./assets/brand/cards/making-card-art-v2.png',href:'./create.html'},
     webtoon:{number:'05 / 06',kicker:'ORIGINAL STORIES',title:'웹툰',description:'《공무가》의 인물과 이야기를 만나보세요.',hint:'오리지널 웹툰',image:'./assets/brand/cards/webtoon-card-art-v2.png',href:'./webtoon.html'},
