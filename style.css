@@ -1526,6 +1526,10 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-stage[data-active-section] .prototype-character--main{transform:none}
 @media(min-width:1201px){
   .prototype-services{margin:1cqw 1cqw 1cqw .75cqw}
+  .prototype-preview{height:clamp(238px,16.25cqw,284px);display:flex;flex-direction:column}
+  .prototype-preview-head{flex:0 0 auto}
+  .prototype-preview-hero{flex:1 1 auto;min-height:0}
+  .prototype-preview-bottom{flex:0 0 48px;margin-top:12px}
 }
 @media(max-width:600px){
   .prototype-stage.is-previewing .prototype-character--main,
