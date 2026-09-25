@@ -1537,8 +1537,11 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-character--section[data-character="webtoon"]{--character-align-x:.7%;--character-align-y:.9%}
 .prototype-character--section[data-character="blog"]{--character-align-x:-.3%;--character-align-y:.7%}
 
-/* Keep the replacement character sharp; only the default scene is softened. */
-.prototype-stage.is-previewing .prototype-character--section.is-active{opacity:1!important;clip-path:none!important;filter:drop-shadow(8px 15px 14px #5c49322b)!important;transform:translate(var(--character-align-x),var(--character-align-y))!important}
+/* Section artwork never receives the scene blur. It fades by opacity only. */
+.prototype-character--section,
+.prototype-stage.is-previewing .prototype-character--section,
+.prototype-stage.is-previewing .prototype-character--section.is-active{filter:drop-shadow(8px 15px 14px #5c49322b)!important}
+.prototype-stage.is-previewing .prototype-character--section.is-active{opacity:1!important;clip-path:none!important;transform:translate(var(--character-align-x),var(--character-align-y))!important}
 
 /* Landscape phones can exceed the desktop breakpoint. Shift the artwork left
    without changing its original frame, size, or visible lower edge. */
