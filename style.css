@@ -1491,6 +1491,16 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card.making .prototype-card-art img{--art-scale:1.28;--art-hover-scale:1.33}
 .prototype-card.webtoon .prototype-card-art img{--art-scale:1.3;--art-hover-scale:1.35}
 .prototype-card.blog .prototype-card-art img{--art-scale:1.45;--art-hover-scale:1.5}
+/* Design Mode card-art adjustments, converted from the 242.917 × 199.552px desktop reference box. */
+@media(min-width:1201px){
+  .prototype-card.magazine{--art-left:-19.41%;--art-top:-2.51%;--art-width:118.11%;--art-height:164.19%}
+  .prototype-card.programs{--art-left:19.19%;--art-top:-8.24%;--art-width:85.42%;--art-height:99.73%}
+  .prototype-card.games{--art-left:-4.53%;--art-top:-1.50%;--art-width:100%;--art-height:100%}
+  .prototype-card.making{--art-left:-1.23%;--art-top:-5.01%;--art-width:100%;--art-height:100%}
+  .prototype-card.webtoon{--art-left:17.63%;--art-top:-3.31%;--art-width:76.54%;--art-height:94.41%}
+  .prototype-card.blog{--art-left:.64%;--art-top:10.74%;--art-width:93.13%;--art-height:85.37%}
+  .prototype-card-art img{inset:var(--art-top) auto auto var(--art-left);width:var(--art-width);height:var(--art-height)}
+}
 .prototype-card.magazine{--card-button:#79b4d3;--card-button-hover:#609ebf;--card-button-shadow:#5f9ebd45}
 .prototype-card.programs{--card-button:#d88991;--card-button-hover:#c86f7a;--card-button-shadow:#bd717a42}
 .prototype-card.games{--card-button:#dfb64f;--card-button-hover:#ca9f32;--card-button-shadow:#b98c2545}
