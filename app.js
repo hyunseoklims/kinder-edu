@@ -42,7 +42,7 @@ if(prototypeStage){
     sectionCharacters.forEach(character=>character.classList.toggle('is-active',character.dataset.character===key));
     railLinks.forEach(link=>link.classList.toggle('is-active',link.dataset.section===key));
   }
-  function hidePreview(){clearTimers();prototypeStage.classList.remove('is-previewing');prototypeStage.dataset.activeSection='';sectionCharacters.forEach(character=>character.classList.remove('is-active'));railLinks.forEach(link=>link.classList.remove('is-active'));}
+  function hidePreview(){clearTimers();prototypeStage.classList.remove('is-previewing');prototypeStage.removeAttribute('data-active-section');sectionCharacters.forEach(character=>character.classList.remove('is-active'));railLinks.forEach(link=>link.classList.remove('is-active'));}
   function scheduleHide(){window.clearTimeout(hideTimer);hideTimer=window.setTimeout(hidePreview,450);}
   function setActiveCard(card){
     serviceCards.forEach(item=>item.classList.toggle('is-active',item===card));
@@ -63,5 +63,5 @@ if(prototypeStage){
     card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setActiveCard(card);}});
   });
   document.addEventListener('keydown',event=>{if(event.key==='Escape')hidePreview();});
-  document.addEventListener('pointerdown',event=>{if(!event.target.closest('.prototype-card'))serviceCards.forEach(card=>card.classList.remove('is-active'));if(isTouch()&&!event.target.closest('.prototype-rail,.prototype-stage'))hidePreview();});
+  document.addEventListener('pointerdown',event=>{if(!event.target.closest('.prototype-card'))serviceCards.forEach(card=>card.classList.remove('is-active'));if(isTouch()&&prototypeStage.classList.contains('is-previewing')&&!event.target.closest('.prototype-rail-link,.prototype-preview'))hidePreview();});
 }
