@@ -1438,7 +1438,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 @media(max-width:1280px) and (min-width:1201px){.prototype-chrome-brand{width:clamp(125px,11cqw,165px)}}
 .prototype-character--main,.prototype-character--section{transition:opacity .58s var(--ease),filter .58s var(--ease),transform .72s var(--ease);will-change:opacity,filter,transform}
 .prototype-character--main{opacity:1;filter:drop-shadow(8px 15px 14px #5c49322b)}
-.prototype-character--section{z-index:3;opacity:0;filter:blur(10px) drop-shadow(8px 15px 14px #5c49322b);clip-path:inset(0 0 23% 0);pointer-events:none;transform-origin:50% 0}
+.prototype-character--section{z-index:3;opacity:0;filter:blur(10px) drop-shadow(8px 15px 14px #5c49322b);clip-path:none;pointer-events:none;transform-origin:50% 0;--character-align-x:0%;--character-align-y:0%}
 .prototype-stage.is-previewing .prototype-character--main{opacity:.24;filter:blur(9px) drop-shadow(8px 15px 14px #5c49322b)}
 .prototype-stage.is-previewing .prototype-character--section{opacity:0;filter:blur(10px) drop-shadow(8px 15px 14px #5c49322b)}
 .prototype-stage.is-previewing .prototype-character--section.is-active{opacity:1!important;filter:drop-shadow(8px 15px 14px #5c49322b)!important;transform:none}
@@ -1477,7 +1477,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-services{border-radius:26px}
 .prototype-character--main,.prototype-character--section{object-fit:contain}
 .prototype-character--main{clip-path:none}
-.prototype-character--section{clip-path:inset(0 0 23% 0)}
+.prototype-character--section{clip-path:none}
 
 .prototype-card::before{content:none}
 .prototype-card-art{inset:24% -2% -4% 18%;width:auto;height:auto;margin:0;overflow:visible;clip-path:none;border-radius:0}
@@ -1509,11 +1509,10 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
   .prototype-rail-home{width:48px;height:48px;flex-basis:48px}
   .prototype-rail-nav{flex:0 0 auto;overflow:visible}
   .prototype-rail-logo{display:none}
-  .prototype-character--main{left:64%;top:20%;height:80%}
-  .prototype-character--section{left:58%;top:12%;height:86%}
+  .prototype-character--main,.prototype-character--section{left:64%;top:20%;height:80%}
   .prototype-character--main{transform:translateX(-50%)}
-  .prototype-character--section{transform:translateX(-50%) scale(1.3);transform-origin:50% 0}
-  .prototype-stage.is-previewing .prototype-character--section.is-active{left:64%;top:20%;height:80%;transform:translateX(-50%)}
+  .prototype-character--section{transform:translate(calc(-50% + var(--character-align-x)),var(--character-align-y))}
+  .prototype-stage.is-previewing .prototype-character--section.is-active{left:64%;top:20%;height:80%;transform:translate(calc(-50% + var(--character-align-x)),var(--character-align-y))}
 }
 
 /* Keep the dimmed home artwork registered to the exact default coordinates. */
@@ -1527,4 +1526,32 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 @media(max-width:600px){
   .prototype-stage.is-previewing .prototype-character--main,
   .prototype-stage[data-active-section] .prototype-character--main{transform:translateX(-50%)}
+}
+
+/* All character art shares a 1024×1536 canvas. These are measured visual
+   eye/face anchor corrections only: no scale and no crop. */
+.prototype-character--section[data-character="magazine"]{--character-align-x:.8%;--character-align-y:1%}
+.prototype-character--section[data-character="programs"]{--character-align-x:1.2%;--character-align-y:-.5%}
+.prototype-character--section[data-character="games"]{--character-align-x:.7%;--character-align-y:1%}
+.prototype-character--section[data-character="making"]{--character-align-x:.4%;--character-align-y:.8%}
+.prototype-character--section[data-character="webtoon"]{--character-align-x:.7%;--character-align-y:.9%}
+.prototype-character--section[data-character="blog"]{--character-align-x:-.3%;--character-align-y:.7%}
+
+/* Keep the replacement character sharp; only the default scene is softened. */
+.prototype-stage.is-previewing .prototype-character--section.is-active{opacity:1!important;clip-path:none!important;filter:drop-shadow(8px 15px 14px #5c49322b)!important;transform:translate(var(--character-align-x),var(--character-align-y))!important}
+
+/* Landscape phones can exceed the desktop breakpoint. Shift the artwork left
+   without changing its original frame, size, or visible lower edge. */
+@media(max-width:1200px) and (orientation:landscape){
+  .prototype-character--main,.prototype-character--section{left:48%}
+}
+@media(min-width:1201px) and (orientation:landscape) and (max-height:700px){
+  .prototype-character--main,.prototype-character--section{left:11cqw}
+}
+@media(max-width:600px){
+  .prototype-stage.is-previewing .prototype-character--section.is-active{transform:translate(calc(-50% + var(--character-align-x)),var(--character-align-y))!important}
+}
+
+@media(hover:none){
+  .prototype-stage.is-previewing .prototype-character--section.is-active{transition:opacity .12s ease,filter .12s ease,transform .12s ease}
 }

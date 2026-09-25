@@ -48,7 +48,7 @@ if(prototypeStage){
     link.addEventListener('pointerdown',event=>{if(!isTouch()&&event.pointerType!=='touch')return;clearTimers();showSection(link.dataset.section);event.preventDefault();});
     link.addEventListener('pointerleave',event=>{if(isTouch()||event.pointerType==='touch')return;window.clearTimeout(showTimer);scheduleHide();});
     link.addEventListener('focus',()=>{if(!isTouch())showSection(link.dataset.section);});
-    link.addEventListener('click',event=>{if(!isTouch())return;if(prototypeStage.dataset.activeSection!==link.dataset.section){event.preventDefault();showSection(link.dataset.section);}});
+    link.addEventListener('click',event=>{event.preventDefault();showSection(link.dataset.section);});
   });
   prototypeStage.addEventListener('pointerenter',()=>window.clearTimeout(hideTimer));
   prototypeStage.addEventListener('pointerleave',scheduleHide);
