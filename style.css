@@ -1326,7 +1326,7 @@ body.prototype-home{background:#edf0f5;color:#29313b;min-height:100vh}
 .prototype-rail-link svg{width:31px;height:31px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
 .prototype-rail-label{position:absolute;left:50%;top:calc(100% + 4px);color:#fff;font:800 clamp(6px,.48cqw,9px)/1 "Manrope",sans-serif;letter-spacing:.08em;white-space:nowrap;pointer-events:none;opacity:0;transform:translate(-50%,-4px);transition:opacity .24s ease,transform .32s var(--ease)}
 .prototype-rail-link:hover .prototype-rail-label,.prototype-rail-link:focus-visible .prototype-rail-label,.prototype-rail-link.is-active .prototype-rail-label{opacity:1;transform:translate(-50%,0)}
-.prototype-rail-link:hover,.prototype-rail-link:focus-visible,.prototype-rail-link.is-active{background:#fff;color:#d77f7e;transform:translateY(-3px);box-shadow:0 8px 18px #ab60603b;outline:none}
+.prototype-rail-link:hover,.prototype-rail-link:focus-visible,.prototype-rail-link.is-active{background:#fff;color:#d77f7e;transform:none;box-shadow:0 8px 18px #ab60603b;outline:none}
 .prototype-rail-end{color:#fff8;font-size:22px}
 .prototype-stage{min-width:0;min-height:720px;position:relative;overflow:hidden;background:#efe4d9}
 .prototype-scene,.prototype-focus-wash{position:absolute;inset:0;pointer-events:none}
@@ -1347,7 +1347,7 @@ body.prototype-home{background:#edf0f5;color:#29313b;min-height:100vh}
 .prototype-preview-hero{display:grid;grid-template-columns:42% minmax(0,1fr);align-items:center;gap:14px;min-height:140px}.prototype-preview-hero img{width:100%;height:132px;object-fit:cover;object-position:center;border-radius:14px;background:#f8e9e3}
 .prototype-preview-hero small{font:800 9px "Manrope",sans-serif;letter-spacing:.1em;color:#bc8380}.prototype-preview-hero h2{font:750 clamp(18px,1.8vw,25px) "Manrope","Noto Sans KR",sans-serif;letter-spacing:-.055em;margin:6px 0}.prototype-preview-hero p{font-size:11px;line-height:1.5;color:#69717a;margin:0;word-break:keep-all}
 .prototype-preview-bottom{border-top:1px solid #e9e6e3;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:15px;padding-top:13px}.prototype-preview-bottom>span{font-size:10px;color:#8a8f97}.prototype-preview-bottom a{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:#de918b;color:#fff;font-size:11px;font-weight:700;white-space:nowrap;padding:9px 11px}
-.prototype-stage.is-previewing .prototype-scene{filter:blur(6px);opacity:.87}.prototype-stage.is-previewing .prototype-background{transform:translateX(3px) scale(1.012)}.prototype-stage.is-previewing .prototype-character{transform:translateX(calc(-50% - 12px)) translateY(-4px) scale(1.015)}.prototype-stage.is-previewing .prototype-welcome{opacity:.18;transform:translateY(-8px)}.prototype-stage.is-previewing .prototype-focus-wash{opacity:1}.prototype-stage.is-previewing .prototype-preview{opacity:1;visibility:visible}
+.prototype-stage.is-previewing .prototype-scene{filter:blur(6px);opacity:.87}.prototype-stage.is-previewing .prototype-background{transform:translateX(3px) scale(1.012)}.prototype-stage.is-previewing .prototype-character{transform:translateX(calc(-50% - 12px)) translateY(-4px) scale(1.015)}.prototype-stage.is-previewing .prototype-welcome{opacity:.18;transform:translateY(-8px)}.prototype-stage.is-previewing .prototype-focus-wash{opacity:1}.prototype-stage.is-previewing .prototype-preview{opacity:1;visibility:visible;transform:translate(-50%,0)!important}
 .prototype-services{min-width:0;display:flex;flex-direction:column;background:#fff;border-radius:0 26px 26px 0;padding:clamp(25px,2.65vw,44px) clamp(20px,2.5vw,40px) 22px;position:relative;z-index:2}
 .prototype-services-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-end;margin-bottom:20px}.prototype-services-head p{font:800 10px "Manrope",sans-serif;color:#d78682;letter-spacing:.17em;margin:0 0 8px}.prototype-services-head h2{font:750 clamp(25px,2.6vw,41px) "Manrope","Noto Sans KR",sans-serif;letter-spacing:-.07em;line-height:1.2;margin:0}.prototype-services-head>span{font:800 9px "Manrope",sans-serif;letter-spacing:.09em;color:#aaaab2;max-width:135px;text-align:right;line-height:1.5}
 .prototype-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:12px;flex:1;min-height:590px}
@@ -1403,7 +1403,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
   .prototype-rail-home,.prototype-rail-link{color:#d77f7e}
   .prototype-rail-link{width:48px;height:48px;flex:0 0 48px}
   .prototype-rail-link svg{width:28px;height:28px}
-  .prototype-rail-link:hover,.prototype-rail-link:focus-visible,.prototype-rail-link.is-active{background:#e99894;color:#fff}
+  .prototype-rail-link:hover,.prototype-rail-link:focus-visible,.prototype-rail-link.is-active{background:#e99894;color:#fff;transform:none}
   .prototype-rail-label{display:none}
   .prototype-rail-end,.prototype-chrome{display:none}
   .prototype-stage{grid-column:1;grid-row:2;min-height:clamp(520px,62vw,690px);overflow:hidden}
@@ -1441,7 +1441,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-character--section{z-index:3;opacity:0;filter:drop-shadow(8px 15px 14px #5c49322b);clip-path:none;pointer-events:none;transform-origin:50% 0;--character-align-x:0%;--character-align-y:0%}
 .prototype-stage.is-previewing .prototype-character--main{opacity:.24;filter:blur(9px) drop-shadow(8px 15px 14px #5c49322b)}
 .prototype-stage.is-previewing .prototype-character--section{opacity:0;filter:drop-shadow(8px 15px 14px #5c49322b)}
-.prototype-stage.is-previewing .prototype-character--section.is-active{opacity:1!important;filter:drop-shadow(8px 15px 14px #5c49322b)!important;transform:none}
+.prototype-stage.is-previewing .prototype-character--section.is-active{opacity:1!important;filter:drop-shadow(8px 15px 14px #5c49322b)!important;transform:translate(var(--desktop-character-x,0),var(--desktop-character-y,0))}
 .prototype-preview-hero img{object-fit:contain}
 
 .prototype-card{position:relative;display:block;isolation:isolate;overflow:hidden}
@@ -1454,8 +1454,8 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card-text span:first-child{font-size:clamp(7px,.47cqw,9px);letter-spacing:.08em}
 .prototype-card-text h3{font-size:clamp(14px,1.05cqw,18px);margin:6px 0 4px}
 .prototype-card-text p{font-size:clamp(9px,.58cqw,11px);line-height:1.35}
-.prototype-card-open{display:inline-flex;align-items:center;gap:6px;width:max-content;margin-top:9px;padding:8px 12px;border-radius:999px;background:#e99894;color:#fff;font:800 11px/1 "Manrope","Noto Sans KR",sans-serif;letter-spacing:0;opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .24s ease,transform .28s var(--ease),background .2s ease}
-.prototype-card-open:hover,.prototype-card-open:focus-visible{background:#d77f7e;outline:none}
+.prototype-card-open{position:absolute;left:15px;bottom:15px;z-index:3;display:inline-flex;align-items:center;justify-content:center;gap:6px;width:max-content;margin-top:0;padding:9px 14px;border-radius:999px;background:var(--card-button,#e99894);box-shadow:0 8px 16px var(--card-button-shadow,#bd716c38),inset 0 1px 0 #ffffff55;color:#fff;font:800 11px/1 "Manrope","Noto Sans KR",sans-serif;letter-spacing:0;text-align:center;opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .24s ease,transform .28s var(--ease),background .2s ease,box-shadow .2s ease}
+.prototype-card-open:hover,.prototype-card-open:focus-visible{background:var(--card-button-hover,var(--card-button,#d77f7e));box-shadow:0 10px 20px var(--card-button-shadow,#bd716c45),inset 0 1px 0 #ffffff66;outline:none}
 .prototype-card:hover .prototype-card-open,.prototype-card:focus-within .prototype-card-open,.prototype-card.is-active .prototype-card-open{opacity:1;transform:translateY(0);pointer-events:auto}
 .prototype-card-arrow{width:24px;height:24px;flex:0 0 24px}
 @media(max-width:1200px){
@@ -1491,6 +1491,12 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card.making .prototype-card-art img{--art-scale:1.28;--art-hover-scale:1.33}
 .prototype-card.webtoon .prototype-card-art img{--art-scale:1.3;--art-hover-scale:1.35}
 .prototype-card.blog .prototype-card-art img{--art-scale:1.45;--art-hover-scale:1.5}
+.prototype-card.magazine{--card-button:#79b4d3;--card-button-hover:#609ebf;--card-button-shadow:#5f9ebd45}
+.prototype-card.programs{--card-button:#d88991;--card-button-hover:#c86f7a;--card-button-shadow:#bd717a42}
+.prototype-card.games{--card-button:#dfb64f;--card-button-hover:#ca9f32;--card-button-shadow:#b98c2545}
+.prototype-card.making{--card-button:#7dbb91;--card-button-hover:#63a879;--card-button-shadow:#5b9a7045}
+.prototype-card.webtoon{--card-button:#a492d2;--card-button-hover:#8d7abe;--card-button-shadow:#826fb145}
+.prototype-card.blog{--card-button:#c7a06e;--card-button-hover:#b28a58;--card-button-shadow:#a67e4e45}
 .prototype-card:hover .prototype-card-art img,.prototype-card:focus-visible .prototype-card-art img,.prototype-card.is-active .prototype-card-art img{transform:translate3d(-4px,-4px,0) scale(var(--art-hover-scale))}
 .prototype-card-text{position:absolute;inset:0 auto auto 0;width:72%;height:auto;display:block;padding:15px 8px 10px 15px;background:transparent}
 .prototype-card-text>div{max-width:100%}
@@ -1539,9 +1545,9 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 
 /* All character art shares a 1024×1536 canvas. These are measured visual
    eye/face anchor corrections only: no scale and no crop. */
-.prototype-character--section[data-character="magazine"]{--character-align-x:.8%;--character-align-y:1%}
+.prototype-character--section[data-character="magazine"]{--character-align-x:.8%;--character-align-y:1%;--desktop-character-y:-15px}
 .prototype-character--section[data-character="programs"]{--character-align-x:1.2%;--character-align-y:-.5%}
-.prototype-character--section[data-character="games"]{--character-align-x:.7%;--character-align-y:1%}
+.prototype-character--section[data-character="games"]{--character-align-x:.7%;--character-align-y:1%;--desktop-character-y:-15px}
 .prototype-character--section[data-character="making"]{--character-align-x:.4%;--character-align-y:.8%}
 .prototype-character--section[data-character="webtoon"]{--character-align-x:.7%;--character-align-y:.9%}
 .prototype-character--section[data-character="blog"]{--character-align-x:-.3%;--character-align-y:.7%}
@@ -1550,7 +1556,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-character--section,
 .prototype-stage.is-previewing .prototype-character--section,
 .prototype-stage.is-previewing .prototype-character--section.is-active{filter:drop-shadow(8px 15px 14px #5c49322b)!important}
-.prototype-stage.is-previewing .prototype-character--section.is-active{opacity:1!important;clip-path:none!important;transform:translate(var(--character-align-x),var(--character-align-y))!important}
+.prototype-stage.is-previewing .prototype-character--section.is-active{opacity:1!important;clip-path:none!important;transform:translate(var(--character-align-x),calc(var(--character-align-y) + var(--desktop-character-y,0px)))!important}
 
 /* Landscape phones can exceed the desktop breakpoint. Shift the artwork left
    without changing its original frame, size, or visible lower edge. */
