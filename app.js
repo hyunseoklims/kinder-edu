@@ -58,6 +58,7 @@ if(prototypeStage){
   prototypeStage.addEventListener('pointerleave',scheduleHide);
   serviceCards.forEach(card=>{
     card.addEventListener('pointerenter',event=>{if(event.pointerType==='touch')return;setActiveCard(card);});
+    card.addEventListener('pointerleave',event=>{if(event.pointerType==='touch')return;card.classList.remove('is-active');});
     card.addEventListener('focusin',()=>setActiveCard(card));
     card.addEventListener('click',event=>{if(event.target.closest('.prototype-card-open'))return;event.preventDefault();setActiveCard(card);});
     card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setActiveCard(card);}});

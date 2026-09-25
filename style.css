@@ -1456,7 +1456,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card-text p{font-size:clamp(9px,.58cqw,11px);line-height:1.35}
 .prototype-card-open{position:absolute;left:15px;bottom:15px;z-index:3;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin-top:0;padding:0;border-radius:50%;background:var(--card-button,#e99894);box-shadow:0 8px 16px var(--card-button-shadow,#bd716c38),inset 0 1px 0 #ffffff55;color:#fff;font:800 22px/1 "Manrope","Noto Sans KR",sans-serif;text-align:center;opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .24s ease,transform .28s var(--ease),background .2s ease,box-shadow .2s ease}
 .prototype-card-open:hover,.prototype-card-open:focus-visible{background:var(--card-button-hover,var(--card-button,#d77f7e));box-shadow:0 10px 20px var(--card-button-shadow,#bd716c45),inset 0 1px 0 #ffffff66;outline:none}
-.prototype-card:hover .prototype-card-open,.prototype-card:focus-within .prototype-card-open,.prototype-card.is-active .prototype-card-open{opacity:1;transform:translateY(0);pointer-events:auto}
+.prototype-card:hover .prototype-card-open,.prototype-card:focus-visible .prototype-card-open,.prototype-card-open:focus-visible,.prototype-card.is-active .prototype-card-open{opacity:1;transform:translateY(0);pointer-events:auto}
 .prototype-card-arrow{width:24px;height:24px;flex:0 0 24px}
 @media(max-width:1200px){
   .prototype-rail-logo{display:block;width:112px;height:auto;flex:0 0 112px;overflow:visible;margin-left:auto}
