@@ -1487,7 +1487,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card-art img{--art-scale:1.25;--art-hover-scale:1.29;position:absolute;inset:auto 0 0 auto;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;object-position:right bottom;transform:scale(var(--art-scale));transform-origin:right bottom;mix-blend-mode:normal;transition:transform .55s var(--ease)}
 .prototype-card.programs .prototype-card-art img{--art-scale:1.2;--art-hover-scale:1.24}
 .prototype-card.games .prototype-card-art img{--art-scale:1.25;--art-hover-scale:1.3}
-.prototype-card.magazine .prototype-card-art img{--art-scale:1.55;--art-hover-scale:1.6}
+.prototype-card.magazine .prototype-card-art img{--art-scale:1.05;--art-hover-scale:1.1;transform:scale(var(--art-scale))}
 .prototype-card.making .prototype-card-art img{--art-scale:1.28;--art-hover-scale:1.33}
 .prototype-card.webtoon .prototype-card-art img{--art-scale:1.3;--art-hover-scale:1.35}
 .prototype-card.blog .prototype-card-art img{--art-scale:1.45;--art-hover-scale:1.5}
