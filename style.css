@@ -1454,7 +1454,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card-text span:first-child{font-size:clamp(7px,.47cqw,9px);letter-spacing:.08em}
 .prototype-card-text h3{font-size:clamp(14px,1.05cqw,18px);margin:6px 0 4px}
 .prototype-card-text p{font-size:clamp(9px,.58cqw,11px);line-height:1.35}
-.prototype-card-open{position:absolute;top:15px;right:15px;z-index:3;display:inline-flex;align-items:center;justify-content:center;width:max-content;margin-top:0;padding:9px 14px;border-radius:999px;background:var(--card-button,#e99894);box-shadow:0 8px 16px var(--card-button-shadow,#bd716c38),inset 0 1px 0 #ffffff55;color:#fff;font:800 11px/1 "Manrope","Noto Sans KR",sans-serif;letter-spacing:0;text-align:center;white-space:nowrap;opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .24s ease,transform .28s var(--ease),background .2s ease,box-shadow .2s ease}
+.prototype-card-open{position:absolute;left:15px;bottom:15px;z-index:3;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin-top:0;padding:0;border-radius:50%;background:var(--card-button,#e99894);box-shadow:0 8px 16px var(--card-button-shadow,#bd716c38),inset 0 1px 0 #ffffff55;color:#fff;font:800 22px/1 "Manrope","Noto Sans KR",sans-serif;text-align:center;opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity .24s ease,transform .28s var(--ease),background .2s ease,box-shadow .2s ease}
 .prototype-card-open:hover,.prototype-card-open:focus-visible{background:var(--card-button-hover,var(--card-button,#d77f7e));box-shadow:0 10px 20px var(--card-button-shadow,#bd716c45),inset 0 1px 0 #ffffff66;outline:none}
 .prototype-card:hover .prototype-card-open,.prototype-card:focus-within .prototype-card-open,.prototype-card.is-active .prototype-card-open{opacity:1;transform:translateY(0);pointer-events:auto}
 .prototype-card-arrow{width:24px;height:24px;flex:0 0 24px}
@@ -1503,7 +1503,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card-text span:first-child{font-size:clamp(8px,.62cqw,10px);letter-spacing:.08em}
 .prototype-card-text h3{font-size:clamp(17px,1.25cqw,20px);margin:6px 0 4px}
 .prototype-card-text p{font-size:clamp(10px,.72cqw,12px);line-height:1.4}
-.prototype-card-open{font-size:clamp(10px,.68cqw,12px)}
+.prototype-card-open{font-size:22px}
 .prototype-card-arrow{position:absolute;top:12px;right:12px;width:28px;height:28px;transform:none}
 .prototype-card:hover .prototype-card-arrow{transform:rotate(45deg)}
 
