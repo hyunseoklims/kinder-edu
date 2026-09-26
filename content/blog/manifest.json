@@ -1,0 +1,11 @@
+[
+  {
+    "id": "homepage-process",
+    "title": "킨더에듀 홈페이지를 만드는 과정",
+    "date": "2026-09-26",
+    "category": "코딩",
+    "thumbnail": "../../assets/brand/cards/programs-laptop-transparent.png",
+    "summary": "공통 프레임과 여섯 개 섹션을 하나의 플랫폼으로 정리하는 과정을 기록합니다.",
+    "markdown": "homepage-process.md"
+  }
+]

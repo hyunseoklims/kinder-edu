@@ -1,0 +1,8 @@
+{
+  "id": "program-id",
+  "name": "프로그램명",
+  "icon": "icon.webp",
+  "summary": "한 줄 설명",
+  "entry": "프로그램 mount 또는 embed 경로",
+  "status": "ready"
+}

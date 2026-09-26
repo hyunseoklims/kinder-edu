@@ -1,0 +1,11 @@
+{
+  "id": "game-id",
+  "title": "게임명",
+  "thumbnail": "thumbnail.webp",
+  "age": [4],
+  "category": ["자연탐구"],
+  "description": "게임 설명",
+  "orientation": "landscape",
+  "entry": "게임 mount 경로",
+  "version": "0.1.0"
+}

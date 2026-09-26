@@ -1,0 +1,9 @@
+{
+  "id": "template-id",
+  "title": "템플릿명",
+  "category": "이름표",
+  "ratio": "4 / 3",
+  "printableArea": { "width": 1200, "height": 900 },
+  "fields": [{ "key": "name", "label": "이름", "type": "text", "defaultValue": "" }],
+  "assets": []
+}

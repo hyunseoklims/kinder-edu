@@ -1,0 +1,8 @@
+{
+  "id": "episode-id",
+  "episodeNumber": 1,
+  "title": "회차 제목",
+  "date": "2026-09-27",
+  "thumbnail": "thumbnail.webp",
+  "images": ["pages/001.webp"]
+}

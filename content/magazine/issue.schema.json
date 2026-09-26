@@ -1,0 +1,11 @@
+{
+  "id": "2026-10",
+  "year": 2026,
+  "month": 10,
+  "title": "월호 제목",
+  "subtitle": "월호 소개",
+  "cover": "cover.webp",
+  "publishDate": "2026-10-01",
+  "pages": [{ "id": "cover", "type": "cover", "image": "pages/cover.webp", "resourceIds": [] }],
+  "resources": [{ "id": "resource-01", "title": "자료 제목", "files": [] }]
+}
