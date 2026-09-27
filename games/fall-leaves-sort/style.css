@@ -1,0 +1,466 @@
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  background: #FAF4E5;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  color: #2E2E2E;
+}
+
+.game-wrapper {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  padding: 8px;
+}
+
+.game-canvas {
+  width: 100%; max-width: 1000px;
+  height: 100%; max-height: 660px;
+  aspect-ratio: 1000 / 660;
+  border-radius: 20px;
+  box-shadow: 0 16px 45px rgba(110, 85, 45, 0.16);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #FFF9ED;
+}
+
+/* 상단 정보 바 */
+.game-header {
+  height: 56px;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(220, 190, 150, 0.35);
+  z-index: 25;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stage-pill {
+  background: #FFF5E0;
+  border: 1px solid #ECC991;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #8F5518;
+}
+
+.game-score-badge {
+  background: #FFF;
+  padding: 5px 14px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.game-score-badge strong { color: #D47A2A; font-size: 16px; }
+
+.game-guide-bubble {
+  background: #FFF;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #5C4A38;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.btn-sound {
+  background: #FFF;
+  border: 1px solid #E8DDD5;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: grid;
+  place-items: center;
+  transition: transform 0.1s ease;
+}
+.btn-sound:hover { transform: scale(1.06); }
+
+/* 메인 씬 (수채화 가을 숲 공원 배경) */
+.scene-main {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 24px 20px;
+}
+
+.scene-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 바람에 날리는 배경 낙엽 효과 */
+.wind-leaves-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.wind-leaf {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  animation: windDrift 8s linear infinite;
+  opacity: 0.85;
+}
+
+@keyframes windDrift {
+  0% { transform: translate(-30px, -20px) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.9; }
+  90% { opacity: 0.9; }
+  100% { transform: translate(1050px, 420px) rotate(720deg); opacity: 0; }
+}
+
+/* 상단 낙엽 보관 트레이 (동화 책 속 잔디 언덕 느낌) */
+.leaves-tray-container {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(220, 190, 150, 0.7);
+  border-radius: 20px;
+  padding: 14px 20px;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 8px 24px rgba(110,85,45,0.08);
+}
+
+.leaves-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 개별 수채화 낙엽 카드 (Rule 6: 72px 이상 대형 히트박스) */
+.leaf-card {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: #FFFDF9;
+  border: 2px solid #EFE4D6;
+  box-shadow: 0 4px 14px rgba(110,85,45,0.12);
+  cursor: grab;
+  display: grid;
+  place-items: center;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28), box-shadow 0.2s, border-color 0.2s;
+  touch-action: none;
+}
+
+.leaf-card:hover {
+  transform: scale(1.15) translateY(-3px);
+  box-shadow: 0 8px 22px rgba(110,85,45,0.2);
+}
+
+.leaf-card.selected {
+  border-color: #DFB64F;
+  transform: scale(1.22) translateY(-6px);
+  box-shadow: 0 0 0 4px rgba(223,182,79,0.35);
+  animation: pulseSelect 1.5s infinite;
+}
+
+@keyframes pulseSelect {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(223,182,79,0.35); }
+  50% { box-shadow: 0 0 0 8px rgba(223,182,79,0.15); }
+}
+
+/* 5초 무조작 힌트 (Rule 15) */
+.leaf-card.hint-shimmer {
+  animation: hintHop 1.2s ease-in-out infinite;
+  border-color: #E8A838;
+}
+
+@keyframes hintHop {
+  0%, 100% { transform: translateY(0); filter: drop-shadow(0 2px 8px rgba(230,160,40,0.4)); }
+  35% { transform: translateY(-14px) scale(1.12); filter: drop-shadow(0 0 16px rgba(230,160,40,0.9)); }
+  70% { transform: translateY(-6px) scale(1.05); }
+}
+
+.leaf-wc-img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12));
+}
+
+/* 하단 인터랙션 영역: 응원 캐릭터(고슴도치) + 3개 분류 바구니 */
+.stage-bottom-area {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+  z-index: 10;
+}
+
+/* 귀여운 아기 고슴도치 캐릭터 (Rule 2) */
+.hedgehog-companion {
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.hedgehog-speech {
+  position: absolute;
+  top: -24px;
+  left: -10px;
+  background: #FFF;
+  border: 2px solid #DFB64F;
+  border-radius: 12px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #6C4215;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  white-space: nowrap;
+  animation: speechFloat 2.8s ease-in-out infinite;
+  z-index: 15;
+}
+.hedgehog-speech:after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 30px;
+  width: 0; height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #DFB64F;
+}
+
+@keyframes speechFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.hedgehog-wc-img {
+  width: 140px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgba(70,40,15,0.22));
+  transform-origin: bottom center;
+  animation: hedgehogBreathe 4s ease-in-out infinite;
+}
+
+@keyframes hedgehogBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02, 0.98) translateY(-2px); }
+}
+
+.hedgehog-companion.happy-bounce .hedgehog-wc-img {
+  animation: hedgehogHappy 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes hedgehogHappy {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-26px) scale(1.06, 0.94); }
+  70% { transform: translateY(-8px) scale(0.96, 1.04); }
+}
+
+/* 3개 분류 바구니 구역 (Rule 3) */
+.baskets-container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.basket-station {
+  background: rgba(255, 253, 249, 0.92);
+  backdrop-filter: blur(6px);
+  border: 3px solid #E8DDD5;
+  border-radius: 20px;
+  padding: 12px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(110,85,45,0.08);
+  transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28), border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.basket-station:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 32px rgba(110,85,45,0.16);
+}
+
+.basket-station.yellow-basket { border-color: #F3C44E; }
+.basket-station.red-basket { border-color: #E8654A; }
+.basket-station.brown-basket { border-color: #A86E3C; }
+
+.basket-station.hover-target {
+  transform: scale(1.06) translateY(-6px);
+  background: #FFF9ED;
+}
+
+.basket-station.bounce-correct {
+  animation: basketBounce 0.45s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+.basket-station.wobble-gentle {
+  animation: basketWobble 0.4s ease-in-out;
+}
+
+@keyframes basketBounce {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.12) translateY(-10px); }
+  60% { transform: scale(0.96); }
+}
+@keyframes basketWobble {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px) rotate(-2deg); }
+  75% { transform: translateX(6px) rotate(2deg); }
+}
+
+.basket-wc-wrapper {
+  position: relative;
+  width: 95px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.basket-wc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(70,40,15,0.2));
+}
+
+/* 바구니 앞의 시각적 식별 잎사귀 뱃지 */
+.basket-leaf-sample {
+  position: absolute;
+  bottom: 0px;
+  right: -4px;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.25));
+}
+
+.basket-label-pill {
+  margin-top: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.basket-label-pill.yellow { background: #FEF3D6; color: #8F6612; }
+.basket-label-pill.red { background: #FCE8E4; color: #9C331E; }
+.basket-label-pill.brown { background: #F4EBE3; color: #6D421E; }
+.basket-count-badge { font-size: 12px; color: #8A8178; font-weight: 700; margin-top: 3px; }
+
+/* 성공 축하 모달 (Rule 17) */
+.celebration-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(45, 30, 15, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: fadeIn 0.3s ease;
+}
+.celebration-overlay[hidden] { display: none; }
+
+.celebration-card {
+  width: min(440px, 90%);
+  background: #FFFDF9;
+  border: 3px solid #DFB64F;
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+  animation: cardPop 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes cardPop {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.celebration-badge {
+  display: inline-block;
+  background: #FAF0D8;
+  color: #A6651E;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.celebration-card h2 {
+  font-size: 24px;
+  color: #D47A2A;
+  margin-bottom: 8px;
+}
+
+.celebration-card p {
+  font-size: 14px;
+  color: #7E7872;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.celebration-stars {
+  font-size: 32px;
+  margin-bottom: 22px;
+  letter-spacing: 4px;
+}
+
+.btn-next {
+  padding: 12px 28px;
+  background: #DFB64F;
+  color: #FFF;
+  border: 0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(223, 182, 79, 0.4);
+  transition: transform 0.15s, background 0.15s;
+}
+.btn-next:hover { background: #CA9F32; transform: scale(1.04); }

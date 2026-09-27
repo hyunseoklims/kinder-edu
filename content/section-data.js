@@ -30,11 +30,141 @@
       { id: 'play-tools', name: '놀이 기록 도구', summary: '놀이 기록 프로그램 연결 슬롯', status: '프로그램 연결 준비 중' }
     ],
     games: [
-      { id: 'acorn-collector', title: '다람쥐의 도토리 모으기', age: '만 3~5세', category: '수·과학', theme: '가을', time: '약 3분', description: '가을 숲속 낙엽 사이에서 도토리를 찾아 세며 다람쥐 바구니에 담는 게임', entry: './games/acorn-collector/index.html', thumbnail: './assets/games/acorn-collector/thumbnail.svg', cover: './assets/games/acorn-collector/cover.svg', featured: true },
-      { id: 'fall-leaves-sort', title: '알록달록 낙엽 분류하기', age: '만 3~5세', category: '자연탐구', theme: '가을', time: '약 3분', description: '은행잎, 단풍잎, 참나무잎을 색깔과 모양에 맞는 바구니로 분류하는 감각 놀이', entry: './games/fall-leaves-sort/index.html', thumbnail: './assets/games/fall-leaves-sort/thumbnail.svg', cover: './assets/games/fall-leaves-sort/cover.svg', featured: false },
-      { id: 'autumn-orchard', title: '가을 과수원 열매 수확', age: '만 4~6세', category: '신체운동', theme: '가을', time: '약 3분', description: '가을 햇살을 받고 탐스럽게 익은 사과와 감을 톡톡 수확 상자에 담는 놀이', entry: './games/autumn-orchard/index.html', thumbnail: './assets/games/autumn-orchard/thumbnail.svg', cover: './assets/games/autumn-orchard/cover.svg', featured: false },
-      { id: 'scarecrow-memory', title: '허수아비 카드 짝맞추기', age: '만 4~6세', category: '의사소통', theme: '가을', time: '약 2분', description: '황금 들판 허수아비 옷에 걸린 가을 낱말 카드를 뒤집어 짝을 찾는 메모리 게임', entry: './games/scarecrow-memory/index.html', thumbnail: './assets/games/scarecrow-memory/thumbnail.svg', cover: './assets/games/scarecrow-memory/cover.svg', featured: false },
-      { id: 'autumn-night-music', title: '가을밤 풀벌레 음악대', age: '만 3~6세', category: '예술경험', theme: '가을', time: '약 3분', description: '보름달 아래 귀뚜라미와 방울벌레 친구들과 함께 나뭇잎 실로폰을 연주하는 리듬 게임', entry: './games/autumn-night-music/index.html', thumbnail: './assets/games/autumn-night-music/thumbnail.svg', cover: './assets/games/autumn-night-music/cover.svg', featured: false }
+      {
+        id: 'acorn-collector',
+        title: '다람쥐의 도토리 모으기',
+        age: '만 3~5세',
+        category: '수·과학',
+        theme: '가을',
+        time: '약 3분',
+        description: '가을 숲속 낙엽 사이에서 도토리를 찾아 세며 다람쥐 바구니에 담는 놀이',
+        entry: './games/acorn-collector/index.html',
+        thumbnail: './assets/games/acorn-collector/thumbnail.jpg',
+        cover: './assets/games/acorn-collector/cover.jpg',
+        featured: true,
+        teacherGuide: {
+          nuriArea: '자연탐구 > 탐구하는 태도 기르기 > 주변 사물과 자연환경에 관심 갖기',
+          coreCompetency: '자연물(도토리) 관찰력, 1:1 수 세기 기초 개념, 시지각 변별력',
+          prompts: [
+            '“도토리가 낙엽 속에 쏙 숨어있네! 바구니에는 지금 몇 개가 모였을까?”',
+            '“도토리를 모은 다람쥐의 기분은 어떨까? 다람쥐 표정을 함께 살펴볼까?”',
+            '“바람이 살랑 불어 낙엽이 흔들릴 때 도토리는 어디로 굴러갈까?”'
+          ],
+          offlineActivities: [
+            '🍂 바깥놀이 시간에 유치원 마당이나 산책로에서 실제 도토리와 솔방울 찾아 크기별로 나열하기',
+            '🐿️ 점토와 낙엽, 도토리 모자를 이용해 나만의 겨울잠 다람쥐 보금자리 만들기'
+          ],
+          worksheet: '도토리 숫자 짝맞추기 활동지'
+        }
+      },
+      {
+        id: 'fall-leaves-sort',
+        title: '알록달록 낙엽 분류하기',
+        age: '만 3~5세',
+        category: '자연탐구',
+        theme: '가을',
+        time: '약 3분',
+        description: '은행잎, 단풍잎, 참나무잎을 색깔과 모양에 맞는 바구니로 분류하는 감각 놀이',
+        entry: './games/fall-leaves-sort/index.html',
+        thumbnail: './assets/games/fall-leaves-sort/thumbnail.jpg',
+        cover: './assets/games/fall-leaves-sort/cover.jpg',
+        featured: false,
+        teacherGuide: {
+          nuriArea: '자연탐구 > 수학적 탐구하기 > 물체를 속성(모양, 색깔)에 따라 분류하기',
+          coreCompetency: '색상과 잎맥 형태 변별력, 유목화 및 논리적 분류 사고력',
+          prompts: [
+            '“노란 부채 모양 잎사귀는 어떤 나무의 잎일까? 노란 바구니에 쏙 넣어볼까?”',
+            '“단풍잎은 뾰족뾰족 몇 갈래로 나뉘어 있을까? 손가락으로 함께 짚어보자!”',
+            '“갈색 둥근 참나무 잎을 만지면 어떤 소리가 바스락 날까?”'
+          ],
+          offlineActivities: [
+            '🍁 교실에서 낙엽 프로타주(색연필 문지르기)로 다양한 잎맥 무늬 관찰하기',
+            '🧺 낙엽을 색깔별(노랑, 빨강, 갈색)로 모아 야외 낙엽 만다라 원형 콜라주 꾸미기'
+          ],
+          worksheet: '알록달록 낙엽 속성 분류 활동지'
+        }
+      },
+      {
+        id: 'autumn-orchard',
+        title: '가을 과수원 열매 수확',
+        age: '만 4~6세',
+        category: '신체운동',
+        theme: '가을',
+        time: '약 3분',
+        description: '가을 햇살을 받고 탐스럽게 익은 사과와 감을 톡톡 수확 상자에 담는 놀이',
+        entry: './games/autumn-orchard/index.html',
+        thumbnail: './assets/games/autumn-orchard/thumbnail.jpg',
+        cover: './assets/games/autumn-orchard/cover.jpg',
+        featured: false,
+        teacherGuide: {
+          nuriArea: '신체운동·건강 > 신체활동 즐기기 > 소근육 조절 및 눈과 손의 협응',
+          coreCompetency: '순발력, 시각-운동 협응 조절, 과일의 계절적 변화 이해',
+          prompts: [
+            '“사과가 나뭇가지에서 통통 튕기며 떨어지네! 어떤 소리가 났을까?”',
+            '“가을이 되면 초록색이던 열매가 왜 빨갛고 주홍빛으로 물들까?”',
+            '“수확한 과일을 친구들과 어떻게 맛있게 나누어 먹을 수 있을까?”'
+          ],
+          offlineActivities: [
+            '🍎 사과와 단감을 반으로 잘라 씨앗의 모양과 단면 패턴 비교 관찰하기',
+            '🎨 종이 접시와 한지를 이용해 입체 가을 과일 바구니 조형 만들기'
+          ],
+          worksheet: '과수원 수확 셈하기 및 관찰 일지'
+        }
+      },
+      {
+        id: 'scarecrow-memory',
+        title: '허수아비 카드 짝맞추기',
+        age: '만 4~6세',
+        category: '의사소통',
+        theme: '가을',
+        time: '약 2분',
+        description: '황금 들판 허수아비 옷에 걸린 가을 낱말 카드를 뒤집어 짝을 찾는 메모리 게임',
+        entry: './games/scarecrow-memory/index.html',
+        thumbnail: './assets/games/scarecrow-memory/thumbnail.jpg',
+        cover: './assets/games/scarecrow-memory/cover.jpg',
+        featured: false,
+        teacherGuide: {
+          nuriArea: '의사소통 > 책과 이야기 즐기기 > 가을 낱말과 그림 연결하기 / 공간 기억',
+          coreCompetency: '작업 기억력(Working Memory), 위치 기억 및 시각적 집중에 대한 주의 지속력',
+          prompts: [
+            '“방금 전에 이 카드를 어디서 봤더라? 허수아비 아저씨 모자 옆이었나?”',
+            '“도토리와 단풍잎 그림을 보며 우리 주변 가을 풍경을 이야기해볼까?”',
+            '“허수아비는 논에서 어떤 일을 하고 있을까?”'
+          ],
+          offlineActivities: [
+            '🌾 가을 낱말 그림 카드를 이용한 친구와 짝꿍 메모리 보드게임 진행',
+            '🧥 버려진 옷감과 털실로 우리 반 지킴이 미니 허수아비 인형 만들기'
+          ],
+          worksheet: '가을 낱말 기억력 카드 오리기 세트'
+        }
+      },
+      {
+        id: 'autumn-night-music',
+        title: '가을밤 풀벌레 음악대',
+        age: '만 3~6세',
+        category: '예술경험',
+        theme: '가을',
+        time: '약 3분',
+        description: '보름달 아래 귀뚜라미와 방울벌레 친구들과 함께 나뭇잎 실로폰을 연주하는 리듬 놀이',
+        entry: './games/autumn-night-music/index.html',
+        thumbnail: './assets/games/autumn-night-music/thumbnail.jpg',
+        cover: './assets/games/autumn-night-music/cover.jpg',
+        featured: false,
+        teacherGuide: {
+          nuriArea: '예술경험 > 창의적으로 표현하기 > 음색과 멜로디 탐색 및 리듬 연주하기',
+          coreCompetency: '음높이(피치) 감각, 청지각적 집중력, 가을 곤충 소리에 대한 심미감',
+          prompts: [
+            '“실로폰 건반이 길수록 높은 소리가 날까, 낮은 소리가 날까?”',
+            '“귀뚜라미 바이올린 소리와 방울벌레 실로폰 소리는 어떻게 다를까?”',
+            '“가을밤 창밖을 가만히 귀 기울이면 어떤 풀벌레 노랫소리가 들릴까?”'
+          ],
+          offlineActivities: [
+            '🦗 물병에 물 높이를 다르게 채워 만든 천연 실로폰으로 가을 동요 연주하기',
+            '🎶 가을밤 풀벌레 소리 오디오를 들으며 몸으로 곤충들의 움직임 표현해보기'
+          ],
+          worksheet: '8음 나뭇잎 실로폰 계이름 색칠 악보'
+        }
+      }
     ],
     templates: [
       { id: 'name-tag', category: '이름표', title: '기본 이름표', ratio: '4 / 3', fields: [{ key: 'name', label: '이름', type: 'text', value: '이름 입력' }, { key: 'color', label: '포인트 색', type: 'color', value: '#7DBB91' }] },

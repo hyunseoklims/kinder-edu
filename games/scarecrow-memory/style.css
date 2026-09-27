@@ -1,0 +1,385 @@
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  background: #FAF4E5;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  color: #2E2E2E;
+}
+
+.game-wrapper {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  padding: 8px;
+}
+
+.game-canvas {
+  width: 100%; max-width: 1000px;
+  height: 100%; max-height: 660px;
+  aspect-ratio: 1000 / 660;
+  border-radius: 20px;
+  box-shadow: 0 16px 45px rgba(110, 85, 45, 0.16);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #FFF9ED;
+}
+
+/* 상단 헤더 바 */
+.game-header {
+  height: 56px;
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(220, 190, 150, 0.35);
+  z-index: 25;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stage-pill {
+  background: #FFF3D6;
+  border: 1px solid #ECC472;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #8C5512;
+}
+
+.pairs-badge {
+  background: #FFF;
+  padding: 5px 14px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.pairs-badge strong { color: #D47A2A; font-size: 16px; }
+
+.guide-bubble {
+  background: #FFF;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #5C4A38;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.btn-sound {
+  background: #FFF;
+  border: 1px solid #E8DDD5;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: grid;
+  place-items: center;
+  transition: transform 0.1s ease;
+}
+.btn-sound:hover { transform: scale(1.06); }
+
+/* 메인 씬 (수채화 가을 들판 배경) */
+.memory-stage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  padding: 16px 24px;
+  gap: 24px;
+  align-items: center;
+}
+
+.scene-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 좌측 허수아비 친구 (Rule 2) */
+.scarecrow-pane {
+  width: 175px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.scarecrow-bubble {
+  position: absolute;
+  top: -24px;
+  left: 0;
+  background: #FFF;
+  border: 2px solid #DFB64F;
+  border-radius: 12px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #6C4215;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  white-space: nowrap;
+  animation: scarecrowSpeechFloat 3s ease-in-out infinite;
+  z-index: 15;
+}
+.scarecrow-bubble:after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 36px;
+  width: 0; height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #DFB64F;
+}
+
+@keyframes scarecrowSpeechFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.scarecrow-art {
+  width: 160px;
+  height: 220px;
+  filter: drop-shadow(0 8px 18px rgba(70,40,15,0.22));
+  transform-origin: bottom center;
+  animation: scarecrowSway 4s ease-in-out infinite;
+}
+
+@keyframes scarecrowSway {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-2.5deg); }
+  70% { transform: rotate(2.5deg); }
+}
+
+.scarecrow-art.happy-wave {
+  animation: scarecrowCheer 0.65s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes scarecrowCheer {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-20px) scale(1.05); }
+}
+
+/* 우측 3D 카드 그리드 영역 (Rule 6, 7) */
+.cards-board-container {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.cards-grid-pane {
+  display: grid;
+  gap: 14px;
+  max-width: 680px;
+  width: 100%;
+  perspective: 1000px;
+}
+
+.cards-grid-pane.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 480px;
+}
+.cards-grid-pane.cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 620px;
+}
+
+/* 개별 카드 슬롯 & 3D 뒤집기 */
+.card-slot {
+  aspect-ratio: 4 / 5;
+  min-height: 100px;
+  perspective: 800px;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.card-flipper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(90, 60, 25, 0.12);
+}
+
+.card-slot:hover .card-flipper {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 24px rgba(90, 60, 25, 0.2);
+}
+
+.card-slot.flipped .card-flipper,
+.card-slot.matched .card-flipper {
+  transform: rotateY(180deg);
+}
+
+.card-slot.matched .card-flipper {
+  box-shadow: 0 0 0 3px #81C784, 0 8px 20px rgba(76, 175, 80, 0.25);
+  animation: matchGlow 0.5s ease;
+}
+
+@keyframes matchGlow {
+  0% { transform: rotateY(180deg) scale(1); }
+  50% { transform: rotateY(180deg) scale(1.12); }
+  100% { transform: rotateY(180deg) scale(1); }
+}
+
+/* 5초 무조작 힌트 (Rule 15) */
+.card-slot.hint-shimmer .card-flipper {
+  animation: cardWiggle 1.2s ease-in-out infinite;
+}
+
+@keyframes cardWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg) scale(1.04); }
+  75% { transform: rotate(5deg) scale(1.04); }
+}
+
+.card-side {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+/* 카드 뒷면 (따뜻한 나무/린넨 질감 + 황금 벼이삭 문양) */
+.card-back {
+  background: linear-gradient(135deg, #FFF9ED 0%, #F5E5C9 100%);
+  border: 3px solid #E4C89E;
+}
+
+.card-back-icon {
+  width: 44px;
+  height: 44px;
+  opacity: 0.85;
+}
+
+/* 카드 앞면 (동화 수채화 그림 + 이름) */
+.card-front {
+  background: #FFFDF9;
+  border: 3px solid #DFB64F;
+  transform: rotateY(180deg);
+}
+
+.card-front-img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.14));
+}
+
+.card-front-label {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #794D1B;
+  background: #FAF3E5;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* 성공 축하 모달 (Rule 17) */
+.celebration-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(45, 30, 15, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: fadeIn 0.3s ease;
+}
+.celebration-overlay[hidden] { display: none; }
+
+.celebration-card {
+  width: min(440px, 90%);
+  background: #FFFDF9;
+  border: 3px solid #DFB64F;
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+  animation: cardPop 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes cardPop {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.celebration-badge {
+  display: inline-block;
+  background: #FFF3D6;
+  color: #8C5512;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.celebration-card h2 {
+  font-size: 24px;
+  color: #D47A2A;
+  margin-bottom: 8px;
+}
+
+.celebration-card p {
+  font-size: 14px;
+  color: #7E7872;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.celebration-stars {
+  font-size: 32px;
+  margin-bottom: 22px;
+  letter-spacing: 4px;
+}
+
+.btn-next {
+  padding: 12px 28px;
+  background: #DFB64F;
+  color: #FFF;
+  border: 0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(223, 182, 79, 0.4);
+  transition: transform 0.15s, background 0.15s;
+}
+.btn-next:hover { background: #CA9F32; transform: scale(1.04); }

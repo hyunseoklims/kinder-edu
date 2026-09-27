@@ -114,11 +114,14 @@ html, body {
   overflow: hidden;
 }
 
-.scene-bg-svg {
+/* 수채화 가을 숲 배경 이미지 (Rule 1) */
+.scene-bg-img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -178,25 +181,48 @@ html, body {
   75% { transform: rotate(12deg) scale(1.1); }
 }
 
-/* 실제 클릭 가능한 도토리 버튼 */
+/* 실제 클릭 가능한 도토리 버튼 (Rule 6: 64px+ 대형 히트박스) */
 .interactive-acorn {
   position: absolute;
-  width: 48px;
-  height: 54px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   border: 0;
   cursor: pointer;
   z-index: 12;
   transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18));
 }
 
-.interactive-acorn:hover {
-  transform: scale(1.22) translateY(-4px);
+.acorn-wc-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px rgba(70,40,15,0.3));
+  transition: transform 0.2s ease;
 }
 
-.interactive-acorn:active {
-  transform: scale(0.95);
+.interactive-acorn:hover .acorn-wc-img {
+  transform: scale(1.18) translateY(-3px);
+}
+
+.interactive-acorn:active .acorn-wc-img {
+  transform: scale(0.92);
+}
+
+/* 5초 무조작 스마트 힌트 (Rule 15) */
+.interactive-acorn.hint-shimmer {
+  animation: acornHintJump 1.2s ease-in-out infinite;
+}
+
+@keyframes acornHintJump {
+  0%, 100% { transform: translateY(0); filter: drop-shadow(0 4px 10px rgba(70,40,15,0.3)); }
+  30% { transform: translateY(-16px) scale(1.12); filter: drop-shadow(0 0 14px rgba(240, 185, 55, 0.95)); }
+  50% { transform: translateY(0) scale(1); }
+  70% { transform: translateY(-8px) scale(1.06); filter: drop-shadow(0 0 10px rgba(240, 185, 55, 0.8)); }
 }
 
 .interactive-acorn.collected {
@@ -218,13 +244,13 @@ html, body {
   }
 }
 
-/* 다람쥐 스테이션 (오른쪽 하단) */
+/* 다람쥐 스테이션 (오른쪽 하단) (Rule 2) */
 .squirrel-station {
   position: absolute;
-  right: 6%;
-  bottom: 5%;
-  width: 220px;
-  height: 220px;
+  right: 5%;
+  bottom: 4%;
+  width: 230px;
+  height: 230px;
   z-index: 15;
   display: flex;
   flex-direction: column;
@@ -234,17 +260,18 @@ html, body {
 
 .speech-bubble-pop {
   position: absolute;
-  top: -24px;
+  top: -20px;
   background: #FFF;
   border: 2px solid #DFB64F;
   border-radius: 14px;
   padding: 6px 14px;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #6C4215;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
   white-space: nowrap;
   animation: bubbleFloat 2.5s ease-in-out infinite;
+  z-index: 20;
 }
 
 .speech-bubble-pop:after {
@@ -268,64 +295,76 @@ html, body {
   position: relative;
   z-index: 16;
   transform-origin: bottom center;
+  cursor: pointer;
 }
 
-/* 다람쥐 꼬리 살랑살랑 */
-.sq-tail {
-  transform-origin: 75px 140px;
-  animation: tailWag 3.2s ease-in-out infinite;
+/* 귀여운 수채화 다람쥐 (Rule 2) */
+.squirrel-wc-img {
+  width: 175px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(90, 60, 20, 0.22));
+  animation: squirrelBreathing 3.6s ease-in-out infinite;
+  transform-origin: bottom center;
 }
 
-@keyframes tailWag {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(14deg); }
+@keyframes squirrelBreathing {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.02, 0.98); }
 }
 
-/* 다람쥐 눈 깜빡임 */
-.sq-eyes {
-  animation: blinkEyes 4.5s ease-in-out infinite;
-  transform-origin: 112px 60px;
-}
-
-@keyframes blinkEyes {
-  0%, 96%, 100% { transform: scaleY(1); }
-  98% { transform: scaleY(0.1); }
-}
-
-/* 도토리 받을 때 다람쥐 점프 */
-.squirrel-character.happy-jump {
-  animation: squirrelHappy 0.6s ease;
+/* 도토리 받을 때 다람쥐 행복 점프 (Rule 2) */
+.squirrel-character.happy-jump .squirrel-wc-img {
+  animation: squirrelHappy 0.65s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
 @keyframes squirrelHappy {
   0%, 100% { transform: translateY(0) scale(1); }
-  40% { transform: translateY(-30px) scale(1.08, 0.92); }
-  60% { transform: translateY(-15px) scale(0.95, 1.05); }
+  40% { transform: translateY(-36px) scale(1.08, 0.92); }
+  70% { transform: translateY(-12px) scale(0.96, 1.04); }
 }
 
-/* 바구니 */
+/* 수채화 도토리 바구니 (Rule 3) */
 .basket-container {
   position: absolute;
   bottom: 0px;
-  left: 20px;
+  left: 15px;
   z-index: 18;
 }
 
-.basket-svg {
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18));
+.basket-wc-img {
+  width: 105px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(80, 50, 20, 0.25));
 }
 
 .basket-fill-items {
   position: absolute;
-  top: 15px;
-  left: 18px;
-  right: 18px;
+  top: 30px;
+  left: 15px;
+  right: 15px;
   height: 40px;
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
   align-items: flex-end;
   pointer-events: none;
+}
+
+.basket-acorn-mini {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  animation: miniBounce 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes miniBounce {
+  0% { transform: scale(0.3) translateY(-10px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
 .basket-acorn-chip {

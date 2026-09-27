@@ -192,7 +192,7 @@
       });
       groundEl.appendChild(leafDecor);
 
-      // 2. 인터랙티브 도토리
+      // 2. 인터랙티브 도토리 (따뜻한 동화풍 수채화 투명 PNG)
       var acornBtn = document.createElement('button');
       acornBtn.type = 'button';
       acornBtn.className = 'interactive-acorn';
@@ -200,44 +200,40 @@
       acornBtn.style.top = pos.y + '%';
       acornBtn.setAttribute('aria-label', '도토리 찾기');
 
-      acornBtn.innerHTML = `
-        <svg viewBox="0 0 44 50" width="100%" height="100%">
-          <defs>
-            <linearGradient id="acornShell-${idx}" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#E89B48"/>
-              <stop offset="60%" stop-color="#C77428"/>
-              <stop offset="100%" stop-color="#9E5416"/>
-            </linearGradient>
-            <linearGradient id="acornCap-${idx}" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#7A4822"/>
-              <stop offset="100%" stop-color="#552C0E"/>
-            </linearGradient>
-          </defs>
-          <!-- 도토리 꼭지 -->
-          <path d="M22 2 C22 2 21 8 22 10" stroke="#48250C" stroke-width="3" stroke-linecap="round"/>
-          <!-- 모자 (뚜껑) -->
-          <path d="M7 16 C8 8 36 8 37 16 C37 20 7 20 7 16 Z" fill="url(#acornCap-${idx})"/>
-          <!-- 모자 그물망 질감 -->
-          <path d="M11 14 Q22 20 33 14 M14 12 Q22 18 30 12" stroke="#9E683C" stroke-width="1.5" opacity="0.6"/>
-          <!-- 도토리 알맹이 -->
-          <path d="M8 17 C8 24 13 44 22 47 C31 44 36 24 36 17 Z" fill="url(#acornShell-${idx})"/>
-          <!-- 반사광 하이라이트 -->
-          <ellipse cx="16" cy="26" rx="3" ry="7" fill="#FCE0B8" opacity="0.55" transform="rotate(-15 16 26)"/>
-        </svg>
-      `;
+      acornBtn.innerHTML = '<img src="./assets/acorn.png" alt="도토리" class="acorn-wc-img" draggable="false">';
 
       acornBtn.addEventListener('click', function () {
         if (acornBtn.classList.contains('collected')) return;
+        resetIdleHint();
         collectAcorn(acornBtn, idx);
       });
 
       groundEl.appendChild(acornBtn);
     });
+
+    resetIdleHint();
+  }
+
+  // 5초 무조작 시 도토리 살랑살랑 힌트 (Rule 15)
+  var idleHintTimer = null;
+  function resetIdleHint() {
+    clearTimeout(idleHintTimer);
+    var allAcorns = groundEl.querySelectorAll('.interactive-acorn:not(.collected)');
+    allAcorns.forEach(function (el) { el.classList.remove('hint-shimmer'); });
+    if (collectedCount >= STAGES[currentStageIndex].total) return;
+
+    idleHintTimer = setTimeout(function () {
+      var remaining = groundEl.querySelectorAll('.interactive-acorn:not(.collected)');
+      if (remaining.length > 0) {
+        remaining[0].classList.add('hint-shimmer');
+      }
+    }, 5000);
   }
 
   function collectAcorn(acornBtn, idx) {
     var stage = STAGES[currentStageIndex];
     collectedCount++;
+    acornBtn.classList.remove('hint-shimmer');
     acornBtn.classList.add('collected');
 
     // 바구니 위치 계산
@@ -264,11 +260,12 @@
     countEl.textContent = collectedCount;
     bubbleEl.textContent = '참 잘했어요! (' + collectedCount + ' / ' + stage.total + ')';
 
-    // 바구니에 도토리 칩 추가
+    // 바구니에 수채화 도토리 미니 아이콘 쏙 넣기
     setTimeout(function () {
-      var chip = document.createElement('div');
-      chip.className = 'basket-acorn-chip';
-      chip.innerHTML = '<svg viewBox="0 0 16 20" width="100%" height="100%"><path d="M8 2 C4 2 2 5 2 8 L14 8 C14 5 12 2 8 2 Z" fill="#6A3B18"/><path d="M2 8 C2 12 4 17 8 19 C12 17 14 12 14 8 Z" fill="#D4863B"/></svg>';
+      var chip = document.createElement('img');
+      chip.src = './assets/acorn.png';
+      chip.className = 'basket-acorn-mini';
+      chip.alt = '도토리';
       basketFillEl.appendChild(chip);
     }, 600);
 

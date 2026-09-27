@@ -127,7 +127,12 @@
         if (reg && Array.isArray(reg.games) && reg.games.length) {
           gameList = reg.games;
           renderSidebar();
-          renderLibrary();
+          const curId = new URLSearchParams(window.location.search).get('id');
+          if (curId && gameList.some(g => g.id === curId)) {
+            renderStage(curId);
+          } else if (!layout.classList.contains('is-playing')) {
+            renderLibrary();
+          }
         }
       })
       .catch(() => {});
@@ -429,12 +434,18 @@
 
       layout.classList.add('is-playing');
       const entryUrl = activeGame.entry || `./games/${activeGame.id}/index.html`;
+      const guide = activeGame.teacherGuide || {};
+
+      try {
+        history.replaceState(null, '', '?id=' + encodeURIComponent(id));
+      } catch (_) {}
 
       surface.innerHTML = `
         <div class="game-stage-view">
           <div class="game-stage-toolbar">
             <button class="soft-button" type="button" data-game-back>← 게임 목록</button>
             <strong>${escapeHtml(activeGame.title)} <span class="meta">· ${escapeHtml(activeGame.category || '')}</span></strong>
+            <button class="soft-button teacher-guide-btn" type="button" data-teacher-guide>💡 지도 팁</button>
             <button class="soft-button" type="button" data-restart>다시 시작</button>
             <button class="soft-button" type="button" data-volume aria-pressed="${isMuted ? 'true' : 'false'}">${isMuted ? '🔇 음소거됨' : '🔊 소리 켬'}</button>
             <button class="soft-button" type="button" data-fullscreen>전체화면</button>
@@ -444,11 +455,60 @@
               <iframe id="game-sandbox-iframe" src="${entryUrl}" allow="fullscreen; autoplay" title="${escapeHtml(activeGame.title)}"></iframe>
             </div>
           </div>
+          <!-- 교사 지도 가이드 드로어 (Rule 18) -->
+          <div class="teacher-guide-drawer" id="teacher-guide-drawer" hidden>
+            <div class="teacher-guide-header">
+              <div class="guide-title-row">
+                <span class="guide-icon">💡</span>
+                <h3>교사 지도 가이드</h3>
+              </div>
+              <button class="soft-button guide-close-btn" type="button" data-close-guide aria-label="닫기">✕</button>
+            </div>
+            <div class="teacher-guide-body">
+              <div class="guide-card">
+                <span class="guide-kicker">🎯 누리과정 연계 영역</span>
+                <p class="guide-nuri">${escapeHtml(guide.nuriArea || '해당 놀이의 누리과정 연계 내용입니다.')}</p>
+                <div class="guide-sub-info">
+                  <strong>핵심 발달 역량:</strong> ${escapeHtml(guide.coreCompetency || '탐구 및 조작 능력')}
+                </div>
+              </div>
+              <div class="guide-card">
+                <span class="guide-kicker">💬 선생님 상호작용 발문 예시</span>
+                <ul class="guide-prompt-list">
+                  ${(guide.prompts || ['“아이와 함께 게임 속 그림을 이야기해보세요.”']).map(p => `<li>${escapeHtml(p)}</li>`).join('')}
+                </ul>
+              </div>
+              <div class="guide-card">
+                <span class="guide-kicker">🎨 오프라인 연계 확장 활동</span>
+                <ul class="guide-activity-list">
+                  ${(guide.offlineActivities || ['교실 바깥놀이 및 미술 영역과 연계해 활동을 확장해보세요.']).map(a => `<li>${escapeHtml(a)}</li>`).join('')}
+                </ul>
+              </div>
+              <div class="guide-card guide-worksheet-box">
+                <span class="guide-kicker">🖨️ 수업 연계 활동지</span>
+                <p><strong>${escapeHtml(guide.worksheet || '활동지')}</strong></p>
+                <button class="btn-print-worksheet" type="button" data-print-worksheet>📄 활동지 인쇄하기</button>
+              </div>
+            </div>
+          </div>
         </div>
       `;
 
+      // 지도 팁 드로어 토글
+      const guideDrawer = surface.querySelector('#teacher-guide-drawer');
+      surface.querySelector('[data-teacher-guide]')?.addEventListener('click', () => {
+        if (guideDrawer) guideDrawer.hidden = !guideDrawer.hidden;
+      });
+      surface.querySelector('[data-close-guide]')?.addEventListener('click', () => {
+        if (guideDrawer) guideDrawer.hidden = true;
+      });
+      surface.querySelector('[data-print-worksheet]')?.addEventListener('click', () => {
+        window.print();
+      });
+
       // 뒤로가기 버튼
       surface.querySelector('[data-game-back]')?.addEventListener('click', () => {
+        try { history.replaceState(null, '', window.location.pathname); } catch (_) {}
         renderLibrary();
       });
 
@@ -501,6 +561,7 @@
         frameContainer?.requestFullscreen?.();
       }
       if (data.type === 'EXIT_GAME') {
+        try { history.replaceState(null, '', window.location.pathname); } catch (_) {}
         renderLibrary();
       }
     });
@@ -511,6 +572,7 @@
         renderStage(playBtn.dataset.play);
       }
       if (event.target.closest('[data-game-back]')) {
+        try { history.replaceState(null, '', window.location.pathname); } catch (_) {}
         renderLibrary();
       }
     });
@@ -526,7 +588,12 @@
     });
 
     renderSidebar();
-    renderLibrary();
+    const initialGameId = new URLSearchParams(window.location.search).get('id');
+    if (initialGameId && gameList.some(g => g.id === initialGameId)) {
+      renderStage(initialGameId);
+    } else {
+      renderLibrary();
+    }
   }
 
 

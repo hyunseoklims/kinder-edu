@@ -36,110 +36,27 @@
 
       <!-- 게임 인터랙티브 씬 -->
       <main class="scene-stage" id="scene-stage">
-        <!-- 배경 숲 풍경 (SVG 벡터) -->
-        <svg class="scene-bg-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <defs>
-            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#FFF5E5"/>
-              <stop offset="45%" stop-color="#FEE8C8"/>
-              <stop offset="100%" stop-color="#FCD5A4"/>
-            </linearGradient>
-            <linearGradient id="hillGrad1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#F2BF73"/>
-              <stop offset="100%" stop-color="#DF9F48"/>
-            </linearGradient>
-            <linearGradient id="hillGrad2" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#EAA64D"/>
-              <stop offset="100%" stop-color="#C77D2B"/>
-            </linearGradient>
-            <filter id="softGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
-          </defs>
-          <rect width="1000" height="600" fill="url(#skyGrad)"/>
-          <!-- 햇살 광선 -->
-          <circle cx="150" cy="80" r="90" fill="#FFF2BD" opacity="0.45" filter="url(#softGlow)"/>
-          <polygon points="150,80 -50,600 350,600" fill="#FFF7DA" opacity="0.12"/>
-          <polygon points="150,80 300,600 700,600" fill="#FFF7DA" opacity="0.08"/>
-          <!-- 먼 가을 산 -->
-          <path d="M-50 420 Q180 320 400 410 T850 370 Q940 390 1050 430 L1050 600 L-50 600 Z" fill="url(#hillGrad1)" opacity="0.75"/>
-          <!-- 가까운 언덕 -->
-          <path d="M-20 470 Q240 390 560 460 T1020 440 L1020 600 L-20 600 Z" fill="url(#hillGrad2)"/>
-          <!-- 참나무 가지와 풍성한 단풍 -->
-          <path d="M-40 0 C120 40 260 120 380 200 L350 240 C240 160 110 80 -40 30 Z" fill="#6B3F1D"/>
-          <path d="M220 100 C300 80 420 110 500 140 L480 170 C410 140 300 110 210 120 Z" fill="#6B3F1D"/>
-          <!-- 나뭇잎 클러스터들 -->
-          <ellipse cx="140" cy="50" rx="90" ry="60" fill="#E86A38" opacity="0.9"/>
-          <ellipse cx="280" cy="90" rx="100" ry="70" fill="#DE8328" opacity="0.92"/>
-          <ellipse cx="440" cy="130" rx="85" ry="55" fill="#ECA23B" opacity="0.95"/>
-          <ellipse cx="200" cy="90" rx="70" ry="45" fill="#D45028" opacity="0.85"/>
-        </svg>
-
-        <!-- 나뭇가지에 대롱대롱 매달린 도토리들 장식 -->
-        <div class="tree-decorations" id="tree-decorations" aria-hidden="true"></div>
+        <!-- 수채화 가을 숲 배경 이미지 (Rule 1) -->
+        <img src="./assets/bg.jpg" class="scene-bg-img" alt="가을 숲 풍경" aria-hidden="true">
 
         <!-- 흩날리는 낙엽 레이어 -->
         <div class="drifting-leaves-layer" id="drifting-leaves" aria-hidden="true"></div>
 
-        <!-- 바닥 낙엽 및 숨겨진 인터랙티브 도토리 컨테이너 -->
+        <!-- 바닥 낙엽 및 숨겨진 인터랙티브 도토리 컨테이너 (Rule 6: 64px+ 히트박스) -->
         <div class="ground-interactive-area" id="ground-area">
           <!-- 도토리 및 낙엽 오브젝트가 JS로 스폰됨 -->
         </div>
 
-        <!-- 애니메이션 다람쥐 캐릭터 & 바구니 -->
+        <!-- 감성 수채화 다람쥐 캐릭터 & 바구니 (Rule 2) -->
         <div class="squirrel-station" id="squirrel-station">
           <div class="speech-bubble-pop" id="squirrel-speech">도토리를 모아줘! 🌰</div>
-          <div class="squirrel-character" id="squirrel-char">
-            <svg viewBox="0 0 160 180" width="160" height="180">
-              <!-- 다람쥐 큰 꼬리 -->
-              <g class="sq-tail">
-                <path d="M60 140 C10 130 -10 60 25 25 C55 -5 95 10 90 45 C86 70 65 95 75 140 Z" fill="#C26B29"/>
-                <path d="M55 130 C20 120 10 65 35 40 C60 15 80 25 78 50 C75 70 60 90 65 130 Z" fill="#E48E44"/>
-                <path d="M45 100 C30 85 28 55 42 45 C56 35 68 45 65 65 Z" fill="#F8BC7A" opacity="0.7"/>
-              </g>
-              <!-- 몸통 -->
-              <ellipse cx="95" cy="120" rx="42" ry="46" fill="#C26B29"/>
-              <!-- 배 (밝은 털) -->
-              <ellipse cx="104" cy="126" rx="26" ry="32" fill="#FBE2C3"/>
-              <!-- 귀 -->
-              <path d="M85 45 C80 25 95 20 100 35 Z" fill="#A85218"/>
-              <path d="M88 43 C85 30 95 27 98 37 Z" fill="#F7C4B2"/>
-              <path d="M125 45 C120 25 135 20 140 35 Z" fill="#A85218"/>
-              <path d="M128 43 C125 30 135 27 138 37 Z" fill="#F7C4B2"/>
-              <!-- 머리 -->
-              <ellipse cx="112" cy="65" rx="35" ry="32" fill="#C26B29"/>
-              <!-- 양 볼 빵빵한 털 -->
-              <ellipse cx="90" cy="74" rx="14" ry="12" fill="#E48E44"/>
-              <ellipse cx="134" cy="74" rx="14" ry="12" fill="#E48E44"/>
-              <circle cx="94" cy="78" r="7" fill="#F79F88" opacity="0.5"/>
-              <circle cx="130" cy="78" r="7" fill="#F79F88" opacity="0.5"/>
-              <!-- 눈 (깜빡임 애니메이션) -->
-              <g class="sq-eyes">
-                <circle cx="102" cy="60" r="5" fill="#2E1B0E"/>
-                <circle cx="104" cy="58" r="1.8" fill="#FFF"/>
-                <circle cx="124" cy="60" r="5" fill="#2E1B0E"/>
-                <circle cx="126" cy="58" r="1.8" fill="#FFF"/>
-              </g>
-              <!-- 코 & 입 -->
-              <polygon points="113,67 110,72 116,72" fill="#4A2511"/>
-              <path d="M113 72 Q110 77 107 75 M113 72 Q116 77 119 75" stroke="#4A2511" stroke-width="2" fill="none" stroke-linecap="round"/>
-              <!-- 발 -->
-              <ellipse cx="80" cy="162" rx="14" ry="8" fill="#A85218"/>
-              <ellipse cx="120" cy="162" rx="14" ry="8" fill="#A85218"/>
-              <!-- 앞발 (바구니 잡기) -->
-              <g class="sq-paws">
-                <ellipse cx="90" cy="115" rx="9" ry="8" fill="#E48E44"/>
-                <ellipse cx="125" cy="115" rx="9" ry="8" fill="#E48E44"/>
-              </g>
-            </svg>
+          <div class="squirrel-character" id="squirrel-char" tabindex="0" role="button" aria-label="다람쥐 캐릭터">
+            <img src="./assets/squirrel.png" class="squirrel-wc-img" alt="귀여운 수채화 아기 다람쥐">
           </div>
 
-          <!-- 도토리 바구니 (앞치마/바구니) -->
+          <!-- 도토리 바구니 (Rule 3) -->
           <div class="basket-container" id="basket-container">
-            <svg class="basket-svg" viewBox="0 0 110 80" width="110" height="80">
-              <path d="M10 20 L20 75 Q55 85 90 75 L100 20 Z" fill="#C88E4B"/>
-              <!-- 바구니 격자 엮임 질감 -->
-              <path d="M15 25 L85 75 M35 20 L95 65 M5 45 L65 80 M95 25 L25 75 M75 20 L15 65 M105 45 L45 80" stroke="#9E6932" stroke-width="2.5" opacity="0.6"/>
-              <path d="M5 20 Q55 12 105 20 Q55 28 5 20 Z" fill="#E2AC6E"/>
-            </svg>
+            <img src="./assets/basket.png" class="basket-wc-img" alt="수확 바구니">
             <!-- 바구니에 들어간 도토리 아이콘들 -->
             <div class="basket-fill-items" id="basket-fill-items"></div>
           </div>
