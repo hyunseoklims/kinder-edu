@@ -1633,3 +1633,20 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
     font-size:9px;
   }
 }
+
+/* First section selection: move the home character out to the right while
+   blurring and fading it. Section-to-section artwork transitions stay intact. */
+@media(min-width:601px){
+  .prototype-stage.is-previewing .prototype-character--main{
+    opacity:0;
+    filter:blur(12px) drop-shadow(8px 15px 14px #5c49322b);
+    transform:translateX(5cqw);
+  }
+}
+@media(max-width:600px){
+  .prototype-stage.is-previewing .prototype-character--main{
+    opacity:0;
+    filter:blur(10px) drop-shadow(8px 15px 14px #5c49322b);
+    transform:translateX(calc(-50% + 72px));
+  }
+}
