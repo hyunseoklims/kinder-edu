@@ -19,6 +19,7 @@ if(prototypeStage){
     blog:{number:'06 / 06',kicker:'NOTES & IDEAS',title:'블로그',description:'교실과 일상에서 발견한 생각을 기록해요.',hint:'브랜드 노트',image:'./assets/brand/cards/blog-card-art-v2.png',href:'./blog.html'}
   };
   const railLinks=[...document.querySelectorAll('.prototype-rail-link')];
+  const homeLink=document.querySelector('.prototype-rail-home');
   const serviceCards=[...document.querySelectorAll('.prototype-card')];
   const sectionCharacters=[...document.querySelectorAll('.prototype-character--section')];
   const preview={number:document.querySelector('#preview-number'),kicker:document.querySelector('#preview-kicker'),title:document.querySelector('#preview-title'),description:document.querySelector('#preview-description'),hint:document.querySelector('#preview-hint'),image:document.querySelector('#preview-image'),open:document.querySelector('#preview-open')};
@@ -43,6 +44,14 @@ if(prototypeStage){
     railLinks.forEach(link=>link.classList.toggle('is-active',link.dataset.section===key));
   }
   function hidePreview(){clearTimers();prototypeStage.classList.remove('is-previewing');prototypeStage.removeAttribute('data-active-section');sectionCharacters.forEach(character=>character.classList.remove('is-active'));railLinks.forEach(link=>link.classList.remove('is-active'));}
+  function returnHome(){
+    clearTimers();
+    prototypeStage.classList.add('is-returning-home');
+    void prototypeStage.offsetWidth;
+    hidePreview();
+    serviceCards.forEach(card=>card.classList.remove('is-active'));
+    window.setTimeout(()=>prototypeStage.classList.remove('is-returning-home'),400);
+  }
   function scheduleHide(){window.clearTimeout(hideTimer);hideTimer=window.setTimeout(hidePreview,450);}
   function setActiveCard(card){
     serviceCards.forEach(item=>item.classList.toggle('is-active',item===card));
@@ -54,6 +63,7 @@ if(prototypeStage){
     link.addEventListener('focus',()=>{if(!isTouch())showSection(link.dataset.section);});
     link.addEventListener('click',event=>{event.preventDefault();showSection(link.dataset.section);});
   });
+  homeLink?.addEventListener('click',event=>{event.preventDefault();returnHome();});
   prototypeStage.addEventListener('pointerenter',()=>window.clearTimeout(hideTimer));
   prototypeStage.addEventListener('pointerleave',event=>{if(isTouch()||event.pointerType==='touch')return;scheduleHide();});
   serviceCards.forEach(card=>{

@@ -1650,3 +1650,10 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
     transform:translateX(calc(-50% + 72px));
   }
 }
+
+/* Returning home restores the main artwork at its fixed coordinates instead
+   of replaying the section-entry slide in reverse. */
+.prototype-stage.is-returning-home .prototype-character--main{
+  transition-property:opacity,filter;
+  transition-duration:.35s;
+}
