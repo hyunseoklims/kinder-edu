@@ -1664,3 +1664,9 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-character--main{
   filter:none!important;
 }
+
+/* The welcome copy belongs to the home state only. */
+.prototype-stage.is-previewing .prototype-welcome{
+  opacity:0!important;
+  transform:none!important;
+}
