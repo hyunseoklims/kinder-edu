@@ -146,46 +146,54 @@
       const categories = ['전체', '수·과학', '자연탐구', '신체운동', '의사소통', '예술경험'];
       const ages = ['전체', '만 3세', '만 4세', '만 5세'];
       const themes = ['전체', '가을', '사계절'];
+      const isExpanded = layout.classList.contains('sidebar-expanded');
 
       sidebar.innerHTML = `
-        <div class="game-sidebar__top">
-          <span class="game-sidebar__title">🔍 필터 및 검색</span>
-          <button type="button" class="game-sidebar__close-btn" data-sidebar-close aria-label="사이드바 접기" title="사이드바 접기">◀ 접기</button>
-        </div>
-        <div class="game-search-box">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="게임 이름, 주제 검색..." value="${escapeHtml(searchQuery)}" id="game-search-input">
-        </div>
-        <div class="game-filter-group">
-          <span class="game-filter-label">교육 영역</span>
-          <div class="game-filter-chips">
-            ${categories.map(cat => `<button type="button" class="game-chip-btn${activeCategory === cat ? ' is-active' : ''}" data-filter-cat="${cat}">${cat}</button>`).join('')}
+        <button type="button" class="game-sidebar-edge-toggle" data-sidebar-edge-toggle aria-label="${isExpanded ? '필터 접기' : '필터 열기'}" title="${isExpanded ? '필터 접기' : '필터 열기'}">
+          <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 4l-6 6 6 6M17 4l-6 6 6 6"/>
+          </svg>
+        </button>
+        <div class="game-sidebar__content">
+          <div class="game-sidebar__top">
+            <span class="game-sidebar__title">🔍 필터 및 검색</span>
           </div>
-        </div>
-        <div class="game-filter-group">
-          <span class="game-filter-label">대상 연령</span>
-          <div class="game-filter-chips">
-            ${ages.map(age => `<button type="button" class="game-chip-btn${activeAge === age ? ' is-active' : ''}" data-filter-age="${age}">${age}</button>`).join('')}
+          <div class="game-search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="게임 이름, 주제 검색..." value="${escapeHtml(searchQuery)}" id="game-search-input">
           </div>
-        </div>
-        <div class="game-filter-group">
-          <span class="game-filter-label">계절·생활주제</span>
-          <div class="game-filter-chips">
-            ${themes.map(thm => `<button type="button" class="game-chip-btn${activeTheme === thm ? ' is-active' : ''}" data-filter-theme="${thm}">${thm}</button>`).join('')}
+          <div class="game-filter-group">
+            <span class="game-filter-label">교육 영역</span>
+            <div class="game-filter-chips">
+              ${categories.map(cat => `<button type="button" class="game-chip-btn${activeCategory === cat ? ' is-active' : ''}" data-filter-cat="${cat}">${cat}</button>`).join('')}
+            </div>
           </div>
+          <div class="game-filter-group">
+            <span class="game-filter-label">대상 연령</span>
+            <div class="game-filter-chips">
+              ${ages.map(age => `<button type="button" class="game-chip-btn${activeAge === age ? ' is-active' : ''}" data-filter-age="${age}">${age}</button>`).join('')}
+            </div>
+          </div>
+          <div class="game-filter-group">
+            <span class="game-filter-label">계절·생활주제</span>
+            <div class="game-filter-chips">
+              ${themes.map(thm => `<button type="button" class="game-chip-btn${activeTheme === thm ? ' is-active' : ''}" data-filter-theme="${thm}">${thm}</button>`).join('')}
+            </div>
+          </div>
+          <button type="button" class="game-filter-reset" data-filter-reset>↺ 조건 초기화</button>
         </div>
-        <button type="button" class="game-filter-reset" data-filter-reset>↺ 조건 초기화</button>
       `;
+
+      // 우측선 중간 « » 엣지 토글 버튼 클릭
+      sidebar.querySelector('[data-sidebar-edge-toggle]')?.addEventListener('click', () => {
+        layout.classList.toggle('sidebar-expanded');
+        updateSidebarToggleBtn();
+      });
 
       const searchInput = sidebar.querySelector('#game-search-input');
       searchInput?.addEventListener('input', e => {
         searchQuery = e.target.value.trim().toLowerCase();
         renderLibrary();
-      });
-
-      sidebar.querySelector('[data-sidebar-close]')?.addEventListener('click', () => {
-        layout.classList.remove('sidebar-expanded');
-        updateSidebarToggleBtn();
       });
 
       sidebar.querySelectorAll('[data-filter-cat]').forEach(btn => {
@@ -223,9 +231,14 @@
     }
 
     function updateSidebarToggleBtn() {
+      const isExpanded = layout.classList.contains('sidebar-expanded');
+      const edgeBtn = sidebar.querySelector('[data-sidebar-edge-toggle]');
+      if (edgeBtn) {
+        edgeBtn.setAttribute('aria-expanded', String(isExpanded));
+        edgeBtn.title = isExpanded ? '필터 접기' : '필터 열기';
+      }
       const toggleBtn = surface.querySelector('[data-toggle-sidebar]');
       if (!toggleBtn) return;
-      const isExpanded = layout.classList.contains('sidebar-expanded');
       toggleBtn.classList.toggle('is-active', isExpanded);
       toggleBtn.setAttribute('aria-expanded', String(isExpanded));
       const filterCount = getActiveFilterCount();
