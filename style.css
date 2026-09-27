@@ -1510,6 +1510,125 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 .prototype-card-arrow{position:absolute;top:12px;right:12px;width:28px;height:28px;transform:none}
 .prototype-card:hover .prototype-card-arrow{transform:rotate(45deg)}
 
+/* ==========================================================================
+   Game Card: 3-Grid Structure & Integrated Character Jump Animation
+   ========================================================================== */
+.prototype-card-anim {
+  display: none;
+}
+
+@media(min-width:1201px){
+  .prototype-card.games {
+    display: grid !important;
+    grid-template-columns: minmax(105px, 1.05fr) minmax(55px, 0.55fr) minmax(115px, 1.25fr);
+    grid-template-rows: 100%;
+    align-items: stretch;
+    isolation: isolate;
+  }
+
+  /* Grid 1: Text information area */
+  .prototype-card.games .prototype-card-text {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100% !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 14px 2px 10px 14px !important;
+    z-index: 2;
+    background: transparent;
+  }
+
+  .prototype-card.games .prototype-card-text span:first-child {
+    white-space: nowrap;
+  }
+
+  /* Grid 2: Visual art area */
+  .prototype-card.games .prototype-card-art {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 2;
+    grid-row: 1;
+    width: 100% !important;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 1;
+    background: transparent;
+    border: none;
+  }
+
+  .prototype-card.games .prototype-card-art img {
+    position: relative !important;
+    inset: auto !important;
+    display: block;
+    width: 100%;
+    max-width: 95px;
+    height: auto;
+    max-height: 58%;
+    object-fit: contain;
+    margin-bottom: 8px;
+    margin-right: -14px; /* Seamless natural overlap towards Grid 3 */
+    transform: none;
+    transition: transform 0.25s ease;
+  }
+
+  /* Grid 3: Character animation area */
+  .prototype-card.games .prototype-card-anim {
+    grid-column: 3;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding-right: 8px;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 2;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .prototype-card-anim .prototype-anim-frame {
+    display: block;
+    max-width: 100%;
+    max-height: 98%;
+    width: auto;
+    height: auto;
+    aspect-ratio: 260 / 512;
+    object-fit: contain;
+    object-position: bottom right;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  .prototype-card.games:hover .prototype-card-art img,
+  .prototype-card.games.is-active .prototype-card-art img {
+    transform: translateY(-4px) scale(1.03);
+  }
+
+  .prototype-card.games:hover .prototype-anim-frame,
+  .prototype-card.games.is-active .prototype-anim-frame {
+    filter: drop-shadow(0 4px 12px rgba(223, 182, 79, 0.35));
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .prototype-anim-frame{animation:none!important}
+}
+
+
 @media(max-width:1200px){
   .prototype-services{border-radius:0}
   .prototype-card-text{width:72%;padding:15px 8px 10px 14px}
