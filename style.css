@@ -1654,6 +1654,7 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 /* Returning home restores the main artwork at its fixed coordinates instead
    of replaying the section-entry slide in reverse. */
 .prototype-stage.is-returning-home .prototype-character--main{
-  transition-property:opacity,filter;
+  filter:drop-shadow(8px 15px 14px #5c49322b)!important;
+  transition-property:opacity;
   transition-duration:.35s;
 }
