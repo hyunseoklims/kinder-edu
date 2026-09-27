@@ -117,8 +117,8 @@
     let activeTheme = '전체';
     let searchQuery = '';
 
-    // 기본 상태: 사이드바 접힘(collapsed)으로 메인 스테이지를 넓고 쾌적하게 유지
-    // 사용자가 상단 [필터 & 검색] 버튼을 누를 때 부드럽게 펼쳐짐
+    // 기본 상태: 검색 및 필터 사이드바를 기본으로 열어두어(expanded) 유저가 바로 조건 검색을 활용할 수 있도록 설정
+    layout.classList.add('sidebar-expanded');
 
     // registry.json 비동기 로드 시도
     fetch('./games/registry.json')
