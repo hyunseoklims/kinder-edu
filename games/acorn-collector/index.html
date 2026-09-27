@@ -9,55 +9,153 @@
 <body>
   <div class="game-wrapper">
     <div id="game-canvas-container" class="game-canvas">
-      <!-- 상단 정보 바 -->
+      <!-- 상단 헤더 바 -->
       <header class="game-header">
-        <div class="game-counter">
-          <span class="counter-icon">🌰</span>
-          <span class="counter-label">모은 도토리:</span>
-          <strong id="collected-count">0</strong> <span class="counter-total">/ 5</span>
+        <div class="header-left">
+          <div class="stage-pill">
+            <span class="stage-star" id="stage-stars">⭐☆☆</span>
+            <span class="stage-title" id="stage-title">1단계: 숲속 잔디밭</span>
+          </div>
+          <div class="game-counter">
+            <span class="counter-icon-svg">
+              <svg viewBox="0 0 32 32" width="22" height="22"><path d="M16 3 C12 3 7 7 7 13 C7 14 8 15 9 15 L23 15 C24 15 25 14 25 13 C25 7 20 3 16 3 Z" fill="#7A4B26"/><path d="M15 1 L16 3 L17 1 Z" stroke="#5A3215" stroke-width="2"/><path d="M9 15 C8 19 11 28 16 30 C21 28 24 19 23 15 Z" fill="#D4863B"/><ellipse cx="14" cy="20" rx="2" ry="4" fill="#F3B36E" opacity="0.6"/></svg>
+            </span>
+            <span class="counter-label">도토리:</span>
+            <strong id="collected-count">0</strong> <span class="counter-total" id="total-count">/ 5</span>
+          </div>
         </div>
+
         <div class="game-status-bubble" id="status-bubble">
-          낙엽 속에 숨은 도토리를 찾아 터치해보세요!
+          낙엽 속에 숨은 도토리를 찾아 톡톡 눌러보세요!
         </div>
-        <button type="button" class="btn-sound" id="btn-sound-toggle" aria-label="소리 토글">🔊</button>
+
+        <div class="header-right">
+          <button type="button" class="btn-sound" id="btn-sound-toggle" aria-label="소리 켜기/끄기">🔊</button>
+        </div>
       </header>
 
-      <!-- 게임 씬 영역 -->
+      <!-- 게임 인터랙티브 씬 -->
       <main class="scene-stage" id="scene-stage">
-        <!-- 배경 숲 장식 -->
-        <div class="forest-trees" aria-hidden="true"></div>
-        
-        <!-- 낙엽 바닥 레이어 -->
-        <div class="ground-layer">
-          <div class="leaf leaf-1" style="left:12%; top:45%; transform:rotate(25deg);"></div>
-          <div class="leaf leaf-2" style="left:28%; top:70%; transform:rotate(-40deg);"></div>
-          <div class="leaf leaf-3" style="left:48%; top:50%; transform:rotate(15deg);"></div>
-          <div class="leaf leaf-4" style="left:70%; top:65%; transform:rotate(-20deg);"></div>
-          <div class="leaf leaf-1" style="left:85%; top:40%; transform:rotate(55deg);"></div>
+        <!-- 배경 숲 풍경 (SVG 벡터) -->
+        <svg class="scene-bg-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFF5E5"/>
+              <stop offset="45%" stop-color="#FEE8C8"/>
+              <stop offset="100%" stop-color="#FCD5A4"/>
+            </linearGradient>
+            <linearGradient id="hillGrad1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F2BF73"/>
+              <stop offset="100%" stop-color="#DF9F48"/>
+            </linearGradient>
+            <linearGradient id="hillGrad2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#EAA64D"/>
+              <stop offset="100%" stop-color="#C77D2B"/>
+            </linearGradient>
+            <filter id="softGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+          </defs>
+          <rect width="1000" height="600" fill="url(#skyGrad)"/>
+          <!-- 햇살 광선 -->
+          <circle cx="150" cy="80" r="90" fill="#FFF2BD" opacity="0.45" filter="url(#softGlow)"/>
+          <polygon points="150,80 -50,600 350,600" fill="#FFF7DA" opacity="0.12"/>
+          <polygon points="150,80 300,600 700,600" fill="#FFF7DA" opacity="0.08"/>
+          <!-- 먼 가을 산 -->
+          <path d="M-50 420 Q180 320 400 410 T850 370 Q940 390 1050 430 L1050 600 L-50 600 Z" fill="url(#hillGrad1)" opacity="0.75"/>
+          <!-- 가까운 언덕 -->
+          <path d="M-20 470 Q240 390 560 460 T1020 440 L1020 600 L-20 600 Z" fill="url(#hillGrad2)"/>
+          <!-- 참나무 가지와 풍성한 단풍 -->
+          <path d="M-40 0 C120 40 260 120 380 200 L350 240 C240 160 110 80 -40 30 Z" fill="#6B3F1D"/>
+          <path d="M220 100 C300 80 420 110 500 140 L480 170 C410 140 300 110 210 120 Z" fill="#6B3F1D"/>
+          <!-- 나뭇잎 클러스터들 -->
+          <ellipse cx="140" cy="50" rx="90" ry="60" fill="#E86A38" opacity="0.9"/>
+          <ellipse cx="280" cy="90" rx="100" ry="70" fill="#DE8328" opacity="0.92"/>
+          <ellipse cx="440" cy="130" rx="85" ry="55" fill="#ECA23B" opacity="0.95"/>
+          <ellipse cx="200" cy="90" rx="70" ry="45" fill="#D45028" opacity="0.85"/>
+        </svg>
+
+        <!-- 나뭇가지에 대롱대롱 매달린 도토리들 장식 -->
+        <div class="tree-decorations" id="tree-decorations" aria-hidden="true"></div>
+
+        <!-- 흩날리는 낙엽 레이어 -->
+        <div class="drifting-leaves-layer" id="drifting-leaves" aria-hidden="true"></div>
+
+        <!-- 바닥 낙엽 및 숨겨진 인터랙티브 도토리 컨테이너 -->
+        <div class="ground-interactive-area" id="ground-area">
+          <!-- 도토리 및 낙엽 오브젝트가 JS로 스폰됨 -->
         </div>
 
-        <!-- 다람쥐 & 바구니 -->
-        <div class="character-squirrel" id="squirrel" aria-label="다람쥐">
-          <div class="squirrel-body"></div>
-          <div class="squirrel-tail"></div>
-        </div>
-        
-        <div class="basket" id="basket" aria-label="도토리 바구니">
-          <div class="basket-front"></div>
-          <div class="basket-items" id="basket-items"></div>
+        <!-- 애니메이션 다람쥐 캐릭터 & 바구니 -->
+        <div class="squirrel-station" id="squirrel-station">
+          <div class="speech-bubble-pop" id="squirrel-speech">도토리를 모아줘! 🌰</div>
+          <div class="squirrel-character" id="squirrel-char">
+            <svg viewBox="0 0 160 180" width="160" height="180">
+              <!-- 다람쥐 큰 꼬리 -->
+              <g class="sq-tail">
+                <path d="M60 140 C10 130 -10 60 25 25 C55 -5 95 10 90 45 C86 70 65 95 75 140 Z" fill="#C26B29"/>
+                <path d="M55 130 C20 120 10 65 35 40 C60 15 80 25 78 50 C75 70 60 90 65 130 Z" fill="#E48E44"/>
+                <path d="M45 100 C30 85 28 55 42 45 C56 35 68 45 65 65 Z" fill="#F8BC7A" opacity="0.7"/>
+              </g>
+              <!-- 몸통 -->
+              <ellipse cx="95" cy="120" rx="42" ry="46" fill="#C26B29"/>
+              <!-- 배 (밝은 털) -->
+              <ellipse cx="104" cy="126" rx="26" ry="32" fill="#FBE2C3"/>
+              <!-- 귀 -->
+              <path d="M85 45 C80 25 95 20 100 35 Z" fill="#A85218"/>
+              <path d="M88 43 C85 30 95 27 98 37 Z" fill="#F7C4B2"/>
+              <path d="M125 45 C120 25 135 20 140 35 Z" fill="#A85218"/>
+              <path d="M128 43 C125 30 135 27 138 37 Z" fill="#F7C4B2"/>
+              <!-- 머리 -->
+              <ellipse cx="112" cy="65" rx="35" ry="32" fill="#C26B29"/>
+              <!-- 양 볼 빵빵한 털 -->
+              <ellipse cx="90" cy="74" rx="14" ry="12" fill="#E48E44"/>
+              <ellipse cx="134" cy="74" rx="14" ry="12" fill="#E48E44"/>
+              <circle cx="94" cy="78" r="7" fill="#F79F88" opacity="0.5"/>
+              <circle cx="130" cy="78" r="7" fill="#F79F88" opacity="0.5"/>
+              <!-- 눈 (깜빡임 애니메이션) -->
+              <g class="sq-eyes">
+                <circle cx="102" cy="60" r="5" fill="#2E1B0E"/>
+                <circle cx="104" cy="58" r="1.8" fill="#FFF"/>
+                <circle cx="124" cy="60" r="5" fill="#2E1B0E"/>
+                <circle cx="126" cy="58" r="1.8" fill="#FFF"/>
+              </g>
+              <!-- 코 & 입 -->
+              <polygon points="113,67 110,72 116,72" fill="#4A2511"/>
+              <path d="M113 72 Q110 77 107 75 M113 72 Q116 77 119 75" stroke="#4A2511" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- 발 -->
+              <ellipse cx="80" cy="162" rx="14" ry="8" fill="#A85218"/>
+              <ellipse cx="120" cy="162" rx="14" ry="8" fill="#A85218"/>
+              <!-- 앞발 (바구니 잡기) -->
+              <g class="sq-paws">
+                <ellipse cx="90" cy="115" rx="9" ry="8" fill="#E48E44"/>
+                <ellipse cx="125" cy="115" rx="9" ry="8" fill="#E48E44"/>
+              </g>
+            </svg>
+          </div>
+
+          <!-- 도토리 바구니 (앞치마/바구니) -->
+          <div class="basket-container" id="basket-container">
+            <svg class="basket-svg" viewBox="0 0 110 80" width="110" height="80">
+              <path d="M10 20 L20 75 Q55 85 90 75 L100 20 Z" fill="#C88E4B"/>
+              <!-- 바구니 격자 엮임 질감 -->
+              <path d="M15 25 L85 75 M35 20 L95 65 M5 45 L65 80 M95 25 L25 75 M75 20 L15 65 M105 45 L45 80" stroke="#9E6932" stroke-width="2.5" opacity="0.6"/>
+              <path d="M5 20 Q55 12 105 20 Q55 28 5 20 Z" fill="#E2AC6E"/>
+            </svg>
+            <!-- 바구니에 들어간 도토리 아이콘들 -->
+            <div class="basket-fill-items" id="basket-fill-items"></div>
+          </div>
         </div>
 
-        <!-- 인터랙티브 도토리 컨테이너 -->
-        <div class="acorns-container" id="acorns-container"></div>
-
-        <!-- 완료 축하 모달 -->
-        <div class="success-overlay" id="success-overlay" hidden>
-          <div class="success-card">
-            <div class="success-squirrel">🎉 🐿️ 🌰</div>
-            <h2>참 잘했어요!</h2>
-            <p>다람쥐가 도토리를 모두 모아 따뜻한 겨울을 보낼 수 있어요!</p>
-            <div class="success-actions">
-              <button type="button" class="btn-restart" id="btn-restart">다시 하기</button>
+        <!-- 성공 축하 오버레이 모달 -->
+        <div class="celebration-overlay" id="celebration-overlay" hidden>
+          <div class="celebration-card">
+            <div class="confetti-cannon" id="confetti-container"></div>
+            <div class="celebration-badge">🎉 참 잘했어요! 🎉</div>
+            <h2 id="celebration-title">숲속 도토리를 모두 모았어요!</h2>
+            <p id="celebration-desc">다람쥐가 활짝 웃으며 고마워해요! 겨울 양식이 든든해졌어요.</p>
+            <div class="star-rating" id="celebration-stars">⭐⭐⭐</div>
+            <div class="celebration-buttons">
+              <button type="button" class="btn-primary" id="btn-next-stage">다음 단계로! ▶</button>
+              <button type="button" class="btn-secondary" id="btn-retry-stage">이 단계 다시 하기 ↺</button>
             </div>
           </div>
         </div>
