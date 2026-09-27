@@ -117,6 +117,11 @@
     let activeTheme = '전체';
     let searchQuery = '';
 
+    // 860px 미만(모바일/사이드바 패널 등)에서는 기본적으로 사이드바를 닫아 본문 찌그러짐 방지
+    if (layout && (layout.offsetWidth < 860 || window.innerWidth < 860)) {
+      layout.classList.add('sidebar-collapsed');
+    }
+
     // registry.json 비동기 로드 시도
     fetch('./games/registry.json')
       .then(res => res.ok ? res.json() : null)
