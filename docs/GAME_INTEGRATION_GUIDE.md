@@ -6,7 +6,7 @@
 
 Kinder Edu 상세 Shell 기준:
 
-- 전체 앱 프레임: `1600 × 870px`
+- 전체 앱 프레임 기준 비율: `1600 × 870px`
 - Header: `1576 × 70px`
 - Main: `1576 × 692px`
 - Footer: `1576 × 60px`
@@ -14,6 +14,8 @@ Kinder Edu 상세 Shell 기준:
 - 게임 Accent: `#DFB64F`
 - 게임 Hover: `#CA9F32`
 - 게임 Soft Background: `#FAF4E5`
+
+`1600 × 870px`은 기준 설계 크기다. 큰 데스크톱에서는 메인페이지와 동일한 계산식으로 비례 확대하며 게임 상세페이지만 `1600 × 870px`에서 멈추게 하지 않는다. Tablet과 Mobile에서는 외곽 좌우 padding 없이 화면 전체 폭을 사용한다.
 
 Play Mode에서는 `1576 × 692px` Main 전체를 Game Stage로 사용한다. Toolbar 높이를 제외한 나머지를 게임 실행 영역으로 사용한다.
 
