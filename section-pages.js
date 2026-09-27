@@ -10,13 +10,37 @@
   document.documentElement.style.setProperty('--accent-hover', section.hover);
   document.documentElement.style.setProperty('--soft', section.soft);
 
-  const icons = { magazine: '▤', programs: '▣', games: '◇', making: '✎', webtoon: '▧', blog: '▥' };
+  const icons = {
+    magazine: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 8c-4-3-8-3-12-2v19c4-1 8-1 12 2 4-3 8-3 12-2V6c-4-1-8-1-12 2ZM16 8v19M7 12c2-.4 4-.2 6 .7m-6 4c2-.4 4-.2 6 .7m6-4.7c2-1 4-1.1 6-.7m-6 5.4c2-1 4-1.1 6-.7"/></svg>',
+    programs: '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="6" width="24" height="17" rx="2"/><path d="M2 27h28M12 23l-1 4m10-4 1 4M12 14h8m-8 4h5"/></svg>',
+    games: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10 11h12c3 0 5 2 6 5l2 7c.7 3-2 5-4 3l-5-4H11l-5 4c-2 2-4.7 0-4-3l2-7c1-3 3-5 6-5ZM9 15v6m-3-3h6"/><circle cx="22" cy="16" r="1"/><circle cx="25" cy="19" r="1"/></svg>',
+    making: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 5h12l6 6v16H7zM19 5v6h6m-15 11 8-8 4 4-8 8-5 1zm8-8 2-2 4 4-2 2"/></svg>',
+    webtoon: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 5h24v16h-9l-4 5-2-5H4z"/><circle cx="11" cy="12" r="2"/><circle cx="21" cy="12" r="2"/><path d="M7 18c.5-2 2-3 4-3m7 3c.5-2 1.5-3 3-3s2.5 1 3 3"/></svg>',
+    blog: '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="4" width="22" height="24" rx="2"/><path d="M10 10h12m-12 5h12m-12 5h8"/></svg>'
+  };
+  const mobileLabels = { magazine: 'MAGAZINE', programs: 'PROGRAM', games: 'GAME', making: 'CREATE', webtoon: 'WEBTOON', blog: 'BLOG' };
   const nav = document.querySelector('[data-global-nav]');
   nav.className = 'global-nav';
   nav.innerHTML = `<nav class="global-nav__links" aria-label="전체 서비스">
-    <a class="global-nav__link global-nav__home" href="./index.html" aria-label="홈">⌂</a>
-    ${Object.entries(data.sections).map(([key,item]) => `<a class="global-nav__link${key === sectionKey ? ' is-active' : ''}" href="${item.path}"${key === sectionKey ? ' aria-current="page"' : ''}><span aria-hidden="true">${icons[key]}</span>${item.label}</a>`).join('')}
+    <a class="global-nav__link global-nav__home" href="./index.html" aria-label="홈" title="홈"><span class="global-nav__icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="m4 14 12-10 12 10M7 12v15h7v-9h5v9h6V12"/></svg></span><span class="global-nav__label">홈</span><span class="global-nav__mobile-label" aria-hidden="true">HOME <b>→</b></span></a>
+    ${Object.entries(data.sections).map(([key,item]) => `<a class="global-nav__link${key === sectionKey ? ' is-active' : ''}" href="${item.path}" title="${item.label}"${key === sectionKey ? ' aria-current="page"' : ''}><span class="global-nav__icon">${icons[key]}</span><span class="global-nav__label">${item.label}</span><span class="global-nav__mobile-label" aria-hidden="true">${mobileLabels[key]} <b>→</b></span></a>`).join('')}
   </nav><a class="global-nav__brand" href="./index.html" aria-label="JINNI'S 홈"><img src="./assets/brand/jinnis-kinder-edu-direction-1-logo.png" alt="JINNI'S"></a>`;
+
+  const globalNavLinks = [...nav.querySelectorAll('.global-nav__link')];
+  const isCompactNav = () => window.matchMedia('(max-width: 600px)').matches;
+  globalNavLinks.forEach(link => link.addEventListener('click', event => {
+    if (!isCompactNav() || link.classList.contains('is-mobile-armed')) return;
+    event.preventDefault();
+    globalNavLinks.forEach(item => item.classList.remove('is-mobile-armed'));
+    link.classList.add('is-mobile-armed');
+    nav.classList.add('has-mobile-armed');
+  }));
+  document.addEventListener('pointerdown', event => {
+    if (isCompactNav() && !event.target.closest('.global-nav__link')) {
+      globalNavLinks.forEach(link => link.classList.remove('is-mobile-armed'));
+      nav.classList.remove('has-mobile-armed');
+    }
+  });
 
   const footer = document.querySelector('[data-utility-footer]');
   footer.className = 'utility-footer';
