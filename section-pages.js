@@ -299,7 +299,7 @@
       // 추천 배너는 필터가 없는 기본 상태일 때 상단에 와이드로 전시
       if (featuredGame && !searchQuery && activeCategory === '전체' && activeAge === '전체' && activeTheme === '전체') {
         contentHtml += `
-          <article class="game-hero-featured">
+          <article class="game-hero-featured" data-play="${featuredGame.id}" tabindex="0" role="button" aria-label="${escapeHtml(featuredGame.title)} 시작하기" style="cursor:pointer;">
             <div class="game-hero-art">
               <img src="${featuredGame.cover || featuredGame.thumbnail}" alt="${escapeHtml(featuredGame.title)} 커버 이미지">
               <span class="game-hero-floating-badge">🍁 대표 추천 놀이</span>
@@ -434,6 +434,11 @@
         </div>
       `;
 
+      // 뒤로가기 버튼
+      surface.querySelector('[data-game-back]')?.addEventListener('click', () => {
+        renderLibrary();
+      });
+
       const iframe = surface.querySelector('#game-sandbox-iframe');
 
       function sendToGame(type, payload) {
@@ -448,6 +453,7 @@
 
       surface.querySelector('[data-restart]').addEventListener('click', () => {
         sendToGame('HOST_RESTART');
+        if (iframe) iframe.src = entryUrl;
       });
 
       const volumeBtn = surface.querySelector('[data-volume]');

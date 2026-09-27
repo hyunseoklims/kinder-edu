@@ -65,7 +65,15 @@
       complete: function (stats) { emit('GAME_COMPLETE', stats); },
       requestFullscreen: function () { emit('REQUEST_FULLSCREEN'); },
       exit: function () { emit('EXIT_GAME'); },
-      isMuted: function () { return isMuted; }
+      isMuted: function () { return isMuted; },
+      onRestart: function (cb) { on('HOST_RESTART', cb); },
+      onMuteChange: function (cb) { on('HOST_SET_MUTED', function (p) { if (typeof cb === 'function') cb(p ? p.muted : false); }); },
+      toggleSound: function () {
+        isMuted = !isMuted;
+        emit('GAME_SET_MUTED', { muted: isMuted });
+        return isMuted;
+      },
+      reportScore: function (score) { emit('GAME_SCORE', { score: score }); }
     };
   }
 

@@ -484,15 +484,17 @@
       });
 
       btnSound.addEventListener('click', function() {
-        var muted = bridge ? bridge.toggleSound() : false;
+        var muted = (bridge && typeof bridge.toggleSound === 'function') ? bridge.toggleSound() : false;
         btnSound.textContent = muted ? '🔇' : '🔊';
       });
 
-      if (bridge) {
+      if (bridge && typeof bridge.onRestart === 'function') {
         bridge.onRestart(function() {
           if (mode === 'song') startSong(currentSongIdx);
           else switchMode('free');
         });
+      }
+      if (bridge && typeof bridge.onMuteChange === 'function') {
         bridge.onMuteChange(function(muted) { btnSound.textContent = muted ? '🔇' : '🔊'; });
       }
 

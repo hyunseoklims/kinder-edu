@@ -475,12 +475,14 @@
       });
 
       btnSound.addEventListener('click', function() {
-        var muted = bridge ? bridge.toggleSound() : false;
+        var muted = (bridge && typeof bridge.toggleSound === 'function') ? bridge.toggleSound() : false;
         btnSound.textContent = muted ? '🔇' : '🔊';
       });
 
-      if (bridge) {
+      if (bridge && typeof bridge.onRestart === 'function') {
         bridge.onRestart(function() { startStage(0); });
+      }
+      if (bridge && typeof bridge.onMuteChange === 'function') {
         bridge.onMuteChange(function(muted) { btnSound.textContent = muted ? '🔇' : '🔊'; });
       }
 

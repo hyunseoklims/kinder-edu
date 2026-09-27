@@ -312,15 +312,17 @@
   });
 
   btnSoundToggle.addEventListener('click', function () {
-    var muted = bridge ? bridge.toggleSound() : false;
+    var muted = (bridge && typeof bridge.toggleSound === 'function') ? bridge.toggleSound() : false;
     btnSoundToggle.textContent = muted ? '🔇' : '🔊';
   });
 
   // 호스트로부터 리스타트/음소거 수신
-  if (bridge) {
+  if (bridge && typeof bridge.onRestart === 'function') {
     bridge.onRestart(function () {
       startStage(0);
     });
+  }
+  if (bridge && typeof bridge.onMuteChange === 'function') {
     bridge.onMuteChange(function (muted) {
       btnSoundToggle.textContent = muted ? '🔇' : '🔊';
     });
