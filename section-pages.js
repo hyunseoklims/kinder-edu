@@ -141,43 +141,59 @@
       const themes = ['전체', '가을', '사계절'];
 
       sidebar.innerHTML = `
-        <div class="game-sidebar__top">
-          <span class="game-sidebar__title">게임 탐색</span>
-          <button type="button" class="game-sidebar__toggle" data-sidebar-toggle aria-label="사이드바 접기">◀</button>
-        </div>
-        <div class="game-search-box">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="게임 이름, 주제 검색..." value="${escapeHtml(searchQuery)}" id="game-search-input">
-        </div>
-        <div class="game-filter-group">
-          <span class="game-filter-label">교육 영역</span>
-          <div class="game-filter-chips">
-            ${categories.map(cat => `<button type="button" class="game-chip-btn${activeCategory === cat ? ' is-active' : ''}" data-filter-cat="${cat}">${cat}</button>`).join('')}
+        <div class="game-sidebar__full">
+          <div class="game-sidebar__top">
+            <span class="game-sidebar__title">🎮 게임 탐색</span>
+            <button type="button" class="game-sidebar__toggle" data-sidebar-toggle aria-label="사이드바 접기" title="사이드바 접기">◀</button>
           </div>
-        </div>
-        <div class="game-filter-group">
-          <span class="game-filter-label">대상 연령</span>
-          <div class="game-filter-chips">
-            ${ages.map(age => `<button type="button" class="game-chip-btn${activeAge === age ? ' is-active' : ''}" data-filter-age="${age}">${age}</button>`).join('')}
+          <div class="game-search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="게임 이름, 주제 검색..." value="${escapeHtml(searchQuery)}" id="game-search-input">
           </div>
-        </div>
-        <div class="game-filter-group">
-          <span class="game-filter-label">계절·생활주제</span>
-          <div class="game-filter-chips">
-            ${themes.map(thm => `<button type="button" class="game-chip-btn${activeTheme === thm ? ' is-active' : ''}" data-filter-theme="${thm}">${thm}</button>`).join('')}
+          <div class="game-filter-group">
+            <span class="game-filter-label">교육 영역</span>
+            <div class="game-filter-chips">
+              ${categories.map(cat => `<button type="button" class="game-chip-btn${activeCategory === cat ? ' is-active' : ''}" data-filter-cat="${cat}">${cat}</button>`).join('')}
+            </div>
           </div>
+          <div class="game-filter-group">
+            <span class="game-filter-label">대상 연령</span>
+            <div class="game-filter-chips">
+              ${ages.map(age => `<button type="button" class="game-chip-btn${activeAge === age ? ' is-active' : ''}" data-filter-age="${age}">${age}</button>`).join('')}
+            </div>
+          </div>
+          <div class="game-filter-group">
+            <span class="game-filter-label">계절·생활주제</span>
+            <div class="game-filter-chips">
+              ${themes.map(thm => `<button type="button" class="game-chip-btn${activeTheme === thm ? ' is-active' : ''}" data-filter-theme="${thm}">${thm}</button>`).join('')}
+            </div>
+          </div>
+          <button type="button" class="game-filter-reset" data-filter-reset>↺ 조건 초기화</button>
         </div>
-        <button type="button" class="game-filter-reset" data-filter-reset>↺ 조건 초기화</button>
+
+        <div class="game-sidebar__mini">
+          <button type="button" class="game-mini-btn game-mini-toggle" data-sidebar-expand title="사이드바 펼치기">▶</button>
+          <button type="button" class="game-mini-btn${activeCategory === '전체' ? ' is-active' : ''}" data-filter-cat="전체" title="전체 놀이">🎮</button>
+          <button type="button" class="game-mini-btn${activeCategory === '수·과학' ? ' is-active' : ''}" data-filter-cat="수·과학" title="수·과학">📐</button>
+          <button type="button" class="game-mini-btn${activeCategory === '자연탐구' ? ' is-active' : ''}" data-filter-cat="자연탐구" title="자연탐구">🌿</button>
+          <button type="button" class="game-mini-btn${activeCategory === '신체운동' ? ' is-active' : ''}" data-filter-cat="신체운동" title="신체운동">🏃</button>
+          <button type="button" class="game-mini-btn${activeCategory === '의사소통' ? ' is-active' : ''}" data-filter-cat="의사소통" title="의사소통">💬</button>
+          <button type="button" class="game-mini-btn${activeCategory === '예술경험' ? ' is-active' : ''}" data-filter-cat="예술경험" title="예술경험">🎵</button>
+        </div>
       `;
 
       const searchInput = sidebar.querySelector('#game-search-input');
-      searchInput.addEventListener('input', e => {
+      searchInput?.addEventListener('input', e => {
         searchQuery = e.target.value.trim().toLowerCase();
         renderLibrary();
       });
 
-      sidebar.querySelector('[data-sidebar-toggle]').addEventListener('click', () => {
-        layout.classList.toggle('sidebar-collapsed');
+      sidebar.querySelector('[data-sidebar-toggle]')?.addEventListener('click', () => {
+        layout.classList.add('sidebar-collapsed');
+      });
+
+      sidebar.querySelector('[data-sidebar-expand]')?.addEventListener('click', () => {
+        layout.classList.remove('sidebar-collapsed');
       });
 
       sidebar.querySelectorAll('[data-filter-cat]').forEach(btn => {
@@ -204,7 +220,7 @@
         });
       });
 
-      sidebar.querySelector('[data-filter-reset]').addEventListener('click', () => {
+      sidebar.querySelector('[data-filter-reset]')?.addEventListener('click', () => {
         activeCategory = '전체';
         activeAge = '전체';
         activeTheme = '전체';
@@ -234,16 +250,14 @@
       layout.classList.remove('is-playing');
       const filtered = getFilteredGames();
       const featuredGame = filtered.find(g => g.featured) || filtered[0] || gameList[0];
-      const otherGames = filtered.filter(g => g.id !== (featuredGame ? featuredGame.id : null));
 
       let contentHtml = `
         <div class="game-library-view">
           <div class="game-library-header">
             <div>
               <p class="panel-kicker">GAME LIBRARY</p>
-              <h1>🎮 킨더 놀이터 <span class="meta">(${filtered.length}개의 놀이)</span></h1>
+              <h1>🎮 킨더 놀이터 <span class="meta" style="font-size:13px; font-weight:normal;">(${filtered.length}개의 놀이 준비됨)</span></h1>
             </div>
-            <button type="button" class="game-sidebar-open-btn" data-sidebar-open>🔍 필터 및 검색</button>
           </div>
       `;
 
@@ -256,7 +270,7 @@
             <div class="game-hero-info">
               <div class="game-hero-badges">
                 <span class="game-badge featured">이달의 추천 놀이</span>
-                <span class="game-badge age">${escapeHtml(featuredGame.age || '유아 전 연령')}</span>
+                <span class="game-badge age">${escapeHtml(featuredGame.age || '만 3~5세')}</span>
                 <span class="game-badge time">${escapeHtml(featuredGame.time || featuredGame.playTime || '약 3분')}</span>
               </div>
               <h2>${escapeHtml(featuredGame.title)}</h2>
@@ -280,7 +294,7 @@
       } else {
         contentHtml += `
           <div class="game-cards-section">
-            <h3>전체 게임 목록</h3>
+            <h3>전체 게임 놀이터 목록 (${filtered.length})</h3>
             <div class="game-grid">
               ${filtered.map(game => `
                 <article class="game-card-item" data-play="${game.id}" tabindex="0">
@@ -304,10 +318,6 @@
 
       contentHtml += `</div>`;
       surface.innerHTML = contentHtml;
-
-      surface.querySelector('[data-sidebar-open]')?.addEventListener('click', () => {
-        layout.classList.remove('sidebar-collapsed');
-      });
     }
 
     function renderStage(id) {
