@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF5E5"/>
+      <stop offset="100%" stop-color="#FCE6C4"/>
+    </linearGradient>
+    <linearGradient id="tree" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EAA64A"/>
+      <stop offset="100%" stop-color="#D47A2A"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F2D19E"/>
+      <stop offset="100%" stop-color="#E2B77B"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <!-- 숲 배경 나무들 -->
+  <circle cx="80" cy="180" r="110" fill="#F8C779" opacity="0.6"/>
+  <circle cx="560" cy="170" r="120" fill="#F4B066" opacity="0.6"/>
+  <circle cx="200" cy="130" r="90" fill="url(#tree)" opacity="0.8"/>
+  <circle cx="450" cy="140" r="100" fill="#DF8736" opacity="0.75"/>
+  <!-- 언덕 -->
+  <path d="M-20 280 Q 200 230, 420 270 T 660 260 L 660 380 L -20 380 Z" fill="url(#ground)"/>
+  <!-- 바구니 -->
+  <g transform="translate(420, 200)">
+    <path d="M10 30 Q 30 75, 70 75 Q 110 75, 130 30 Z" fill="#C98B48"/>
+    <path d="M5 30 L 135 30 L 125 40 L 15 40 Z" fill="#B17537"/>
+    <!-- 바구니 속 도토리들 -->
+    <ellipse cx="50" cy="28" rx="16" ry="14" fill="#8C4E1E"/>
+    <ellipse cx="80" cy="24" rx="15" ry="13" fill="#A05A23"/>
+    <ellipse cx="65" cy="18" rx="14" ry="12" fill="#753F16"/>
+  </g>
+  <!-- 다람쥐 캐릭터 -->
+  <g transform="translate(230, 140)">
+    <!-- 꼬리 -->
+    <path d="M 50 110 C 130 90, 140 -20, 70 -10 C 20 -5, 30 50, 20 80 Z" fill="#D36B28"/>
+    <path d="M 45 100 C 110 80, 115 5, 68 12 C 30 18, 38 60, 25 80 Z" fill="#F2A465"/>
+    <!-- 몸통 -->
+    <ellipse cx="10" cy="85" rx="36" ry="42" fill="#D36B28"/>
+    <ellipse cx="18" cy="88" rx="22" ry="28" fill="#FDF3E5"/>
+    <!-- 발 -->
+    <ellipse cx="32" cy="122" rx="14" ry="7" fill="#B75215"/>
+    <ellipse cx="-10" cy="122" rx="14" ry="7" fill="#B75215"/>
+    <!-- 귀 -->
+    <ellipse cx="-6" cy="16" rx="8" ry="14" fill="#D36B28" transform="rotate(-15 -6 16)"/>
+    <ellipse cx="24" cy="16" rx="8" ry="14" fill="#D36B28" transform="rotate(15 24 16)"/>
+    <ellipse cx="-6" cy="17" rx="4" ry="8" fill="#FDF3E5" transform="rotate(-15 -6 17)"/>
+    <ellipse cx="24" cy="17" rx="4" ry="8" fill="#FDF3E5" transform="rotate(15 24 17)"/>
+    <!-- 머리 -->
+    <ellipse cx="10" cy="40" rx="34" ry="30" fill="#D36B28"/>
+    <ellipse cx="10" cy="50" rx="26" ry="18" fill="#FDF3E5"/>
+    <!-- 눈 & 볼 -->
+    <circle cx="-1" cy="38" r="4.5" fill="#2E2E2E"/>
+    <circle cx="21" cy="38" r="4.5" fill="#2E2E2E"/>
+    <circle cx="0" cy="36.5" r="1.5" fill="#FFFFFF"/>
+    <circle cx="22" cy="36.5" r="1.5" fill="#FFFFFF"/>
+    <circle cx="-7" cy="47" r="6" fill="#F49E82" opacity="0.6"/>
+    <circle cx="27" cy="47" r="6" fill="#F49E82" opacity="0.6"/>
+    <!-- 코 & 입 -->
+    <polygon points="10,44 7,41 13,41" fill="#753F16"/>
+    <path d="M 6 47 Q 10 51, 14 47" fill="none" stroke="#753F16" stroke-width="2" stroke-linecap="round"/>
+    <!-- 손에 든 도토리 -->
+    <ellipse cx="10" cy="74" rx="13" ry="15" fill="#8C4E1E"/>
+    <path d="M -1 65 Q 10 60, 21 65 L 18 69 L 2 69 Z" fill="#5E3311"/>
+    <!-- 팔 -->
+    <ellipse cx="-4" cy="78" rx="8" ry="6" fill="#D36B28"/>
+    <ellipse cx="24" cy="78" rx="8" ry="6" fill="#D36B28"/>
+  </g>
+  <!-- 흩어진 단풍잎과 도토리 -->
+  <g transform="translate(110, 280) rotate(20)">
+    <path d="M0 0 C10 -15, 30 -5, 20 15 C5 25, -15 10, 0 0 Z" fill="#E85D35"/>
+    <line x1="0" y1="0" x2="20" y2="15" stroke="#BF411B" stroke-width="1.5"/>
+  </g>
+  <g transform="translate(360, 290) rotate(-15)">
+    <path d="M0 0 C15 -10, 25 10, 10 20 C-5 15, -10 5, 0 0 Z" fill="#F3A932"/>
+  </g>
+  <!-- 타이틀 뱃지 -->
+  <rect x="24" y="24" width="130" height="34" rx="17" fill="rgba(255,255,255,0.9)"/>
+  <circle cx="42" cy="41" r="7" fill="#DFB64F"/>
+  <text x="56" y="46" font-family="'Pretendard', sans-serif" font-weight="700" font-size="14" fill="#2E2E2E">도토리 모으기</text>
+</svg>

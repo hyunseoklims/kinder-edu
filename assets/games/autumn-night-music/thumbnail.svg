@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="night5" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1B2238"/>
+      <stop offset="100%" stop-color="#2D3B62"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#night5)"/>
+  <!-- 별빛들 -->
+  <circle cx="90" cy="70" r="1.5" fill="#FFE59E" opacity="0.8"/>
+  <circle cx="210" cy="40" r="2" fill="#FFE59E"/>
+  <circle cx="340" cy="65" r="1.5" fill="#FFE59E" opacity="0.7"/>
+  <circle cx="480" cy="50" r="2" fill="#FFE59E"/>
+  <circle cx="590" cy="80" r="1.5" fill="#FFE59E" opacity="0.9"/>
+  <!-- 보름달 -->
+  <circle cx="510" cy="90" r="45" fill="#FFF2B8"/>
+  <circle cx="510" cy="90" r="55" fill="#FFF2B8" opacity="0.25"/>
+  <!-- 밤 언덕 실루엣 -->
+  <path d="M-20 360 L-20 250 Q 200 200, 420 230 T 660 210 L 660 360 Z" fill="#151A2C"/>
+  <!-- 풀벌레와 나뭇잎 실로폰 -->
+  <!-- 나뭇잎 건반들 -->
+  <g transform="translate(180, 240)">
+    <!-- 4개 건반 -->
+    <rect x="0" y="30" width="45" height="18" rx="9" fill="#7DBB91" transform="rotate(-10 0 30)"/>
+    <rect x="60" y="24" width="45" height="18" rx="9" fill="#91C788" transform="rotate(-10 60 24)"/>
+    <rect x="120" y="18" width="45" height="18" rx="9" fill="#E2AC52" transform="rotate(-10 120 18)"/>
+    <rect x="180" y="12" width="45" height="18" rx="9" fill="#E86850" transform="rotate(-10 180 12)"/>
+  </g>
+  <!-- 귀뚜라미 연주자 -->
+  <g transform="translate(120, 180)">
+    <!-- 몸통 -->
+    <ellipse cx="25" cy="50" rx="15" ry="22" fill="#4B6E47"/>
+    <!-- 머리 & 더듬이 -->
+    <circle cx="25" cy="24" r="11" fill="#3D5A3A"/>
+    <path d="M22 15 Q 12 0, 5 3" stroke="#8BB087" stroke-width="2" fill="none"/>
+    <path d="M28 15 Q 38 0, 45 3" stroke="#8BB087" stroke-width="2" fill="none"/>
+    <circle cx="21" cy="22" r="2" fill="#FFFFFF"/>
+    <circle cx="29" cy="22" r="2" fill="#FFFFFF"/>
+    <!-- 바이올린 활 -->
+    <line x1="35" y1="35" x2="65" y2="55" stroke="#C9945A" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <!-- 음표 효과들 -->
+  <g transform="translate(320, 140)" fill="#FFDF78">
+    <circle cx="0" cy="10" r="4.5"/>
+    <rect x="3" y="-5" width="2" height="15"/>
+    <circle cx="35" cy="5" r="4.5"/>
+    <rect x="38" y="-10" width="2" height="15"/>
+    <line x1="5" y1="-5" x2="40" y2="-10" stroke="#FFDF78" stroke-width="2"/>
+  </g>
+  <!-- 타이틀 뱃지 -->
+  <rect x="24" y="24" width="130" height="34" rx="17" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+  <circle cx="42" cy="41" r="7" fill="#FFDF78"/>
+  <text x="56" y="46" font-family="'Pretendard', sans-serif" font-weight="700" font-size="14" fill="#FFFFFF">풀벌레 음악대</text>
+</svg>

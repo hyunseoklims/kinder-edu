@@ -106,26 +106,305 @@
   }
 
   function initGames() {
+    const layout = document.querySelector('.game-layout');
+    const sidebar = document.querySelector('#game-sidebar');
     const surface = document.querySelector('#game-surface');
+    let gameList = (data.games && data.games.length) ? data.games : [];
     let activeGame = null;
+    let isMuted = false;
+    let activeCategory = '전체';
+    let activeAge = '전체';
+    let activeTheme = '전체';
+    let searchQuery = '';
+
+    // registry.json 비동기 로드 시도
+    fetch('./games/registry.json')
+      .then(res => res.ok ? res.json() : null)
+      .then(reg => {
+        if (reg && Array.isArray(reg.games) && reg.games.length) {
+          gameList = reg.games;
+          renderSidebar();
+          renderLibrary();
+        }
+      })
+      .catch(() => {});
+
+    function renderSidebar() {
+      if (!sidebar) return;
+      const categories = ['전체', '수·과학', '자연탐구', '신체운동', '의사소통', '예술경험'];
+      const ages = ['전체', '만 3세', '만 4세', '만 5세'];
+      const themes = ['전체', '가을', '사계절'];
+
+      sidebar.innerHTML = `
+        <div class="game-sidebar__top">
+          <span class="game-sidebar__title">게임 탐색</span>
+          <button type="button" class="game-sidebar__toggle" data-sidebar-toggle aria-label="사이드바 접기">◀</button>
+        </div>
+        <div class="game-search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="게임 이름, 주제 검색..." value="${escapeHtml(searchQuery)}" id="game-search-input">
+        </div>
+        <div class="game-filter-group">
+          <span class="game-filter-label">교육 영역</span>
+          <div class="game-filter-chips">
+            ${categories.map(cat => `<button type="button" class="game-chip-btn${activeCategory === cat ? ' is-active' : ''}" data-filter-cat="${cat}">${cat}</button>`).join('')}
+          </div>
+        </div>
+        <div class="game-filter-group">
+          <span class="game-filter-label">대상 연령</span>
+          <div class="game-filter-chips">
+            ${ages.map(age => `<button type="button" class="game-chip-btn${activeAge === age ? ' is-active' : ''}" data-filter-age="${age}">${age}</button>`).join('')}
+          </div>
+        </div>
+        <div class="game-filter-group">
+          <span class="game-filter-label">계절·생활주제</span>
+          <div class="game-filter-chips">
+            ${themes.map(thm => `<button type="button" class="game-chip-btn${activeTheme === thm ? ' is-active' : ''}" data-filter-theme="${thm}">${thm}</button>`).join('')}
+          </div>
+        </div>
+        <button type="button" class="game-filter-reset" data-filter-reset>↺ 조건 초기화</button>
+      `;
+
+      const searchInput = sidebar.querySelector('#game-search-input');
+      searchInput.addEventListener('input', e => {
+        searchQuery = e.target.value.trim().toLowerCase();
+        renderLibrary();
+      });
+
+      sidebar.querySelector('[data-sidebar-toggle]').addEventListener('click', () => {
+        layout.classList.toggle('sidebar-collapsed');
+      });
+
+      sidebar.querySelectorAll('[data-filter-cat]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeCategory = btn.dataset.filterCat;
+          renderSidebar();
+          renderLibrary();
+        });
+      });
+
+      sidebar.querySelectorAll('[data-filter-age]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeAge = btn.dataset.filterAge;
+          renderSidebar();
+          renderLibrary();
+        });
+      });
+
+      sidebar.querySelectorAll('[data-filter-theme]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeTheme = btn.dataset.filterTheme;
+          renderSidebar();
+          renderLibrary();
+        });
+      });
+
+      sidebar.querySelector('[data-filter-reset]').addEventListener('click', () => {
+        activeCategory = '전체';
+        activeAge = '전체';
+        activeTheme = '전체';
+        searchQuery = '';
+        renderSidebar();
+        renderLibrary();
+      });
+    }
+
+    function getFilteredGames() {
+      return gameList.filter(game => {
+        if (activeCategory !== '전체' && game.category !== activeCategory && !game.category?.includes?.(activeCategory)) return false;
+        if (activeAge !== '전체' && !game.age?.includes?.(activeAge) && !game.ageGroup?.includes?.(activeAge)) return false;
+        if (activeTheme !== '전체' && game.theme !== activeTheme) return false;
+        if (searchQuery) {
+          const matchTitle = (game.title || '').toLowerCase().includes(searchQuery);
+          const matchDesc = (game.description || game.summary || '').toLowerCase().includes(searchQuery);
+          const matchCat = (game.category || '').toLowerCase().includes(searchQuery);
+          if (!matchTitle && !matchDesc && !matchCat) return false;
+        }
+        return true;
+      });
+    }
+
     function renderLibrary() {
       activeGame = null;
-      const featured = data.games[0];
-      surface.innerHTML = `<div class="game-heading"><div><p class="panel-kicker">GAME LIBRARY</p><h1>게임</h1></div><p class="meta">게임별 독립 프로젝트를 연결하는 Launcher</p></div><div class="chip-row"><span class="category-chip">전체</span><span class="category-chip">자연탐구</span><span class="category-chip">수·과학</span></div><article class="game-feature"><div><p class="panel-kicker">FEATURED GAME</p><h2>${escapeHtml(featured.title)}</h2><p>${escapeHtml(featured.description)}</p><button class="soft-button" type="button" data-play="${featured.id}">Main 안에서 실행</button></div><div class="game-feature__art">16:9 GAME COVER SLOT</div></article><div class="game-cards">${data.games.map(game => `<button class="game-card" type="button" data-play="${game.id}"><span class="game-card__thumb">16:9 THUMBNAIL</span><b>${escapeHtml(game.title)}</b><p class="meta">${escapeHtml(game.category)} · ${escapeHtml(game.age)}</p></button>`).join('')}</div>`;
+      layout.classList.remove('is-playing');
+      const filtered = getFilteredGames();
+      const featuredGame = filtered.find(g => g.featured) || filtered[0] || gameList[0];
+      const otherGames = filtered.filter(g => g.id !== (featuredGame ? featuredGame.id : null));
+
+      let contentHtml = `
+        <div class="game-library-view">
+          <div class="game-library-header">
+            <div>
+              <p class="panel-kicker">GAME LIBRARY</p>
+              <h1>🎮 킨더 놀이터 <span class="meta">(${filtered.length}개의 놀이)</span></h1>
+            </div>
+            <button type="button" class="game-sidebar-open-btn" data-sidebar-open>🔍 필터 및 검색</button>
+          </div>
+      `;
+
+      if (featuredGame && !searchQuery && activeCategory === '전체' && activeAge === '전체' && activeTheme === '전체') {
+        contentHtml += `
+          <article class="game-hero-featured">
+            <div class="game-hero-art">
+              <img src="${featuredGame.cover || featuredGame.thumbnail}" alt="${escapeHtml(featuredGame.title)} 커버 이미지">
+            </div>
+            <div class="game-hero-info">
+              <div class="game-hero-badges">
+                <span class="game-badge featured">이달의 추천 놀이</span>
+                <span class="game-badge age">${escapeHtml(featuredGame.age || '유아 전 연령')}</span>
+                <span class="game-badge time">${escapeHtml(featuredGame.time || featuredGame.playTime || '약 3분')}</span>
+              </div>
+              <h2>${escapeHtml(featuredGame.title)}</h2>
+              <p>${escapeHtml(featuredGame.summary || featuredGame.description || '')}</p>
+              <div class="game-hero-actions">
+                <button type="button" class="game-play-btn" data-play="${featuredGame.id}">지금 플레이하기 ▶</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      if (!filtered.length) {
+        contentHtml += `
+          <div class="game-empty-state">
+            <p style="font-size:36px; margin-bottom:12px;">🔍</p>
+            <h3>조건에 맞는 게임을 찾지 못했어요</h3>
+            <p style="margin-top:6px;">검색어를 바꾸거나 필터 조건을 초기화해보세요.</p>
+          </div>
+        `;
+      } else {
+        contentHtml += `
+          <div class="game-cards-section">
+            <h3>전체 게임 목록</h3>
+            <div class="game-grid">
+              ${filtered.map(game => `
+                <article class="game-card-item" data-play="${game.id}" tabindex="0">
+                  <div class="game-card-thumb">
+                    <img src="${game.thumbnail}" alt="${escapeHtml(game.title)}" loading="lazy">
+                  </div>
+                  <div class="game-card-meta">
+                    <h4>${escapeHtml(game.title)}</h4>
+                    <p>${escapeHtml(game.summary || game.description || '')}</p>
+                  </div>
+                  <div class="game-card-tags">
+                    <span>${escapeHtml(game.category || '놀이')}</span>
+                    <span>${escapeHtml(game.age || '')}</span>
+                  </div>
+                </article>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      contentHtml += `</div>`;
+      surface.innerHTML = contentHtml;
+
+      surface.querySelector('[data-sidebar-open]')?.addEventListener('click', () => {
+        layout.classList.remove('sidebar-collapsed');
+      });
     }
+
     function renderStage(id) {
-      activeGame = data.games.find(game => game.id === id);
-      surface.innerHTML = `<div class="game-stage"><div class="game-toolbar"><button class="soft-button" type="button" data-game-back>← 게임 목록</button><strong>${escapeHtml(activeGame.title)}</strong><button class="soft-button" type="button" data-restart>다시 시작</button><button class="soft-button" type="button" data-volume aria-pressed="false">음량</button><button class="soft-button" type="button" data-fullscreen>전체화면</button></div><div class="game-frame"><div><p class="panel-kicker">GAME STAGE</p><h2>${escapeHtml(activeGame.title)}</h2><p>${escapeHtml(activeGame.description)}</p><p class="meta">독립 게임 entry가 이 영역에 mount됩니다.</p></div></div></div>`;
+      activeGame = gameList.find(g => g.id === id);
+      if (!activeGame) return;
+
+      layout.classList.add('is-playing');
+      const entryUrl = activeGame.entry || `./games/${activeGame.id}/index.html`;
+
+      surface.innerHTML = `
+        <div class="game-stage-view">
+          <div class="game-stage-toolbar">
+            <button class="soft-button" type="button" data-game-back>← 게임 목록</button>
+            <strong>${escapeHtml(activeGame.title)} <span class="meta">· ${escapeHtml(activeGame.category || '')}</span></strong>
+            <button class="soft-button" type="button" data-restart>다시 시작</button>
+            <button class="soft-button" type="button" data-volume aria-pressed="${isMuted ? 'true' : 'false'}">${isMuted ? '🔇 음소거됨' : '🔊 소리 켬'}</button>
+            <button class="soft-button" type="button" data-fullscreen>전체화면</button>
+          </div>
+          <div class="game-frame-container" id="game-frame-container">
+            <div class="game-frame-wrapper">
+              <iframe id="game-sandbox-iframe" src="${entryUrl}" allow="fullscreen; autoplay" title="${escapeHtml(activeGame.title)}"></iframe>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const iframe = surface.querySelector('#game-sandbox-iframe');
+
+      function sendToGame(type, payload) {
+        if (!iframe || !iframe.contentWindow) return;
+        iframe.contentWindow.postMessage({
+          source: 'kinder-edu-host',
+          type: type,
+          gameId: activeGame.id,
+          payload: payload || {}
+        }, '*');
+      }
+
+      surface.querySelector('[data-restart]').addEventListener('click', () => {
+        sendToGame('HOST_RESTART');
+      });
+
+      const volumeBtn = surface.querySelector('[data-volume]');
+      volumeBtn.addEventListener('click', () => {
+        isMuted = !isMuted;
+        volumeBtn.setAttribute('aria-pressed', String(isMuted));
+        volumeBtn.textContent = isMuted ? '🔇 음소거됨' : '🔊 소리 켬';
+        sendToGame('HOST_SET_MUTED', { muted: isMuted });
+      });
+
+      const fullscreenBtn = surface.querySelector('[data-fullscreen]');
+      fullscreenBtn.addEventListener('click', () => {
+        const frameContainer = surface.querySelector('#game-frame-container');
+        if (!document.fullscreenElement) {
+          if (frameContainer.requestFullscreen) {
+            frameContainer.requestFullscreen();
+          } else if (frameContainer.webkitRequestFullscreen) {
+            frameContainer.webkitRequestFullscreen();
+          }
+        } else {
+          document.exitFullscreen?.();
+        }
+      });
     }
-    surface.addEventListener('click', event => {
-      const play = event.target.closest('[data-play]'); if (play) renderStage(play.dataset.play);
-      if (event.target.closest('[data-game-back]')) renderLibrary();
-      if (event.target.closest('[data-restart]') && activeGame) renderStage(activeGame.id);
-      const volume = event.target.closest('[data-volume]'); if (volume) { const muted = volume.getAttribute('aria-pressed') !== 'true'; volume.setAttribute('aria-pressed', String(muted)); volume.textContent = muted ? '음소거됨' : '음량'; }
-      if (event.target.closest('[data-fullscreen]')) surface.requestFullscreen?.();
+
+    // 포스트메시지 수신 (게임 -> 호스트)
+    window.addEventListener('message', event => {
+      const data = event.data;
+      if (!data || data.source !== 'kinder-edu-game') return;
+      if (data.type === 'REQUEST_FULLSCREEN') {
+        const frameContainer = surface.querySelector('#game-frame-container');
+        frameContainer?.requestFullscreen?.();
+      }
+      if (data.type === 'EXIT_GAME') {
+        renderLibrary();
+      }
     });
+
+    surface.addEventListener('click', event => {
+      const playBtn = event.target.closest('[data-play]');
+      if (playBtn) {
+        renderStage(playBtn.dataset.play);
+      }
+      if (event.target.closest('[data-game-back]')) {
+        renderLibrary();
+      }
+    });
+
+    surface.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        const playBtn = event.target.closest('[data-play]');
+        if (playBtn) {
+          event.preventDefault();
+          renderStage(playBtn.dataset.play);
+        }
+      }
+    });
+
+    renderSidebar();
     renderLibrary();
   }
+
 
   function initMaking() {
     const list = document.querySelector('#template-list');

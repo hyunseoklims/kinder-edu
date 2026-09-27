@@ -30,8 +30,11 @@
       { id: 'play-tools', name: '놀이 기록 도구', summary: '놀이 기록 프로그램 연결 슬롯', status: '프로그램 연결 준비 중' }
     ],
     games: [
-      { id: 'acorn-collector', title: '다람쥐 도토리 모으기', age: '대상 연령 준비 중', category: '자연탐구', time: '플레이 시간 준비 중', description: 'Game Launcher와 독립 게임 프로젝트 연결을 검증하는 대표 슬롯입니다.' },
-      { id: 'game-slot-02', title: '게임 슬롯 02', age: '준비 중', category: '준비 중', time: '준비 중', description: '실제 게임 manifest로 교체할 자리입니다.' }
+      { id: 'acorn-collector', title: '다람쥐의 도토리 모으기', age: '만 3~5세', category: '수·과학', theme: '가을', time: '약 3분', description: '가을 숲속 낙엽 사이에서 도토리를 찾아 세며 다람쥐 바구니에 담는 게임', entry: './games/acorn-collector/index.html', thumbnail: './assets/games/acorn-collector/thumbnail.svg', cover: './assets/games/acorn-collector/cover.svg', featured: true },
+      { id: 'fall-leaves-sort', title: '알록달록 낙엽 분류하기', age: '만 3~5세', category: '자연탐구', theme: '가을', time: '약 3분', description: '은행잎, 단풍잎, 참나무잎을 색깔과 모양에 맞는 바구니로 분류하는 감각 놀이', entry: './games/fall-leaves-sort/index.html', thumbnail: './assets/games/fall-leaves-sort/thumbnail.svg', cover: './assets/games/fall-leaves-sort/cover.svg', featured: false },
+      { id: 'autumn-orchard', title: '가을 과수원 열매 수확', age: '만 4~6세', category: '신체운동', theme: '가을', time: '약 3분', description: '가을 햇살을 받고 탐스럽게 익은 사과와 감을 톡톡 수확 상자에 담는 놀이', entry: './games/autumn-orchard/index.html', thumbnail: './assets/games/autumn-orchard/thumbnail.svg', cover: './assets/games/autumn-orchard/cover.svg', featured: false },
+      { id: 'scarecrow-memory', title: '허수아비 카드 짝맞추기', age: '만 4~6세', category: '의사소통', theme: '가을', time: '약 2분', description: '황금 들판 허수아비 옷에 걸린 가을 낱말 카드를 뒤집어 짝을 찾는 메모리 게임', entry: './games/scarecrow-memory/index.html', thumbnail: './assets/games/scarecrow-memory/thumbnail.svg', cover: './assets/games/scarecrow-memory/cover.svg', featured: false },
+      { id: 'autumn-night-music', title: '가을밤 풀벌레 음악대', age: '만 3~6세', category: '예술경험', theme: '가을', time: '약 3분', description: '보름달 아래 귀뚜라미와 방울벌레 친구들과 함께 나뭇잎 실로폰을 연주하는 리듬 게임', entry: './games/autumn-night-music/index.html', thumbnail: './assets/games/autumn-night-music/thumbnail.svg', cover: './assets/games/autumn-night-music/cover.svg', featured: false }
     ],
     templates: [
       { id: 'name-tag', category: '이름표', title: '기본 이름표', ratio: '4 / 3', fields: [{ key: 'name', label: '이름', type: 'text', value: '이름 입력' }, { key: 'color', label: '포인트 색', type: 'color', value: '#7DBB91' }] },

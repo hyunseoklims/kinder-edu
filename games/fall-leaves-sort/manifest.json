@@ -1,0 +1,17 @@
+{
+  "id": "fall-leaves-sort",
+  "title": "알록달록 낙엽 분류하기",
+  "description": "은행잎, 단풍잎, 참나무잎을 색깔과 모양에 맞는 바구니로 분류하는 감각 놀이",
+  "version": "1.0.0",
+  "entry": "./index.html",
+  "thumbnail": "../../assets/games/fall-leaves-sort/thumbnail.svg",
+  "cover": "../../assets/games/fall-leaves-sort/cover.svg",
+  "category": ["자연탐구"],
+  "age": [3, 4, 5],
+  "playTimeMinutes": 3,
+  "orientation": "any",
+  "baseWidth": 1000,
+  "baseHeight": 660,
+  "fullscreen": true,
+  "status": "ready"
+}

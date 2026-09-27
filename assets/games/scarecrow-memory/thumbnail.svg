@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF9EA"/>
+      <stop offset="100%" stop-color="#FCEABF"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg4)"/>
+  <!-- 황금 들판 벼들 -->
+  <path d="M-20 360 L-20 260 Q 200 240, 420 260 T 660 250 L 660 360 Z" fill="#E8BD56" opacity="0.8"/>
+  <path d="M-20 360 L-20 290 Q 150 270, 350 295 T 660 280 L 660 360 Z" fill="#D3A233"/>
+  <!-- 허수아비 -->
+  <g transform="translate(180, 110)">
+    <!-- 나무 기둥 -->
+    <rect x="52" y="40" width="16" height="180" rx="4" fill="#99602E"/>
+    <rect x="-30" y="80" width="180" height="12" rx="4" fill="#99602E"/>
+    <!-- 옷 (파란 멜빵) -->
+    <path d="M20 70 L100 70 L115 150 L5 150 Z" fill="#6A97BD"/>
+    <!-- 밀짚모자 -->
+    <ellipse cx="60" cy="30" rx="45" ry="12" fill="#E2AC52"/>
+    <path d="M35 30 Q 60 5, 85 30 Z" fill="#C98F32"/>
+    <!-- 얼굴 -->
+    <circle cx="60" cy="45" r="18" fill="#FDF3E5"/>
+    <circle cx="53" cy="43" r="2.5" fill="#2E2E2E"/>
+    <circle cx="67" cy="43" r="2.5" fill="#2E2E2E"/>
+    <path d="M56 50 Q 60 55, 64 50" stroke="#B04526" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="48" cy="48" r="3.5" fill="#F49E82" opacity="0.6"/>
+    <circle cx="72" cy="48" r="3.5" fill="#F49E82" opacity="0.6"/>
+  </g>
+  <!-- 짝맞추기 카드 3장 -->
+  <g transform="translate(360, 90) rotate(6)">
+    <rect width="90" height="115" rx="10" fill="#FFFFFF" stroke="#E8DDD5" stroke-width="2"/>
+    <circle cx="45" cy="55" r="28" fill="#FFF3D6"/>
+    <!-- 잠자리 그림 -->
+    <ellipse cx="45" cy="55" rx="4" ry="16" fill="#C9442A"/>
+    <ellipse cx="33" cy="48" rx="12" ry="4" fill="#82B0CE" opacity="0.8"/>
+    <ellipse cx="57" cy="48" rx="12" ry="4" fill="#82B0CE" opacity="0.8"/>
+    <text x="45" y="98" font-family="'Pretendard', sans-serif" font-weight="700" font-size="11" fill="#7E7872" text-anchor="middle">고추잠자리</text>
+  </g>
+  <g transform="translate(470, 110) rotate(-8)">
+    <rect width="90" height="115" rx="10" fill="#FFFFFF" stroke="#E8DDD5" stroke-width="2"/>
+    <circle cx="45" cy="55" r="28" fill="#FFF3D6"/>
+    <!-- 잠자리 그림 -->
+    <ellipse cx="45" cy="55" rx="4" ry="16" fill="#C9442A"/>
+    <ellipse cx="33" cy="48" rx="12" ry="4" fill="#82B0CE" opacity="0.8"/>
+    <ellipse cx="57" cy="48" rx="12" ry="4" fill="#82B0CE" opacity="0.8"/>
+    <text x="45" y="98" font-family="'Pretendard', sans-serif" font-weight="700" font-size="11" fill="#7E7872" text-anchor="middle">고추잠자리</text>
+  </g>
+  <!-- 타이틀 뱃지 -->
+  <rect x="24" y="24" width="140" height="34" rx="17" fill="rgba(255,255,255,0.9)"/>
+  <circle cx="42" cy="41" r="7" fill="#6A97BD"/>
+  <text x="56" y="46" font-family="'Pretendard', sans-serif" font-weight="700" font-size="14" fill="#2E2E2E">허수아비 짝맞추기</text>
+</svg>

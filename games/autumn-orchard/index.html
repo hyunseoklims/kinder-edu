@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>가을 과수원 열매 수확 | Kinder Edu</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background: #FAF4E5; font-family: 'Pretendard', sans-serif; }
+    .game-wrapper { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 10px; }
+    .game-canvas {
+      width: 100%; max-width: 1000px; height: 100%; max-height: 660px; aspect-ratio: 1000 / 660;
+      background: linear-gradient(180deg, #E6F3FA 0%, #F5FBFD 60%, #E2F0D9 100%);
+      border-radius: 20px; box-shadow: 0 16px 40px rgba(110,85,45,0.12);
+      display: flex; flex-direction: column; position: relative; overflow: hidden;
+    }
+    .header { height: 60px; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); }
+    .info { font-size: 15px; font-weight: 700; color: #35532F; }
+    .tree-stage { flex: 1; position: relative; }
+    .tree-crown {
+      position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+      width: 640px; height: 380px; border-radius: 50%; background: #4C9665;
+      box-shadow: inset 0 -20px 40px rgba(0,0,0,0.1);
+    }
+    .fruit-item {
+      position: absolute; width: 56px; height: 56px; border-radius: 50%;
+      background: #FFF; box-shadow: 0 6px 14px rgba(0,0,0,0.15); display: grid; place-items: center;
+      font-size: 30px; cursor: pointer; transition: transform 0.2s; border: none;
+    }
+    .fruit-item:hover { transform: scale(1.2); }
+    .crate-box {
+      position: absolute; bottom: 20px; right: 80px;
+      width: 180px; height: 90px; background: #C9945A; border: 4px solid #A87236; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 24px;
+    }
+    .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 20; }
+    .overlay[hidden] { display: none; }
+    .card { background: #FFF; padding: 32px 40px; border-radius: 20px; text-align: center; }
+    .card h2 { font-size: 24px; color: #D47A2A; margin-bottom: 8px; }
+    .btn-res { background: #DFB64F; color: #FFF; border: none; padding: 10px 28px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="game-wrapper">
+    <div class="game-canvas">
+      <header class="header">
+        <div class="info">🍎 나무에 열린 탐스러운 사과와 감을 터치해 상자에 담아보세요!</div>
+        <div id="harvest-score" style="font-weight:700; color:#4C9665;">수확: 0 / 6</div>
+      </header>
+      <main class="tree-stage">
+        <div class="tree-crown"></div>
+        <div id="fruits-area"></div>
+        <div class="crate-box" id="crate-box">
+          <span style="font-size:14px; font-weight:700; color:#5A3816;">수확 상자 📦</span>
+        </div>
+        <div class="overlay" id="overlay" hidden>
+          <div class="card">
+            <div style="font-size:42px; margin-bottom:10px;">🍎 🍊 🧺</div>
+            <h2>맛있는 가을 열매를 모두 수확했어요!</h2>
+            <p>달콤한 과일 상자가 가득 찼어요. 참 잘했어요!</p>
+            <button class="btn-res" id="btn-restart">다시 수확하기</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../shared/game-bridge.js"></script>
+  <script>
+    (function(){
+      var bridge = window.KinderGameBridge ? window.KinderGameBridge.createGameClient('autumn-orchard') : null;
+      var fruits = [
+        { icon: '🍎', x: '35%', y: '80px' },
+        { icon: '🍊', x: '48%', y: '60px' },
+        { icon: '🍎', x: '60%', y: '100px' },
+        { icon: '🍊', x: '30%', y: '160px' },
+        { icon: '🍎', x: '45%', y: '200px' },
+        { icon: '🍊', x: '65%', y: '180px' }
+      ];
+      var harvested = 0;
+      var area = document.getElementById('fruits-area');
+      var score = document.getElementById('harvest-score');
+      var crate = document.getElementById('crate-box');
+      var overlay = document.getElementById('overlay');
+
+      function init(){
+        harvested = 0;
+        score.textContent = '수확: 0 / 6';
+        area.innerHTML = '';
+        crate.innerHTML = '<span style="font-size:14px; font-weight:700; color:#5A3816;">수확 상자 📦</span>';
+        overlay.hidden = true;
+
+        fruits.forEach(function(f, i){
+          var btn = document.createElement('button');
+          btn.className = 'fruit-item';
+          btn.textContent = f.icon;
+          btn.style.left = f.x;
+          btn.style.top = f.y;
+          btn.onclick = function(){
+            btn.style.transition = 'all 0.35s ease';
+            btn.style.transform = 'scale(0.2) translate(100px, 300px)';
+            btn.style.opacity = '0';
+            setTimeout(function(){
+              if(btn.parentNode) area.removeChild(btn);
+              harvested++;
+              score.textContent = '수확: ' + harvested + ' / 6';
+              var span = document.createElement('span');
+              span.textContent = f.icon;
+              crate.appendChild(span);
+              if(harvested >= 6){
+                setTimeout(function(){
+                  overlay.hidden = false;
+                  if(bridge) bridge.complete({ harvested: harvested });
+                }, 300);
+              }
+            }, 350);
+          };
+          area.appendChild(btn);
+        });
+        if(bridge) bridge.start();
+      }
+
+      document.getElementById('btn-restart').onclick = init;
+      if(bridge){
+        bridge.on('HOST_RESTART', init);
+        bridge.ready();
+      }
+      init();
+    })();
+  </script>
+</body>
+</html>

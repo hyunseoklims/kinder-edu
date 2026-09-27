@@ -1,0 +1,17 @@
+{
+  "id": "autumn-night-music",
+  "title": "가을밤 풀벌레 음악대",
+  "description": "보름달 아래 귀뚜라미와 방울벌레 친구들과 함께 나뭇잎 실로폰을 연주하는 리듬 게임",
+  "version": "1.0.0",
+  "entry": "./index.html",
+  "thumbnail": "../../assets/games/autumn-night-music/thumbnail.svg",
+  "cover": "../../assets/games/autumn-night-music/cover.svg",
+  "category": ["예술경험"],
+  "age": [3, 4, 5, 6],
+  "playTimeMinutes": 3,
+  "orientation": "any",
+  "baseWidth": 1000,
+  "baseHeight": 660,
+  "fullscreen": true,
+  "status": "ready"
+}

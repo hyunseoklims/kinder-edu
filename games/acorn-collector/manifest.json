@@ -1,0 +1,17 @@
+{
+  "id": "acorn-collector",
+  "title": "다람쥐의 도토리 모으기",
+  "description": "가을 숲속 낙엽 사이에서 도토리를 찾아 세며 다람쥐 바구니에 담는 게임",
+  "version": "1.0.0",
+  "entry": "./index.html",
+  "thumbnail": "../../assets/games/acorn-collector/thumbnail.svg",
+  "cover": "../../assets/games/acorn-collector/cover.svg",
+  "category": ["수·과학", "자연탐구"],
+  "age": [3, 4, 5],
+  "playTimeMinutes": 3,
+  "orientation": "any",
+  "baseWidth": 1000,
+  "baseHeight": 660,
+  "fullscreen": true,
+  "status": "ready"
+}

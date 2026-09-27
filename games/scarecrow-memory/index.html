@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>허수아비 카드 짝맞추기 | Kinder Edu</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background: #FAF4E5; font-family: 'Pretendard', sans-serif; }
+    .game-wrapper { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 10px; }
+    .game-canvas {
+      width: 100%; max-width: 1000px; height: 100%; max-height: 660px; aspect-ratio: 1000 / 660;
+      background: linear-gradient(180deg, #FFF9EB 0%, #FBECC7 100%);
+      border-radius: 20px; box-shadow: 0 16px 40px rgba(110,85,45,0.12);
+      display: flex; flex-direction: column; position: relative; overflow: hidden;
+    }
+    .header { height: 60px; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); }
+    .stage { flex: 1; display: grid; grid-template-columns: repeat(3, 140px); gap: 20px; align-content: center; justify-content: center; }
+    .flip-card {
+      width: 140px; height: 170px; perspective: 1000px; cursor: pointer;
+    }
+    .card-inner {
+      width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .flip-card.flipped .card-inner { transform: rotateY(180deg); }
+    .flip-card.matched .card-inner { transform: rotateY(180deg); opacity: 0.7; }
+    .card-front, .card-back {
+      position: absolute; inset: 0; backface-visibility: hidden; border-radius: 16px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .card-back { background: #E2AC52; color: #FFF; font-size: 36px; border: 4px solid #FFF; }
+    .card-front { background: #FFF; transform: rotateY(180deg); border: 4px solid #E2AC52; font-size: 40px; }
+    .card-label { font-size: 13px; font-weight: 700; color: #5C4A38; margin-top: 6px; }
+    .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 20; }
+    .overlay[hidden] { display: none; }
+    .card-modal { background: #FFF; padding: 32px 40px; border-radius: 20px; text-align: center; }
+    .btn-res { background: #DFB64F; color: #FFF; border: none; padding: 10px 28px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 14px; }
+  </style>
+</head>
+<body>
+  <div class="game-wrapper">
+    <div class="game-canvas">
+      <header class="header">
+        <div style="font-weight:700; color:#5C4A38;">🌾 카드를 뒤집어 같은 가을 짝을 찾아보세요!</div>
+        <div id="pairs-score" style="font-weight:700; color:#D47A2A;">맞춘 짝: 0 / 3</div>
+      </header>
+      <main class="stage" id="cards-grid"></main>
+      <div class="overlay" id="overlay" hidden>
+        <div class="card-modal">
+          <div style="font-size:42px; margin-bottom:10px;">🌾 🌽 🍂</div>
+          <h2 style="color:#D47A2A; margin-bottom:8px;">짝을 모두 찾았어요!</h2>
+          <p style="color:#7E7872; font-size:14px;">허수아비가 활짝 웃으며 칭찬해요!</p>
+          <button class="btn-res" id="btn-restart">다시 맞추기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../shared/game-bridge.js"></script>
+  <script>
+    (function(){
+      var bridge = window.KinderGameBridge ? window.KinderGameBridge.createGameClient('scarecrow-memory') : null;
+      var cardPairs = [
+        { key: 'dragonfly', icon: '🦗', label: '잠자리' },
+        { key: 'dragonfly', icon: '🦗', label: '잠자리' },
+        { key: 'scarecrow', icon: '🌾', label: '허수아비' },
+        { key: 'scarecrow', icon: '🌾', label: '허수아비' },
+        { key: 'persimmon', icon: '🍊', label: '단감' },
+        { key: 'persimmon', icon: '🍊', label: '단감' }
+      ];
+      var flipped = [];
+      var matchedPairs = 0;
+      var grid = document.getElementById('cards-grid');
+      var score = document.getElementById('pairs-score');
+      var overlay = document.getElementById('overlay');
+
+      function init(){
+        grid.innerHTML = '';
+        flipped = [];
+        matchedPairs = 0;
+        score.textContent = '맞춘 짝: 0 / 3';
+        overlay.hidden = true;
+
+        var shuffled = cardPairs.slice().sort(function(){ return 0.5 - Math.random(); });
+        shuffled.forEach(function(item, idx){
+          var card = document.createElement('div');
+          card.className = 'flip-card';
+          card.innerHTML = '<div class="card-inner">' +
+            '<div class="card-back">🌾</div>' +
+            '<div class="card-front">' + item.icon + '<span class="card-label">' + item.label + '</span></div>' +
+            '</div>';
+          
+          card.onclick = function(){
+            if(card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length >= 2) return;
+            card.classList.add('flipped');
+            flipped.push({ el: card, key: item.key });
+
+            if(flipped.length === 2){
+              if(flipped[0].key === flipped[1].key){
+                setTimeout(function(){
+                  flipped[0].el.classList.add('matched');
+                  flipped[1].el.classList.add('matched');
+                  flipped = [];
+                  matchedPairs++;
+                  score.textContent = '맞춘 짝: ' + matchedPairs + ' / 3';
+                  if(matchedPairs >= 3){
+                    setTimeout(function(){
+                      overlay.hidden = false;
+                      if(bridge) bridge.complete({ pairs: matchedPairs });
+                    }, 400);
+                  }
+                }, 400);
+              } else {
+                setTimeout(function(){
+                  flipped[0].el.classList.remove('flipped');
+                  flipped[1].el.classList.remove('flipped');
+                  flipped = [];
+                }, 800);
+              }
+            }
+          };
+          grid.appendChild(card);
+        });
+        if(bridge) bridge.start();
+      }
+
+      document.getElementById('btn-restart').onclick = init;
+      if(bridge){
+        bridge.on('HOST_RESTART', init);
+        bridge.ready();
+      }
+      init();
+    })();
+  </script>
+</body>
+</html>

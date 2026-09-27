@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>알록달록 낙엽 분류하기 | Kinder Edu</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background: #FAF4E5; font-family: 'Pretendard', sans-serif; }
+    .game-wrapper { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 10px; }
+    .game-canvas {
+      width: 100%; max-width: 1000px; height: 100%; max-height: 660px; aspect-ratio: 1000 / 660;
+      background: linear-gradient(180deg, #FFFDF8 0%, #F5ECDD 100%);
+      border-radius: 20px; box-shadow: 0 16px 40px rgba(110,85,45,0.12);
+      display: flex; flex-direction: column; position: relative; overflow: hidden;
+    }
+    .header { height: 60px; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); }
+    .info { font-size: 15px; font-weight: 700; color: #5C4A38; }
+    .stage { flex: 1; position: relative; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+    .leaf-spawn-area { height: 180px; position: relative; display: flex; align-items: center; justify-content: center; gap: 20px; }
+    .leaf-btn {
+      width: 70px; height: 70px; border-radius: 50%; border: 3px solid transparent; background: #FFF;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08); font-size: 38px; cursor: pointer; display: grid; place-items: center;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .leaf-btn:hover { transform: scale(1.15); }
+    .leaf-btn.selected { border-color: #DFB64F; transform: scale(1.2); box-shadow: 0 0 0 4px rgba(223,182,79,0.3); }
+    .baskets-area { display: flex; justify-content: space-around; padding-bottom: 20px; }
+    .basket-box {
+      width: 160px; height: 130px; border-radius: 16px; border: 3px dashed #C9A87C;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      cursor: pointer; background: rgba(255,255,255,0.6); transition: all 0.2s;
+    }
+    .basket-box:hover { background: #FFF; border-color: #DFB64F; transform: translateY(-4px); }
+    .basket-box.yellow { border-color: #F4CA55; }
+    .basket-box.red { border-color: #E86850; }
+    .basket-box.brown { border-color: #B78255; }
+    .basket-title { font-size: 14px; font-weight: 700; color: #5C4A38; }
+    .basket-count { font-size: 12px; color: #8A8178; }
+    .overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 20;
+    }
+    .overlay[hidden] { display: none; }
+    .card { background: #FFF; padding: 32px 40px; border-radius: 20px; text-align: center; }
+    .card h2 { font-size: 24px; color: #D47A2A; margin-bottom: 8px; }
+    .card p { font-size: 14px; color: #7E7872; margin-bottom: 20px; }
+    .btn-res { background: #DFB64F; color: #FFF; border: none; padding: 10px 28px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="game-wrapper">
+    <div class="game-canvas">
+      <header class="header">
+        <div class="info">🍂 나뭇잎을 탭하고 알맞은 색깔 바구니에 담아보세요!</div>
+        <div id="score" style="font-weight:700; color:#D47A2A;">분류 완료: 0 / 6</div>
+      </header>
+      <main class="stage">
+        <div class="leaf-spawn-area" id="spawn-area"></div>
+        <div class="baskets-area">
+          <div class="basket-box yellow" data-type="yellow">
+            <span style="font-size:32px;">🧺</span>
+            <span class="basket-title">노란 은행잎</span>
+            <span class="basket-count" id="count-yellow">0개</span>
+          </div>
+          <div class="basket-box red" data-type="red">
+            <span style="font-size:32px;">🧺</span>
+            <span class="basket-title">붉은 단풍잎</span>
+            <span class="basket-count" id="count-red">0개</span>
+          </div>
+          <div class="basket-box brown" data-type="brown">
+            <span style="font-size:32px;">🧺</span>
+            <span class="basket-title">갈색 참나무잎</span>
+            <span class="basket-count" id="count-brown">0개</span>
+          </div>
+        </div>
+        <div class="overlay" id="overlay" hidden>
+          <div class="card">
+            <div style="font-size:42px; margin-bottom:10px;">🍁 🍂 🌾</div>
+            <h2>낙엽 정리가 모두 끝났어요!</h2>
+            <p>색깔과 모양에 맞춰 참 예쁘게 정리했네요!</p>
+            <button class="btn-res" id="btn-restart">다시 정리하기</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../shared/game-bridge.js"></script>
+  <script>
+    (function(){
+      var bridge = window.KinderGameBridge ? window.KinderGameBridge.createGameClient('fall-leaves-sort') : null;
+      var leaves = [
+        { id: 1, type: 'yellow', icon: '🟡', label: '은행잎' },
+        { id: 2, type: 'red', icon: '🍁', label: '단풍잎' },
+        { id: 3, type: 'brown', icon: '🍂', label: '참나무잎' },
+        { id: 4, type: 'yellow', icon: '🟡', label: '은행잎' },
+        { id: 5, type: 'red', icon: '🍁', label: '단풍잎' },
+        { id: 6, type: 'brown', icon: '🍂', label: '참나무잎' }
+      ];
+      var selectedLeaf = null;
+      var counts = { yellow: 0, red: 0, brown: 0 };
+      var totalSorted = 0;
+      var spawnEl = document.getElementById('spawn-area');
+      var scoreEl = document.getElementById('score');
+      var overlayEl = document.getElementById('overlay');
+
+      function init() {
+        totalSorted = 0;
+        counts = { yellow: 0, red: 0, brown: 0 };
+        document.getElementById('count-yellow').textContent = '0개';
+        document.getElementById('count-red').textContent = '0개';
+        document.getElementById('count-brown').textContent = '0개';
+        scoreEl.textContent = '분류 완료: 0 / 6';
+        overlayEl.hidden = true;
+        spawnEl.innerHTML = '';
+        selectedLeaf = null;
+
+        leaves.forEach(function(item){
+          var btn = document.createElement('button');
+          btn.className = 'leaf-btn';
+          btn.textContent = item.icon;
+          btn.title = item.label;
+          btn.onclick = function(){
+            document.querySelectorAll('.leaf-btn').forEach(function(b){ b.classList.remove('selected'); });
+            selectedLeaf = item;
+            btn.classList.add('selected');
+          };
+          btn.leafData = item;
+          spawnEl.appendChild(btn);
+        });
+        if (bridge) bridge.start();
+      }
+
+      document.querySelectorAll('.basket-box').forEach(function(box){
+        box.onclick = function(){
+          if (!selectedLeaf) return;
+          var basketType = box.dataset.type;
+          if (selectedLeaf.type === basketType) {
+            counts[basketType]++;
+            document.getElementById('count-' + basketType).textContent = counts[basketType] + '개';
+            totalSorted++;
+            scoreEl.textContent = '분류 완료: ' + totalSorted + ' / 6';
+            
+            // 제거
+            var targetBtn = Array.from(spawnEl.children).find(function(b){ return b.leafData && b.leafData.id === selectedLeaf.id; });
+            if (targetBtn) spawnEl.removeChild(targetBtn);
+            selectedLeaf = null;
+
+            if (totalSorted >= 6) {
+              setTimeout(function(){
+                overlayEl.hidden = false;
+                if (bridge) bridge.complete({ sorted: totalSorted });
+              }, 400);
+            }
+          } else {
+            box.style.transform = 'translateX(-6px)';
+            setTimeout(function(){ box.style.transform = 'translateX(6px)'; }, 100);
+            setTimeout(function(){ box.style.transform = 'none'; }, 200);
+          }
+        };
+      });
+
+      document.getElementById('btn-restart').onclick = init;
+      if (bridge) {
+        bridge.on('HOST_RESTART', init);
+        bridge.ready();
+      }
+      init();
+    })();
+  </script>
+</body>
+</html>

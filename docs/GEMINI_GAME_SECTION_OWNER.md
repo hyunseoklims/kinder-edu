@@ -58,6 +58,10 @@ Gemini는 Kinder Edu의 게임 섹션 전담 개발·관리 에이전트다. 단
 - `content/webtoon/**`
 - `content/blog/**`
 
+## 4.1 공통 Shell 보호 영역 — 상단 글로벌 내비게이션 바 (Global Nav)
+
+상단 글로벌 내비게이션 바(`<header data-global-nav></header>` 및 `.global-nav` 관련 공통 구조)는 플랫폼 전 섹션의 시각적·기능적 통일성을 위해 **절대 수정하지 않고 100% 현행 그대로 유지**한다. 게임 섹션의 모든 신규 UI(사이드바, 라이브러리, 스테이지 등)는 상단바 아래의 순수한 본문 영역(`<main class="section-main ...">`) 내부에서만 구현한다.
+
 ## 5. 기본 수정 허용 범위
 
 게임 작업의 기본 허용 경로는 다음과 같다.

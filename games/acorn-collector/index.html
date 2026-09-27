@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>다람쥐의 도토리 모으기 | Kinder Edu</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="game-wrapper">
+    <div id="game-canvas-container" class="game-canvas">
+      <!-- 상단 정보 바 -->
+      <header class="game-header">
+        <div class="game-counter">
+          <span class="counter-icon">🌰</span>
+          <span class="counter-label">모은 도토리:</span>
+          <strong id="collected-count">0</strong> <span class="counter-total">/ 5</span>
+        </div>
+        <div class="game-status-bubble" id="status-bubble">
+          낙엽 속에 숨은 도토리를 찾아 터치해보세요!
+        </div>
+        <button type="button" class="btn-sound" id="btn-sound-toggle" aria-label="소리 토글">🔊</button>
+      </header>
+
+      <!-- 게임 씬 영역 -->
+      <main class="scene-stage" id="scene-stage">
+        <!-- 배경 숲 장식 -->
+        <div class="forest-trees" aria-hidden="true"></div>
+        
+        <!-- 낙엽 바닥 레이어 -->
+        <div class="ground-layer">
+          <div class="leaf leaf-1" style="left:12%; top:45%; transform:rotate(25deg);"></div>
+          <div class="leaf leaf-2" style="left:28%; top:70%; transform:rotate(-40deg);"></div>
+          <div class="leaf leaf-3" style="left:48%; top:50%; transform:rotate(15deg);"></div>
+          <div class="leaf leaf-4" style="left:70%; top:65%; transform:rotate(-20deg);"></div>
+          <div class="leaf leaf-1" style="left:85%; top:40%; transform:rotate(55deg);"></div>
+        </div>
+
+        <!-- 다람쥐 & 바구니 -->
+        <div class="character-squirrel" id="squirrel" aria-label="다람쥐">
+          <div class="squirrel-body"></div>
+          <div class="squirrel-tail"></div>
+        </div>
+        
+        <div class="basket" id="basket" aria-label="도토리 바구니">
+          <div class="basket-front"></div>
+          <div class="basket-items" id="basket-items"></div>
+        </div>
+
+        <!-- 인터랙티브 도토리 컨테이너 -->
+        <div class="acorns-container" id="acorns-container"></div>
+
+        <!-- 완료 축하 모달 -->
+        <div class="success-overlay" id="success-overlay" hidden>
+          <div class="success-card">
+            <div class="success-squirrel">🎉 🐿️ 🌰</div>
+            <h2>참 잘했어요!</h2>
+            <p>다람쥐가 도토리를 모두 모아 따뜻한 겨울을 보낼 수 있어요!</p>
+            <div class="success-actions">
+              <button type="button" class="btn-restart" id="btn-restart">다시 하기</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../shared/game-bridge.js"></script>
+  <script src="./src/game.js"></script>
+</body>
+</html>

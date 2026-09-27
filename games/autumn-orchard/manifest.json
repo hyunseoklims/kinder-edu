@@ -1,0 +1,17 @@
+{
+  "id": "autumn-orchard",
+  "title": "가을 과수원 열매 수확",
+  "description": "가을 햇살을 받고 탐스럽게 익은 사과와 감을 톡톡 수확 상자에 담는 놀이",
+  "version": "1.0.0",
+  "entry": "./index.html",
+  "thumbnail": "../../assets/games/autumn-orchard/thumbnail.svg",
+  "cover": "../../assets/games/autumn-orchard/cover.svg",
+  "category": ["신체운동"],
+  "age": [4, 5, 6],
+  "playTimeMinutes": 3,
+  "orientation": "any",
+  "baseWidth": 1000,
+  "baseHeight": 660,
+  "fullscreen": true,
+  "status": "ready"
+}

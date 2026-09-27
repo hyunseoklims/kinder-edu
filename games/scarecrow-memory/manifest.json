@@ -1,0 +1,17 @@
+{
+  "id": "scarecrow-memory",
+  "title": "허수아비 카드 짝맞추기",
+  "description": "황금 들판 허수아비 옷에 걸린 가을 낱말 카드를 뒤집어 짝을 찾는 메모리 게임",
+  "version": "1.0.0",
+  "entry": "./index.html",
+  "thumbnail": "../../assets/games/scarecrow-memory/thumbnail.svg",
+  "cover": "../../assets/games/scarecrow-memory/cover.svg",
+  "category": ["의사소통"],
+  "age": [4, 5, 6],
+  "playTimeMinutes": 2,
+  "orientation": "any",
+  "baseWidth": 1000,
+  "baseHeight": 660,
+  "fullscreen": true,
+  "status": "ready"
+}
