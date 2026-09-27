@@ -1639,14 +1639,14 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 @media(min-width:601px){
   .prototype-stage.is-previewing .prototype-character--main{
     opacity:0;
-    filter:blur(12px) drop-shadow(8px 15px 14px #5c49322b);
+    filter:none!important;
     transform:translateX(5cqw);
   }
 }
 @media(max-width:600px){
   .prototype-stage.is-previewing .prototype-character--main{
     opacity:0;
-    filter:blur(10px) drop-shadow(8px 15px 14px #5c49322b);
+    filter:none!important;
     transform:translateX(calc(-50% + 72px));
   }
 }
@@ -1654,7 +1654,13 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
 /* Returning home restores the main artwork at its fixed coordinates instead
    of replaying the section-entry slide in reverse. */
 .prototype-stage.is-returning-home .prototype-character--main{
-  filter:drop-shadow(8px 15px 14px #5c49322b)!important;
+  filter:none!important;
   transition-property:opacity;
   transition-duration:.35s;
+}
+
+/* iOS Safari can retain the blurred compositing surface after the preview
+   closes. Keep the main artwork outside the filter pipeline at all times. */
+.prototype-character--main{
+  filter:none!important;
 }
