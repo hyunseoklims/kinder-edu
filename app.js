@@ -55,7 +55,7 @@ if(prototypeStage){
     link.addEventListener('click',event=>{event.preventDefault();showSection(link.dataset.section);});
   });
   prototypeStage.addEventListener('pointerenter',()=>window.clearTimeout(hideTimer));
-  prototypeStage.addEventListener('pointerleave',scheduleHide);
+  prototypeStage.addEventListener('pointerleave',event=>{if(isTouch()||event.pointerType==='touch')return;scheduleHide();});
   serviceCards.forEach(card=>{
     const activateCard=()=>{setActiveCard(card);showSection(card.dataset.section);};
     card.addEventListener('pointerenter',event=>{if(event.pointerType==='touch')return;activateCard();});
@@ -68,7 +68,6 @@ if(prototypeStage){
   document.addEventListener('keydown',event=>{if(event.key==='Escape')hidePreview();});
   function handleDocumentPress(event){
     if(!event.target.closest('.prototype-card'))serviceCards.forEach(card=>card.classList.remove('is-active'));
-    if(isTouch()&&prototypeStage.classList.contains('is-previewing')&&!event.target.closest('.prototype-rail-link,.prototype-preview,.prototype-card'))hidePreview();
   }
   document.addEventListener('pointerdown',handleDocumentPress);
   document.addEventListener('touchstart',handleDocumentPress,{passive:true});
