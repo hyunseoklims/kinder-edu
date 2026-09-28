@@ -793,14 +793,16 @@
 
       canvas.innerHTML = `
         <div class="canvas-toolbar">
-          <strong class="canvas-toolbar__title">${escapeHtml(currentTemplate.title)}</strong>
+          <strong class="canvas-toolbar__title">우리학급</strong>
+          <button class="canvas-toolbar-btn" id="btn-quick-manage-class" type="button">⚙️ 학급관리</button>
           <button class="canvas-class-trigger ${isClassDropdownOpen ? 'is-active' : ''}" id="btn-class-trigger" type="button" title="학급 전환 / 새 학급 만들기">
             <span>🏫 ${escapeHtml(active.year)}학년도 ${escapeHtml(active.className)} (${childCount}명)</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
           </button>
           <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
-            <button class="canvas-toolbar-btn canvas-toolbar-btn--primary" id="btn-quick-save-class" type="button" title="내 문서 classcreation에 저장">📁 classcreation 저장</button>
-            <button class="canvas-toolbar-btn" id="btn-quick-manage-class" type="button">⚙️ 학급관리</button>
+            <button class="canvas-toolbar-btn canvas-toolbar-btn--primary" id="btn-quick-save-class" type="button" title="내 문서 classcreation에 저장">💾 저장</button>
+            <button class="canvas-toolbar-btn" id="btn-quick-load-class" type="button" title="학급 파일(.json) 불러오기">📂 불러오기</button>
+            <input type="file" id="input-load-class-file" accept=".json" style="display:none">
           </div>
 
           ${isClassDropdownOpen ? `
@@ -1190,6 +1192,39 @@
 
       if (event.target.closest('#btn-quick-save-class')) {
         saveClassToFile(getActiveClass());
+        return;
+      }
+
+      if (event.target.closest('#btn-quick-load-class')) {
+        const fileInput = document.getElementById('input-load-class-file');
+        if (fileInput) {
+          fileInput.onchange = (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (loadEvt) => {
+              try {
+                const loaded = JSON.parse(loadEvt.target.result);
+                if (!loaded.className) throw new Error('학급 데이터 형식이 올바르지 않습니다.');
+                if (!loaded.id) loaded.id = 'class_' + Date.now();
+                if (!loaded.year) loaded.year = String(currentYear);
+                const existIdx = classStore.classes.findIndex(c => c.id === loaded.id);
+                if (existIdx >= 0) classStore.classes[existIdx] = loaded;
+                else classStore.classes.unshift(loaded);
+                classStore.activeId = loaded.id;
+                saveClassStore();
+                alert(`🎉 "${loaded.year}학년도 ${loaded.className}" 학급 데이터를 성공적으로 불러왔습니다!`);
+                renderCanvas();
+                renderInspector();
+              } catch (err) {
+                alert('파일을 불러오는 중 오류가 발생했습니다: ' + err.message);
+              }
+            };
+            reader.readAsText(file, 'utf-8');
+            fileInput.value = '';
+          };
+          fileInput.click();
+        }
         return;
       }
 
