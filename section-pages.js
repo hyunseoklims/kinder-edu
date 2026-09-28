@@ -949,8 +949,8 @@
           </button>
           <button class="canvas-toolbar-btn" id="btn-quick-manage-class" type="button">⚙️ 학급관리</button>
           <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
-            <button class="canvas-toolbar-btn" id="btn-quick-save-class" type="button" title="내 문서 classcreation에 저장">💾 저장</button>
-            <button class="canvas-toolbar-btn" id="btn-quick-load-class" type="button" title="학급 파일(.json) 불러오기">📂 불러오기</button>
+            <button class="canvas-toolbar-btn canvas-toolbar-btn--equal" id="btn-quick-save-class" type="button" title="내 문서 classcreation에 저장">💾 저장</button>
+            <button class="canvas-toolbar-btn canvas-toolbar-btn--equal" id="btn-quick-load-class" type="button" title="학급 파일(.json) 불러오기">📂 불러오기</button>
             <input type="file" id="input-load-class-file" accept=".json" style="display:none">
           </div>
 
