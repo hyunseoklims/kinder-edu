@@ -1072,7 +1072,7 @@
         </div>
 
         <!-- 1. 크기 및 비율 -->
-        <div class="inspector-group">
+        <div class="inspector-group is-collapsed">
           <div class="inspector-group__header" data-toggle-group>
             <span>📐 크기 및 비율</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
@@ -1098,7 +1098,7 @@
         </div>
 
         <!-- 2. 이름 텍스트 -->
-        <div class="inspector-group">
+        <div class="inspector-group is-collapsed">
           <div class="inspector-group__header" data-toggle-group>
             <span>🏷️ 이름 텍스트</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
@@ -1149,7 +1149,7 @@
         </div>
 
         <!-- 3. 학급 텍스트 -->
-        <div class="inspector-group">
+        <div class="inspector-group is-collapsed">
           <div class="inspector-group__header" data-toggle-group>
             <span>🏫 학급 / 문구 텍스트</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
@@ -1184,7 +1184,7 @@
         </div>
 
         <!-- 4. 배경 및 테두리 -->
-        <div class="inspector-group">
+        <div class="inspector-group is-collapsed">
           <div class="inspector-group__header" data-toggle-group>
             <span>🎨 배경 및 테두리</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
