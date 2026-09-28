@@ -801,10 +801,6 @@
           <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
             <button class="canvas-toolbar-btn canvas-toolbar-btn--primary" id="btn-quick-save-class" type="button" title="내 문서 classcreation에 저장">📁 classcreation 저장</button>
             <button class="canvas-toolbar-btn" id="btn-quick-manage-class" type="button">⚙️ 학급관리</button>
-            <button class="soft-button" type="button" data-zoom=".75">75%</button>
-            <button class="soft-button" type="button" data-zoom="1">100%</button>
-            <button class="soft-button" type="button" data-zoom="1.25">125%</button>
-            <button class="soft-button" type="button" id="btn-print-preview">미리보기</button>
           </div>
 
           ${isClassDropdownOpen ? `
