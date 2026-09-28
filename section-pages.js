@@ -1051,7 +1051,7 @@
 
       inspector.innerHTML = `
         <p class="panel-kicker">INSPECTOR</p>
-        <h2>상세 디자인 설정</h2>
+        <h2>디자인수정</h2>
 
         <div class="inspector-class-box">
           <div class="inspector-class-box__title">
