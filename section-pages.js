@@ -644,6 +644,59 @@
     } else {
       renderLibrary();
     }
+
+    function initCharacterAnim() {
+      const frameImg = document.getElementById('game-character-anim-img');
+      const stage = document.getElementById('game-anim-stage');
+      const cheerBtn = document.getElementById('game-anim-cheer-btn');
+      if (!frameImg) return;
+
+      const frames = [
+        './assets/game-character-frame-01.png',
+        './assets/game-character-frame-02.png',
+        './assets/game-character-frame-03.png',
+        './assets/game-character-frame-04.png',
+        './assets/game-character-frame-05.png',
+        './assets/game-character-frame-06.png'
+      ];
+      const timings = [180, 140, 170, 220, 180, 260];
+      const pauseAfterLanding = 800;
+
+      frames.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
+
+      let currentFrame = 0;
+      let timerId = null;
+
+      function step() {
+        if (document.hidden || window.getComputedStyle(frameImg).display === 'none') {
+          timerId = setTimeout(step, 600);
+          return;
+        }
+
+        currentFrame = (currentFrame + 1) % frames.length;
+        frameImg.src = frames[currentFrame];
+
+        const delay = (currentFrame === 5) ? pauseAfterLanding : timings[currentFrame];
+        timerId = setTimeout(step, delay);
+      }
+
+      timerId = setTimeout(step, timings[0]);
+
+      function punchJump() {
+        clearTimeout(timerId);
+        currentFrame = 1;
+        frameImg.src = frames[1];
+        timerId = setTimeout(step, timings[1]);
+      }
+
+      stage?.addEventListener('click', punchJump);
+      cheerBtn?.addEventListener('click', punchJump);
+    }
+
+    initCharacterAnim();
   }
 
 
