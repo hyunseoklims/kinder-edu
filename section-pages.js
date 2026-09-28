@@ -167,8 +167,12 @@
     let activeTheme = '전체';
     let searchQuery = '';
 
-    // 기본 상태: 검색 및 필터 사이드바를 기본으로 열어두어(expanded) 유저가 바로 조건 검색을 활용할 수 있도록 설정
-    layout.classList.add('sidebar-expanded');
+    // 기본 상태: 데스크톱(> 1200px)에서는 사이드바를 기본으로 열어두고, 화면이 좁은 환경에서는 메인 게임 목록이 바로 보이도록 닫아둠
+    if (window.innerWidth > 1200) {
+      layout.classList.add('sidebar-expanded');
+    } else {
+      layout.classList.remove('sidebar-expanded');
+    }
 
     // registry.json 비동기 로드 시도
     fetch('./games/registry.json')
@@ -304,6 +308,15 @@
         ${countBadge}
       `;
     }
+
+    document.addEventListener('pointerdown', (e) => {
+      if (window.innerWidth <= 1200 && layout.classList.contains('sidebar-expanded')) {
+        if (!sidebar.contains(e.target) && !surface.querySelector('[data-toggle-sidebar]')?.contains(e.target)) {
+          layout.classList.remove('sidebar-expanded');
+          updateSidebarToggleBtn();
+        }
+      }
+    });
 
     function getFilteredGames() {
       return gameList.filter(game => {
@@ -770,26 +783,163 @@
 
     loadClassStore();
 
+    const DESIGN_PRESETS = [
+      {
+        id: 'sprout',
+        title: '새싹 프렌즈',
+        desc: '싱그러운 초록 테마',
+        deco: '🌱',
+        ratio: '4/3',
+        bgColor: '#f0fdf4',
+        bgOpacity: 100,
+        borderWidth: 3,
+        borderColor: '#86efac',
+        borderRadius: 20,
+        nameFont: `'Nanum Gothic', 'Pretendard', sans-serif`,
+        nameSize: 34,
+        nameSpacing: 2,
+        nameColor: '#166534',
+        nameBold: true,
+        showClass: true,
+        classSize: 12,
+        classColor: '#15803d'
+      },
+      {
+        id: 'teddy',
+        title: '달콤 곰돌이',
+        desc: '포근한 베이지 테마',
+        deco: '🐻',
+        ratio: '4/3',
+        bgColor: '#fffbeb',
+        bgOpacity: 100,
+        borderWidth: 4,
+        borderColor: '#fde68a',
+        borderRadius: 24,
+        nameFont: `'Nanum Gothic', 'Pretendard', sans-serif`,
+        nameSize: 34,
+        nameSpacing: 1,
+        nameColor: '#92400e',
+        nameBold: true,
+        showClass: true,
+        classSize: 12,
+        classColor: '#b45309'
+      },
+      {
+        id: 'rainbow',
+        title: '파스텔 무지개',
+        desc: '화사한 핑크 테마',
+        deco: '🌈',
+        ratio: '16/9',
+        bgColor: '#fdf2f8',
+        bgOpacity: 100,
+        borderWidth: 3,
+        borderColor: '#fbcfe8',
+        borderRadius: 22,
+        nameFont: `'Nanum Gothic', 'Pretendard', sans-serif`,
+        nameSize: 32,
+        nameSpacing: 3,
+        nameColor: '#db2777',
+        nameBold: true,
+        showClass: true,
+        classSize: 12,
+        classColor: '#be185d'
+      },
+      {
+        id: 'star',
+        title: '반짝 별나라',
+        desc: '신비로운 라벤더 테마',
+        deco: '⭐',
+        ratio: '4/3',
+        bgColor: '#f5f3ff',
+        bgOpacity: 100,
+        borderWidth: 3,
+        borderColor: '#ddd6fe',
+        borderRadius: 18,
+        nameFont: `'Nanum Gothic', 'Pretendard', sans-serif`,
+        nameSize: 34,
+        nameSpacing: 2,
+        nameColor: '#6d28d9',
+        nameBold: true,
+        showClass: true,
+        classSize: 12,
+        classColor: '#7c3aed'
+      },
+      {
+        id: 'acorn',
+        title: '가을 도토리',
+        desc: '자연 감성 브라운 테마',
+        deco: '🌰',
+        ratio: '4/3',
+        bgColor: '#fefce8',
+        bgOpacity: 100,
+        borderWidth: 3,
+        borderColor: '#fde047',
+        borderRadius: 20,
+        nameFont: `'Nanum Gothic', 'Pretendard', sans-serif`,
+        nameSize: 34,
+        nameSpacing: 2,
+        nameColor: '#713f12',
+        nameBold: true,
+        showClass: true,
+        classSize: 12,
+        classColor: '#854d0e'
+      },
+      {
+        id: 'simple',
+        title: '클린 미니멀',
+        desc: '단정하고 모던한 스타일',
+        deco: '✏️',
+        ratio: '16/9',
+        bgColor: '#ffffff',
+        bgOpacity: 100,
+        borderWidth: 2,
+        borderColor: '#cbd5e1',
+        borderRadius: 12,
+        nameFont: `'Nanum Gothic', 'Pretendard', sans-serif`,
+        nameSize: 32,
+        nameSpacing: 4,
+        nameColor: '#1e293b',
+        nameBold: true,
+        showClass: true,
+        classSize: 11,
+        classColor: '#64748b'
+      }
+    ];
+
+    function hexToRgba(hex, opacity) {
+      let c = hex.replace('#', '');
+      if (c.length === 3) c = c.split('').map(x => x + x).join('');
+      const num = parseInt(c, 16);
+      const r = (num >> 16) & 255;
+      const g = (num >> 8) & 255;
+      const b = num & 255;
+      return `rgba(${r}, ${g}, ${b}, ${(opacity / 100).toFixed(2)})`;
+    }
+
+    const initialActive = getActiveClass();
+    let designState = {
+      ...DESIGN_PRESETS[0],
+      activePresetId: 'sprout',
+      name: initialActive.children?.[0]?.name || '김민수',
+      classText: `${initialActive.year}학년도 ${initialActive.className}`,
+      scale: 1
+    };
+
     let currentTemplate = data.templates[0];
-    let scale = 1;
     let isClassDropdownOpen = false;
 
     list.className = 'template-list';
     list.innerHTML = data.templates.map(item => `
-      <button class="template-item" type="button" data-template="${item.id}">
+      <button class="template-item ${item.id === currentTemplate.id ? 'is-active' : ''}" type="button" data-template="${item.id}">
         <span class="template-thumb">${escapeHtml(item.category)}</span>
         <b>${escapeHtml(item.title)}</b>
       </button>
     `).join('');
 
-    function values() {
-      return Object.fromEntries(currentTemplate.fields.map(field => [field.key, field.value]));
-    }
-
     function renderCanvas() {
-      const state = values();
       const active = getActiveClass();
       const childCount = active.children ? active.children.length : 0;
+      const bgRgba = hexToRgba(designState.bgColor, designState.bgOpacity);
 
       canvas.innerHTML = `
         <div class="canvas-toolbar">
@@ -823,13 +973,76 @@
         </div>
 
         <div class="canvas-stage">
-          <article class="canvas-paper" style="--template-ratio:${currentTemplate.ratio};--canvas-scale:${scale};--template-color:${escapeHtml(state.color || section.accent)}">
-            <span class="canvas-paper-badge">🌱 ${escapeHtml(active.year)}학년도 ${escapeHtml(active.className)}</span>
-            <h2 data-canvas-title>${escapeHtml(state.name || state.title || currentTemplate.title)}</h2>
-            <p data-canvas-message>${escapeHtml(state.message || currentTemplate.category)}</p>
+          <article class="canvas-paper" id="canvas-paper" style="
+            aspect-ratio: ${designState.ratio};
+            --canvas-scale: ${designState.scale};
+            background-color: ${bgRgba};
+            border: ${designState.borderWidth}px solid ${designState.borderColor};
+            border-radius: ${designState.borderRadius}px;
+          ">
+            <div class="canvas-paper__deco" id="canvas-paper-deco">${designState.deco}</div>
+            <span class="canvas-paper-badge" id="canvas-paper-badge" style="
+              display: ${designState.showClass ? 'inline-block' : 'none'};
+              font-size: ${designState.classSize}px;
+              color: ${designState.classColor};
+            ">${escapeHtml(designState.classText)}</span>
+            <h2 id="canvas-paper-name" style="
+              font-family: ${designState.nameFont};
+              font-size: ${designState.nameSize}px;
+              letter-spacing: ${designState.nameSpacing}px;
+              color: ${designState.nameColor};
+              font-weight: ${designState.nameBold ? '800' : '400'};
+            ">${escapeHtml(designState.name)}</h2>
           </article>
         </div>
+
+        <div class="canvas-design-tray" id="canvas-design-tray">
+          <div class="design-tray-label">🎨 <span>디자인 템플릿</span></div>
+          <div class="design-chips-list">
+            ${DESIGN_PRESETS.map(preset => `
+              <button type="button" class="design-chip ${designState.activePresetId === preset.id ? 'is-active' : ''}" data-design-id="${preset.id}">
+                <span class="design-chip__preview" style="background:${preset.bgColor}; border:1.5px solid ${preset.borderColor};">${preset.deco}</span>
+                <div class="design-chip__info">
+                  <span class="design-chip__title">${escapeHtml(preset.title)}</span>
+                  <span class="design-chip__sub">${escapeHtml(preset.desc)}</span>
+                </div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
       `;
+    }
+
+    function updatePaperLive() {
+      const paper = document.getElementById('canvas-paper');
+      const badge = document.getElementById('canvas-paper-badge');
+      const nameEl = document.getElementById('canvas-paper-name');
+      const decoEl = document.getElementById('canvas-paper-deco');
+      if (!paper) return;
+
+      paper.style.aspectRatio = designState.ratio;
+      paper.style.setProperty('--canvas-scale', designState.scale);
+      paper.style.backgroundColor = hexToRgba(designState.bgColor, designState.bgOpacity);
+      paper.style.border = `${designState.borderWidth}px solid ${designState.borderColor}`;
+      paper.style.borderRadius = `${designState.borderRadius}px`;
+
+      if (decoEl) decoEl.textContent = designState.deco;
+
+      if (badge) {
+        badge.style.display = designState.showClass ? 'inline-block' : 'none';
+        badge.style.fontSize = `${designState.classSize}px`;
+        badge.style.color = designState.classColor;
+        badge.textContent = designState.classText;
+      }
+
+      if (nameEl) {
+        nameEl.style.fontFamily = designState.nameFont;
+        nameEl.style.fontSize = `${designState.nameSize}px`;
+        nameEl.style.letterSpacing = `${designState.nameSpacing}px`;
+        nameEl.style.color = designState.nameColor;
+        nameEl.style.fontWeight = designState.nameBold ? '800' : '400';
+        nameEl.textContent = designState.name;
+      }
     }
 
     function renderInspector() {
@@ -838,7 +1051,7 @@
 
       inspector.innerHTML = `
         <p class="panel-kicker">INSPECTOR</p>
-        <h2>필요한 값만 수정</h2>
+        <h2>상세 디자인 설정</h2>
 
         <div class="inspector-class-box">
           <div class="inspector-class-box__title">
@@ -848,7 +1061,9 @@
           <select id="select-child-quick">
             <option value="">-- 원아 선택 (이름 자동 반영) --</option>
             ${children.map(c => `
-              <option value="${escapeHtml(c.name)}">${c.num ? c.num + '번 ' : ''}${escapeHtml(c.name)} (${c.gender === '여' ? '👧' : '👦'})</option>
+              <option value="${escapeHtml(c.name)}" ${c.name === designState.name ? 'selected' : ''}>
+                ${c.num ? c.num + '번 ' : ''}${escapeHtml(c.name)} (${c.gender === '여' ? '👧' : '👦'})
+              </option>
             `).join('')}
           </select>
           <button class="btn-batch-print" id="btn-batch-print-all" type="button">
@@ -856,14 +1071,177 @@
           </button>
         </div>
 
-        ${currentTemplate.fields.map(field => `
-          <label class="inspector-field">
-            <span>${escapeHtml(field.label)}</span>
-            <input type="${field.type}" value="${escapeHtml(field.value)}" data-field="${field.key}">
-          </label>
-        `).join('')}
-        <p class="meta">작성 중인 내용은 현재 브라우저에 안전하게 자동 저장됩니다.</p>
+        <!-- 1. 크기 및 비율 -->
+        <div class="inspector-group">
+          <div class="inspector-group__header" data-toggle-group>
+            <span>📐 크기 및 비율</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="inspector-group__body">
+            <div class="insp-row--col">
+              <span class="insp-label">이름표 비율</span>
+              <div class="insp-segmented" id="ratio-segmented">
+                <button type="button" data-ratio="4/3" class="${designState.ratio === '4/3' ? 'is-active' : ''}">4:3</button>
+                <button type="button" data-ratio="16/9" class="${designState.ratio === '16/9' ? 'is-active' : ''}">16:9</button>
+                <button type="button" data-ratio="1/1" class="${designState.ratio === '1/1' ? 'is-active' : ''}">1:1</button>
+                <button type="button" data-ratio="3/4" class="${designState.ratio === '3/4' ? 'is-active' : ''}">3:4</button>
+              </div>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">캔버스 확대</span>
+              <div class="insp-slider-wrap">
+                <input type="range" class="insp-slider" id="insp-scale" min="0.8" max="1.4" step="0.05" value="${designState.scale}">
+                <span class="insp-slider-val" id="val-insp-scale">${Math.round(designState.scale * 100)}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 이름 텍스트 -->
+        <div class="inspector-group">
+          <div class="inspector-group__header" data-toggle-group>
+            <span>🏷️ 이름 텍스트</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="inspector-group__body">
+            <div class="insp-row">
+              <span class="insp-label">원아 이름</span>
+              <input type="text" class="insp-input" id="insp-name-text" value="${escapeHtml(designState.name)}">
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">폰트 서체</span>
+              <select class="insp-input" id="insp-name-font">
+                <option value="'Nanum Gothic', 'Pretendard', sans-serif" ${designState.nameFont.includes('Nanum Gothic') ? 'selected' : ''}>나눔고딕 (기본)</option>
+                <option value="'Pretendard', sans-serif" ${designState.nameFont === "'Pretendard', sans-serif" ? 'selected' : ''}>프리텐다드 (모던)</option>
+                <option value="'Comic Sans MS', cursive, sans-serif" ${designState.nameFont.includes('Comic') ? 'selected' : ''}>귀여운 손글씨</option>
+                <option value="'Batang', serif" ${designState.nameFont.includes('Batang') ? 'selected' : ''}>정갈한 명조체</option>
+              </select>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">글자 크기</span>
+              <div class="insp-slider-wrap">
+                <input type="range" class="insp-slider" id="insp-name-size" min="20" max="56" value="${designState.nameSize}">
+                <span class="insp-slider-val" id="val-insp-name-size">${designState.nameSize}px</span>
+              </div>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">자간 (간격)</span>
+              <div class="insp-slider-wrap">
+                <input type="range" class="insp-slider" id="insp-name-spacing" min="-2" max="14" value="${designState.nameSpacing}">
+                <span class="insp-slider-val" id="val-insp-name-spacing">${designState.nameSpacing}px</span>
+              </div>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">글자 색상</span>
+              <div class="insp-color-wrap">
+                <input type="color" class="insp-color-input" id="insp-name-color" value="${designState.nameColor}">
+                <span class="insp-color-hex" id="hex-insp-name-color">${designState.nameColor}</span>
+              </div>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">굵기</span>
+              <label class="insp-checkbox">
+                <input type="checkbox" id="insp-name-bold" ${designState.nameBold ? 'checked' : ''}>
+                <span>볼드체 (굵게)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 학급 텍스트 -->
+        <div class="inspector-group">
+          <div class="inspector-group__header" data-toggle-group>
+            <span>🏫 학급 / 문구 텍스트</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="inspector-group__body">
+            <div class="insp-row">
+              <span class="insp-label">학급 문구</span>
+              <input type="text" class="insp-input" id="insp-class-text" value="${escapeHtml(designState.classText)}">
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">표시 여부</span>
+              <label class="insp-checkbox">
+                <input type="checkbox" id="insp-class-show" ${designState.showClass ? 'checked' : ''}>
+                <span>학급 문구 노출</span>
+              </label>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">문구 크기</span>
+              <div class="insp-slider-wrap">
+                <input type="range" class="insp-slider" id="insp-class-size" min="10" max="20" value="${designState.classSize}">
+                <span class="insp-slider-val" id="val-insp-class-size">${designState.classSize}px</span>
+              </div>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">문구 색상</span>
+              <div class="insp-color-wrap">
+                <input type="color" class="insp-color-input" id="insp-class-color" value="${designState.classColor}">
+                <span class="insp-color-hex" id="hex-insp-class-color">${designState.classColor}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 배경 및 테두리 -->
+        <div class="inspector-group">
+          <div class="inspector-group__header" data-toggle-group>
+            <span>🎨 배경 및 테두리</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="inspector-group__body">
+            <div class="insp-row">
+              <span class="insp-label">배경 색상</span>
+              <div class="insp-color-wrap">
+                <input type="color" class="insp-color-input" id="insp-bg-color" value="${designState.bgColor}">
+                <span class="insp-color-hex" id="hex-insp-bg-color">${designState.bgColor}</span>
+              </div>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">배경 투명도</span>
+              <div class="insp-slider-wrap">
+                <input type="range" class="insp-slider" id="insp-bg-opacity" min="20" max="100" value="${designState.bgOpacity}">
+                <span class="insp-slider-val" id="val-insp-bg-opacity">${designState.bgOpacity}%</span>
+              </div>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">테두리 두께</span>
+              <div class="insp-slider-wrap">
+                <input type="range" class="insp-slider" id="insp-border-width" min="0" max="10" value="${designState.borderWidth}">
+                <span class="insp-slider-val" id="val-insp-border-width">${designState.borderWidth}px</span>
+              </div>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">테두리 색상</span>
+              <div class="insp-color-wrap">
+                <input type="color" class="insp-color-input" id="insp-border-color" value="${designState.borderColor}">
+                <span class="insp-color-hex" id="hex-insp-border-color">${designState.borderColor}</span>
+              </div>
+            </div>
+            <div class="insp-row">
+              <span class="insp-label">둥근 모서리</span>
+              <div class="insp-slider-wrap">
+                <input type="range" class="insp-slider" id="insp-border-radius" min="0" max="36" value="${designState.borderRadius}">
+                <span class="insp-slider-val" id="val-insp-border-radius">${designState.borderRadius}px</span>
+              </div>
+            </div>
+          </div>
+        </div>
       `;
+    }
+
+    function applyPreset(presetId) {
+      const preset = DESIGN_PRESETS.find(p => p.id === presetId);
+      if (!preset) return;
+
+      designState = {
+        ...designState,
+        ...preset,
+        activePresetId: preset.id
+      };
+
+      renderCanvas();
+      renderInspector();
     }
 
     function openClassModal(isNew = false) {
@@ -1123,7 +1501,6 @@
     function executeBatchPrint() {
       const active = getActiveClass();
       const children = active.children || [];
-      const state = values();
 
       if (children.length === 0) {
         alert('등록된 원아가 없습니다. 먼저 원아를 등록해주세요.');
@@ -1131,11 +1508,29 @@
       }
 
       if (!batchPrintStage) return;
+      const bgRgba = hexToRgba(designState.bgColor, designState.bgOpacity);
+
       batchPrintStage.innerHTML = children.map(c => `
-        <div class="batch-print-card" style="border-color:${state.color || '#7dbb91'}">
-          <p style="font-size:12pt;font-weight:bold;color:#79877e">${escapeHtml(active.year)}학년도 ${escapeHtml(active.className)}</p>
-          <h2 style="color:${state.color || '#2e6040'}">${escapeHtml(c.name)}</h2>
-          <p>${escapeHtml(state.message || currentTemplate.category)}</p>
+        <div class="batch-print-card" style="
+          aspect-ratio: ${designState.ratio};
+          background-color: ${bgRgba};
+          border: ${designState.borderWidth}px solid ${designState.borderColor};
+          border-radius: ${designState.borderRadius}px;
+        ">
+          <div style="font-size:24pt;margin-bottom:6px;">${designState.deco}</div>
+          ${designState.showClass ? `
+            <p style="font-size:${designState.classSize + 2}pt;font-weight:bold;color:${designState.classColor};margin:4px 0;">
+              ${escapeHtml(designState.classText)}
+            </p>
+          ` : ''}
+          <h2 style="
+            font-family: ${designState.nameFont};
+            font-size: ${designState.nameSize}pt;
+            letter-spacing: ${designState.nameSpacing}px;
+            color: ${designState.nameColor};
+            font-weight: ${designState.nameBold ? '800' : '400'};
+            margin: 8px 0;
+          ">${escapeHtml(c.name)}</h2>
         </div>
       `).join('');
 
@@ -1144,7 +1539,6 @@
 
     function selectTemplate(id) {
       currentTemplate = data.templates.find(item => item.id === id);
-      scale = 1;
       list.querySelectorAll('.template-item').forEach(item => {
         item.classList.toggle('is-active', item.dataset.template === id);
       });
@@ -1158,6 +1552,12 @@
     });
 
     canvas.addEventListener('click', event => {
+      const chip = event.target.closest('[data-design-id]');
+      if (chip) {
+        applyPreset(chip.dataset.designId);
+        return;
+      }
+
       if (event.target.closest('#btn-class-trigger')) {
         isClassDropdownOpen = !isClassDropdownOpen;
         renderCanvas();
@@ -1171,6 +1571,11 @@
           classStore.activeId = id;
           saveClassStore();
           isClassDropdownOpen = false;
+          const newActive = getActiveClass();
+          designState.classText = `${newActive.year}학년도 ${newActive.className}`;
+          if (newActive.children?.[0]?.name) {
+            designState.name = newActive.children[0].name;
+          }
           renderCanvas();
           renderInspector();
         }
@@ -1213,6 +1618,8 @@
                 classStore.activeId = loaded.id;
                 saveClassStore();
                 alert(`🎉 "${loaded.year}학년도 ${loaded.className}" 학급 데이터를 성공적으로 불러왔습니다!`);
+                designState.classText = `${loaded.year}학년도 ${loaded.className}`;
+                if (loaded.children?.[0]?.name) designState.name = loaded.children[0].name;
                 renderCanvas();
                 renderInspector();
               } catch (err) {
@@ -1225,12 +1632,6 @@
           fileInput.click();
         }
         return;
-      }
-
-      const zoom = event.target.closest('[data-zoom]');
-      if (zoom) {
-        scale = Number(zoom.dataset.zoom);
-        canvas.querySelector('.canvas-paper')?.style.setProperty('--canvas-scale', scale);
       }
 
       if (event.target.closest('#btn-print-preview')) {
@@ -1249,39 +1650,114 @@
       if (event.target.id === 'select-child-quick') {
         const name = event.target.value;
         if (!name) return;
-        const nameField = currentTemplate.fields.find(f => f.key === 'name' || f.key === 'title');
-        if (nameField) {
-          nameField.value = name;
-          const input = inspector.querySelector(`[data-field="${nameField.key}"]`);
-          if (input) input.value = name;
-          const title = canvas.querySelector('[data-canvas-title]');
-          if (title) title.textContent = name;
-        }
+        designState.name = name;
+        const nameInput = document.getElementById('insp-name-text');
+        if (nameInput) nameInput.value = name;
+        updatePaperLive();
+        return;
+      }
+
+      if (event.target.id === 'insp-name-font') {
+        designState.nameFont = event.target.value;
+        updatePaperLive();
+        return;
+      }
+
+      if (event.target.id === 'insp-name-bold') {
+        designState.nameBold = event.target.checked;
+        updatePaperLive();
+        return;
+      }
+
+      if (event.target.id === 'insp-class-show') {
+        designState.showClass = event.target.checked;
+        updatePaperLive();
+        return;
       }
     });
 
     inspector.addEventListener('click', event => {
       if (event.target.closest('#btn-batch-print-all')) {
         executeBatchPrint();
+        return;
+      }
+
+      const groupHdr = event.target.closest('[data-toggle-group]');
+      if (groupHdr) {
+        groupHdr.closest('.inspector-group').classList.toggle('is-collapsed');
+        return;
+      }
+
+      const ratioBtn = event.target.closest('#ratio-segmented button');
+      if (ratioBtn) {
+        designState.ratio = ratioBtn.dataset.ratio;
+        document.querySelectorAll('#ratio-segmented button').forEach(b => {
+          b.classList.toggle('is-active', b === ratioBtn);
+        });
+        updatePaperLive();
+        return;
       }
     });
 
     inspector.addEventListener('input', event => {
-      const input = event.target.closest('[data-field]');
-      if (!input) return;
-      const field = currentTemplate.fields.find(item => item.key === input.dataset.field);
-      if (field) field.value = input.value;
-      const state = values();
-      const title = canvas.querySelector('[data-canvas-title]');
-      const message = canvas.querySelector('[data-canvas-message]');
-      if (title) title.textContent = state.name || state.title || currentTemplate.title;
-      if (message) message.textContent = state.message || currentTemplate.category;
-      if (state.color) {
-        canvas.querySelector('.canvas-paper')?.style.setProperty('--template-color', state.color);
+      const id = event.target.id;
+      if (!id) return;
+
+      if (id === 'insp-scale') {
+        designState.scale = Number(event.target.value);
+        document.getElementById('val-insp-scale').textContent = Math.round(designState.scale * 100) + '%';
+        updatePaperLive();
+      } else if (id === 'insp-name-text') {
+        designState.name = event.target.value;
+        updatePaperLive();
+      } else if (id === 'insp-name-size') {
+        designState.nameSize = Number(event.target.value);
+        document.getElementById('val-insp-name-size').textContent = designState.nameSize + 'px';
+        updatePaperLive();
+      } else if (id === 'insp-name-spacing') {
+        designState.nameSpacing = Number(event.target.value);
+        document.getElementById('val-insp-name-spacing').textContent = designState.nameSpacing + 'px';
+        updatePaperLive();
+      } else if (id === 'insp-name-color') {
+        designState.nameColor = event.target.value;
+        document.getElementById('hex-insp-name-color').textContent = designState.nameColor;
+        updatePaperLive();
+      } else if (id === 'insp-class-text') {
+        designState.classText = event.target.value;
+        updatePaperLive();
+      } else if (id === 'insp-class-size') {
+        designState.classSize = Number(event.target.value);
+        document.getElementById('val-insp-class-size').textContent = designState.classSize + 'px';
+        updatePaperLive();
+      } else if (id === 'insp-class-color') {
+        designState.classColor = event.target.value;
+        document.getElementById('hex-insp-class-color').textContent = designState.classColor;
+        updatePaperLive();
+      } else if (id === 'insp-bg-color') {
+        designState.bgColor = event.target.value;
+        document.getElementById('hex-insp-bg-color').textContent = designState.bgColor;
+        updatePaperLive();
+      } else if (id === 'insp-bg-opacity') {
+        designState.bgOpacity = Number(event.target.value);
+        document.getElementById('val-insp-bg-opacity').textContent = designState.bgOpacity + '%';
+        updatePaperLive();
+      } else if (id === 'insp-border-width') {
+        designState.borderWidth = Number(event.target.value);
+        document.getElementById('val-insp-border-width').textContent = designState.borderWidth + 'px';
+        updatePaperLive();
+      } else if (id === 'insp-border-color') {
+        designState.borderColor = event.target.value;
+        document.getElementById('hex-insp-border-color').textContent = designState.borderColor;
+        updatePaperLive();
+      } else if (id === 'insp-border-radius') {
+        designState.borderRadius = Number(event.target.value);
+        document.getElementById('val-insp-border-radius').textContent = designState.borderRadius + 'px';
+        updatePaperLive();
       }
     });
 
-    selectTemplate(currentTemplate.id);
+    renderCanvas();
+    renderInspector();
   }
 
   function initWebtoon() {
