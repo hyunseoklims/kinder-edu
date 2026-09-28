@@ -794,13 +794,13 @@
       canvas.innerHTML = `
         <div class="canvas-toolbar">
           <strong class="canvas-toolbar__title">우리학급</strong>
-          <button class="canvas-toolbar-btn" id="btn-quick-manage-class" type="button">⚙️ 학급관리</button>
           <button class="canvas-class-trigger ${isClassDropdownOpen ? 'is-active' : ''}" id="btn-class-trigger" type="button" title="학급 전환 / 새 학급 만들기">
             <span>🏫 ${escapeHtml(active.year)}학년도 ${escapeHtml(active.className)} (${childCount}명)</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
           </button>
+          <button class="canvas-toolbar-btn" id="btn-quick-manage-class" type="button">⚙️ 학급관리</button>
           <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
-            <button class="canvas-toolbar-btn canvas-toolbar-btn--primary" id="btn-quick-save-class" type="button" title="내 문서 classcreation에 저장">💾 저장</button>
+            <button class="canvas-toolbar-btn" id="btn-quick-save-class" type="button" title="내 문서 classcreation에 저장">💾 저장</button>
             <button class="canvas-toolbar-btn" id="btn-quick-load-class" type="button" title="학급 파일(.json) 불러오기">📂 불러오기</button>
             <input type="file" id="input-load-class-file" accept=".json" style="display:none">
           </div>
