@@ -2,6 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
+      "source": "/programs/photo-twinsweep",
+      "destination": "https://photo-twinsweep.vercel.app/"
+    },
+    {
+      "source": "/programs/photo-twinsweep/",
+      "destination": "https://photo-twinsweep.vercel.app/"
+    },
+    {
       "source": "/programs/photo-twinsweep/:path*",
       "destination": "https://photo-twinsweep.vercel.app/:path*"
     }

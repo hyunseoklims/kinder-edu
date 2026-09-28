@@ -4,7 +4,7 @@
 
 - 원본 프로젝트: `hyunseoklims/photo-twinsweep`
 - 원본 배포: `https://photo-twinsweep.vercel.app/`
-- Kinder Edu 내부 경로: `/programs/photo-twinsweep/`
+- Kinder Edu 내부 경로: `/programs/photo-twinsweep/` 및 `/programs/photo-twinsweep/index.html`
 - Kinder Edu 프로그램 데이터: `content/section-data.js`
 - 연결 설정: 루트 `vercel.json`
 
