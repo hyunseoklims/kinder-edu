@@ -1087,12 +1087,12 @@
                 <button type="button" data-ratio="3/4" class="${designState.ratio === '3/4' ? 'is-active' : ''}">3:4</button>
               </div>
             </div>
-            <div class="insp-row">
-              <span class="insp-label">캔버스 확대</span>
-              <div class="insp-slider-wrap">
-                <input type="range" class="insp-slider" id="insp-scale" min="0.8" max="1.4" step="0.05" value="${designState.scale}">
+            <div class="insp-slider-group">
+              <div class="insp-slider-header">
+                <span class="insp-label">캔버스 확대</span>
                 <span class="insp-slider-val" id="val-insp-scale">${Math.round(designState.scale * 100)}%</span>
               </div>
+              <input type="range" class="insp-slider" id="insp-scale" min="0.8" max="1.4" step="0.05" value="${designState.scale}">
             </div>
           </div>
         </div>
@@ -1117,19 +1117,19 @@
                 <option value="'Batang', serif" ${designState.nameFont.includes('Batang') ? 'selected' : ''}>정갈한 명조체</option>
               </select>
             </div>
-            <div class="insp-row">
-              <span class="insp-label">글자 크기</span>
-              <div class="insp-slider-wrap">
-                <input type="range" class="insp-slider" id="insp-name-size" min="20" max="56" value="${designState.nameSize}">
+            <div class="insp-slider-group">
+              <div class="insp-slider-header">
+                <span class="insp-label">글자 크기</span>
                 <span class="insp-slider-val" id="val-insp-name-size">${designState.nameSize}px</span>
               </div>
+              <input type="range" class="insp-slider" id="insp-name-size" min="20" max="56" value="${designState.nameSize}">
             </div>
-            <div class="insp-row">
-              <span class="insp-label">자간 (간격)</span>
-              <div class="insp-slider-wrap">
-                <input type="range" class="insp-slider" id="insp-name-spacing" min="-2" max="14" value="${designState.nameSpacing}">
+            <div class="insp-slider-group">
+              <div class="insp-slider-header">
+                <span class="insp-label">자간 (간격)</span>
                 <span class="insp-slider-val" id="val-insp-name-spacing">${designState.nameSpacing}px</span>
               </div>
+              <input type="range" class="insp-slider" id="insp-name-spacing" min="-2" max="14" value="${designState.nameSpacing}">
             </div>
             <div class="insp-row">
               <span class="insp-label">글자 색상</span>
@@ -1166,12 +1166,12 @@
                 <span>학급 문구 노출</span>
               </label>
             </div>
-            <div class="insp-row">
-              <span class="insp-label">문구 크기</span>
-              <div class="insp-slider-wrap">
-                <input type="range" class="insp-slider" id="insp-class-size" min="10" max="20" value="${designState.classSize}">
+            <div class="insp-slider-group">
+              <div class="insp-slider-header">
+                <span class="insp-label">문구 크기</span>
                 <span class="insp-slider-val" id="val-insp-class-size">${designState.classSize}px</span>
               </div>
+              <input type="range" class="insp-slider" id="insp-class-size" min="10" max="20" value="${designState.classSize}">
             </div>
             <div class="insp-row">
               <span class="insp-label">문구 색상</span>
@@ -1197,19 +1197,19 @@
                 <span class="insp-color-hex" id="hex-insp-bg-color">${designState.bgColor}</span>
               </div>
             </div>
-            <div class="insp-row">
-              <span class="insp-label">배경 투명도</span>
-              <div class="insp-slider-wrap">
-                <input type="range" class="insp-slider" id="insp-bg-opacity" min="20" max="100" value="${designState.bgOpacity}">
+            <div class="insp-slider-group">
+              <div class="insp-slider-header">
+                <span class="insp-label">배경 투명도</span>
                 <span class="insp-slider-val" id="val-insp-bg-opacity">${designState.bgOpacity}%</span>
               </div>
+              <input type="range" class="insp-slider" id="insp-bg-opacity" min="20" max="100" value="${designState.bgOpacity}">
             </div>
-            <div class="insp-row">
-              <span class="insp-label">테두리 두께</span>
-              <div class="insp-slider-wrap">
-                <input type="range" class="insp-slider" id="insp-border-width" min="0" max="10" value="${designState.borderWidth}">
+            <div class="insp-slider-group">
+              <div class="insp-slider-header">
+                <span class="insp-label">테두리 두께</span>
                 <span class="insp-slider-val" id="val-insp-border-width">${designState.borderWidth}px</span>
               </div>
+              <input type="range" class="insp-slider" id="insp-border-width" min="0" max="10" value="${designState.borderWidth}">
             </div>
             <div class="insp-row">
               <span class="insp-label">테두리 색상</span>
@@ -1218,12 +1218,12 @@
                 <span class="insp-color-hex" id="hex-insp-border-color">${designState.borderColor}</span>
               </div>
             </div>
-            <div class="insp-row">
-              <span class="insp-label">둥근 모서리</span>
-              <div class="insp-slider-wrap">
-                <input type="range" class="insp-slider" id="insp-border-radius" min="0" max="36" value="${designState.borderRadius}">
+            <div class="insp-slider-group">
+              <div class="insp-slider-header">
+                <span class="insp-label">둥근 모서리</span>
                 <span class="insp-slider-val" id="val-insp-border-radius">${designState.borderRadius}px</span>
               </div>
+              <input type="range" class="insp-slider" id="insp-border-radius" min="0" max="36" value="${designState.borderRadius}">
             </div>
           </div>
         </div>
