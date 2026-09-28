@@ -704,18 +704,554 @@
     const list = document.querySelector('#template-list');
     const canvas = document.querySelector('#template-canvas');
     const inspector = document.querySelector('#template-inspector');
-    let current = data.templates[0];
+    const modalContainer = document.querySelector('#class-modal-container');
+    const batchPrintStage = document.querySelector('#batch-print-stage');
+
+    const STORAGE_KEY_CLASSES = 'KINDER_EDU_CLASSES_V1';
+    const STORAGE_KEY_ACTIVE = 'KINDER_EDU_ACTIVE_CLASS_ID';
+    const currentYear = new Date().getFullYear();
+
+    function getDefaultClass() {
+      return {
+        id: 'class_' + Date.now(),
+        year: String(currentYear),
+        className: '햇살가득반',
+        ageGroup: '만 4세',
+        teacherName: '지니쌤',
+        children: [
+          { id: 'c1', num: 1, name: '김민수', gender: '남', birth: '2020-03-15' },
+          { id: 'c2', num: 2, name: '이서연', gender: '여', birth: '2020-05-20' },
+          { id: 'c3', num: 3, name: '박도윤', gender: '남', birth: '2020-07-08' },
+          { id: 'c4', num: 4, name: '최지우', gender: '여', birth: '2020-09-12' },
+          { id: 'c5', num: 5, name: '정하은', gender: '여', birth: '2020-11-04' },
+          { id: 'c6', num: 6, name: '강예준', gender: '남', birth: '2020-12-25' }
+        ],
+        updatedAt: new Date().toISOString()
+      };
+    }
+
+    let classStore = {
+      classes: [],
+      activeId: null
+    };
+
+    function loadClassStore() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_CLASSES);
+        if (raw) classStore.classes = JSON.parse(raw);
+      } catch (e) {
+        console.warn('Failed to parse classes', e);
+      }
+      if (!Array.isArray(classStore.classes) || classStore.classes.length === 0) {
+        const def = getDefaultClass();
+        classStore.classes = [def];
+        classStore.activeId = def.id;
+        saveClassStore();
+      } else {
+        classStore.activeId = localStorage.getItem(STORAGE_KEY_ACTIVE) || classStore.classes[0].id;
+        if (!classStore.classes.some(c => c.id === classStore.activeId)) {
+          classStore.activeId = classStore.classes[0].id;
+        }
+      }
+    }
+
+    function saveClassStore() {
+      try {
+        localStorage.setItem(STORAGE_KEY_CLASSES, JSON.stringify(classStore.classes));
+        if (classStore.activeId) localStorage.setItem(STORAGE_KEY_ACTIVE, classStore.activeId);
+      } catch (e) {
+        console.warn('Failed to save classes', e);
+      }
+    }
+
+    function getActiveClass() {
+      return classStore.classes.find(c => c.id === classStore.activeId) || classStore.classes[0];
+    }
+
+    loadClassStore();
+
+    let currentTemplate = data.templates[0];
     let scale = 1;
+    let isClassDropdownOpen = false;
+
     list.className = 'template-list';
-    list.innerHTML = data.templates.map(item => `<button class="template-item" type="button" data-template="${item.id}"><span class="template-thumb">${escapeHtml(item.category)}</span><b>${escapeHtml(item.title)}</b></button>`).join('');
-    function values() { return Object.fromEntries(current.fields.map(field => [field.key, field.value])); }
-    function renderCanvas() { const state = values(); canvas.innerHTML = `<div class="canvas-toolbar"><strong>${escapeHtml(current.title)}</strong><button class="soft-button" type="button" data-zoom=".75">75%</button><button class="soft-button" type="button" data-zoom="1">100%</button><button class="soft-button" type="button" data-zoom="1.25">125%</button><button class="soft-button" type="button">미리보기</button><button class="soft-button" type="button">내보내기</button></div><div class="canvas-stage"><article class="canvas-paper" style="--template-ratio:${current.ratio};--canvas-scale:${scale};--template-color:${escapeHtml(state.color || section.accent)}"><div><p class="panel-kicker">TEMPLATE PREVIEW</p><h2 data-canvas-title>${escapeHtml(state.name || state.title || current.title)}</h2><p data-canvas-message>${escapeHtml(state.message || current.category)}</p></div></article></div>`; }
-    function renderInspector() { inspector.innerHTML = `<p class="panel-kicker">INSPECTOR</p><h2>필요한 값만 수정</h2>${current.fields.map(field => `<label class="inspector-field">${escapeHtml(field.label)}<input type="${field.type}" value="${escapeHtml(field.value)}" data-field="${field.key}"></label>`).join('')}<p class="meta">Template Schema가 노출할 항목을 결정합니다.</p>`; }
-    function selectTemplate(id) { current = data.templates.find(item => item.id === id); scale = 1; list.querySelectorAll('.template-item').forEach(item => item.classList.toggle('is-active', item.dataset.template === id)); renderCanvas(); renderInspector(); }
-    list.addEventListener('click', event => { const item = event.target.closest('[data-template]'); if (item) selectTemplate(item.dataset.template); });
-    canvas.addEventListener('click', event => { const zoom = event.target.closest('[data-zoom]'); if (zoom) { scale = Number(zoom.dataset.zoom); canvas.querySelector('.canvas-paper')?.style.setProperty('--canvas-scale', scale); } });
-    inspector.addEventListener('input', event => { const input = event.target.closest('[data-field]'); if (!input) return; const field = current.fields.find(item => item.key === input.dataset.field); field.value = input.value; const state = values(); const title = canvas.querySelector('[data-canvas-title]'); const message = canvas.querySelector('[data-canvas-message]'); if (title) title.textContent = state.name || state.title || current.title; if (message) message.textContent = state.message || current.category; if (state.color) canvas.querySelector('.canvas-paper')?.style.setProperty('--template-color', state.color); });
-    selectTemplate(current.id);
+    list.innerHTML = data.templates.map(item => `
+      <button class="template-item" type="button" data-template="${item.id}">
+        <span class="template-thumb">${escapeHtml(item.category)}</span>
+        <b>${escapeHtml(item.title)}</b>
+      </button>
+    `).join('');
+
+    function values() {
+      return Object.fromEntries(currentTemplate.fields.map(field => [field.key, field.value]));
+    }
+
+    function renderCanvas() {
+      const state = values();
+      const active = getActiveClass();
+      const childCount = active.children ? active.children.length : 0;
+
+      canvas.innerHTML = `
+        <div class="canvas-toolbar">
+          <strong class="canvas-toolbar__title">${escapeHtml(currentTemplate.title)}</strong>
+          <button class="canvas-class-trigger ${isClassDropdownOpen ? 'is-active' : ''}" id="btn-class-trigger" type="button" title="학급 전환 / 새 학급 만들기">
+            <span>🏫 ${escapeHtml(active.year)}학년도 ${escapeHtml(active.className)} (${childCount}명)</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
+            <button class="canvas-toolbar-btn canvas-toolbar-btn--primary" id="btn-quick-save-class" type="button" title="내 문서 classcreation에 저장">📁 classcreation 저장</button>
+            <button class="canvas-toolbar-btn" id="btn-quick-manage-class" type="button">⚙️ 학급관리</button>
+            <button class="soft-button" type="button" data-zoom=".75">75%</button>
+            <button class="soft-button" type="button" data-zoom="1">100%</button>
+            <button class="soft-button" type="button" data-zoom="1.25">125%</button>
+            <button class="soft-button" type="button" id="btn-print-preview">미리보기</button>
+          </div>
+
+          ${isClassDropdownOpen ? `
+            <div class="canvas-class-menu" id="canvas-class-menu">
+              <span class="canvas-class-menu__title">등록된 학급 목록</span>
+              ${classStore.classes.map(c => `
+                <div class="canvas-class-item ${c.id === active.id ? 'is-active' : ''}" data-class-id="${c.id}">
+                  <div>
+                    <b>${c.id === active.id ? '✓ ' : ''}${escapeHtml(c.year)}학년도 ${escapeHtml(c.className)}</b>
+                    <span>${escapeHtml(c.ageGroup || '')} · ${c.children ? c.children.length : 0}명</span>
+                  </div>
+                </div>
+              `).join('')}
+              <div class="canvas-class-menu__footer">
+                <button type="button" id="btn-menu-new-class">➕ 새 학급 추가</button>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="canvas-stage">
+          <article class="canvas-paper" style="--template-ratio:${currentTemplate.ratio};--canvas-scale:${scale};--template-color:${escapeHtml(state.color || section.accent)}">
+            <span class="canvas-paper-badge">🌱 ${escapeHtml(active.year)}학년도 ${escapeHtml(active.className)}</span>
+            <h2 data-canvas-title>${escapeHtml(state.name || state.title || currentTemplate.title)}</h2>
+            <p data-canvas-message>${escapeHtml(state.message || currentTemplate.category)}</p>
+          </article>
+        </div>
+      `;
+    }
+
+    function renderInspector() {
+      const active = getActiveClass();
+      const children = active.children || [];
+
+      inspector.innerHTML = `
+        <p class="panel-kicker">INSPECTOR</p>
+        <h2>필요한 값만 수정</h2>
+
+        <div class="inspector-class-box">
+          <div class="inspector-class-box__title">
+            <span>🏫 우리학급 원아 자동 채우기</span>
+            <span style="font-size:11px;color:#666">${children.length}명</span>
+          </div>
+          <select id="select-child-quick">
+            <option value="">-- 원아 선택 (이름 자동 반영) --</option>
+            ${children.map(c => `
+              <option value="${escapeHtml(c.name)}">${c.num ? c.num + '번 ' : ''}${escapeHtml(c.name)} (${c.gender === '여' ? '👧' : '👦'})</option>
+            `).join('')}
+          </select>
+          <button class="btn-batch-print" id="btn-batch-print-all" type="button">
+            🖨️ ${escapeHtml(active.className)} 전체(${children.length}명) 일괄 인쇄
+          </button>
+        </div>
+
+        ${currentTemplate.fields.map(field => `
+          <label class="inspector-field">
+            <span>${escapeHtml(field.label)}</span>
+            <input type="${field.type}" value="${escapeHtml(field.value)}" data-field="${field.key}">
+          </label>
+        `).join('')}
+        <p class="meta">작성 중인 내용은 현재 브라우저에 안전하게 자동 저장됩니다.</p>
+      `;
+    }
+
+    function openClassModal(isNew = false) {
+      if (isNew) {
+        const newClass = {
+          id: 'class_' + Date.now(),
+          year: String(currentYear),
+          className: '새싹반',
+          ageGroup: '만 3세',
+          teacherName: '선생님',
+          children: [{ id: 'c1', num: 1, name: '새싹1', gender: '남', birth: '' }],
+          updatedAt: new Date().toISOString()
+        };
+        classStore.classes.unshift(newClass);
+        classStore.activeId = newClass.id;
+        saveClassStore();
+      }
+
+      const active = getActiveClass();
+      const children = active.children || [];
+
+      if (!modalContainer) return;
+      modalContainer.innerHTML = `
+        <div class="class-modal-backdrop" id="class-modal-backdrop">
+          <div class="class-modal-window">
+            <div class="class-modal-header">
+              <h2>🏫 우리학급 관리 설정</h2>
+              <button class="class-modal-close" id="btn-modal-close" type="button">✕</button>
+            </div>
+            <div class="class-modal-body">
+              <div class="class-form-grid">
+                <div class="class-input-group">
+                  <label>학년도 (연도)</label>
+                  <input type="number" id="modal-field-year" value="${escapeHtml(active.year || String(currentYear))}">
+                </div>
+                <div class="class-input-group">
+                  <label>학급명 (반 이름)</label>
+                  <input type="text" id="modal-field-name" value="${escapeHtml(active.className || '')}" placeholder="예: 햇살가득반">
+                </div>
+                <div class="class-input-group">
+                  <label>연령대</label>
+                  <select id="modal-field-age">
+                    ${['만 0세', '만 1세', '만 2세', '만 3세', '만 4세', '만 5세', '혼합반', '방과후반'].map(age => `
+                      <option value="${age}" ${active.ageGroup === age ? 'selected' : ''}>${age}</option>
+                    `).join('')}
+                  </select>
+                </div>
+                <div class="class-input-group">
+                  <label>담임 교사명</label>
+                  <input type="text" id="modal-field-teacher" value="${escapeHtml(active.teacherName || '')}" placeholder="예: 지니쌤">
+                </div>
+              </div>
+
+              <div class="children-section">
+                <div class="children-section-header">
+                  <h3>👶 원아 명단 관리 <span class="canvas-paper-badge" id="children-count-badge">${children.length}명</span></h3>
+                  <div class="children-section-actions">
+                    <button class="canvas-toolbar-btn" type="button" id="btn-toggle-batch-paste">📋 엑셀/명단 붙여넣기</button>
+                    <button class="canvas-toolbar-btn canvas-toolbar-btn--primary" type="button" id="btn-add-one-child">+ 원아 1명 추가</button>
+                  </div>
+                </div>
+
+                <div class="batch-paste-box" id="batch-paste-area" style="display:none">
+                  <p>💡 엑셀 또는 한글에서 원아 이름을 복사(줄바꿈 또는 쉼표 구분)하여 붙여넣으세요.</p>
+                  <textarea id="batch-paste-textarea" placeholder="김민수&#10;이서연&#10;박도윤"></textarea>
+                  <div style="display:flex;justify-content:flex-end;">
+                    <button class="canvas-toolbar-btn canvas-toolbar-btn--primary" type="button" id="btn-apply-batch-paste">명단 일괄 적용</button>
+                  </div>
+                </div>
+
+                <div class="children-table-wrap">
+                  <table class="children-table">
+                    <thead>
+                      <tr>
+                        <th style="width:50px">번호</th>
+                        <th style="width:140px">이름</th>
+                        <th style="width:80px">성별</th>
+                        <th>생년월일 (선택)</th>
+                        <th style="width:50px;text-align:center">삭제</th>
+                      </tr>
+                    </thead>
+                    <tbody id="children-table-body">
+                      ${children.map((c, i) => `
+                        <tr data-child-id="${c.id || i}">
+                          <td><input type="text" class="child-num" value="${c.num || i + 1}" style="text-align:center"></td>
+                          <td><input type="text" class="child-name" value="${escapeHtml(c.name || '')}" placeholder="이름"></td>
+                          <td>
+                            <select class="child-gender">
+                              <option value="남" ${c.gender === '남' ? 'selected' : ''}>남</option>
+                              <option value="여" ${c.gender === '여' ? 'selected' : ''}>여</option>
+                            </select>
+                          </td>
+                          <td><input type="date" class="child-birth" value="${escapeHtml(c.birth || '')}"></td>
+                          <td style="text-align:center"><button class="children-remove-btn" type="button" data-action="remove-child">삭제</button></td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="class-modal-footer">
+              <span style="font-size:11.5px;color:#666">📁 내 문서/classcreation/${escapeHtml(active.year)}학년도_${escapeHtml(active.className)}.json</span>
+              <div class="class-modal-buttons">
+                <button class="canvas-toolbar-btn canvas-toolbar-btn--primary" id="btn-modal-save-file" type="button">💾 classcreation 저장</button>
+                <button class="canvas-toolbar-btn canvas-toolbar-btn--accent" id="btn-modal-done" type="button">완료</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      bindModalEvents();
+    }
+
+    function closeModal() {
+      if (modalContainer) modalContainer.innerHTML = '';
+      renderCanvas();
+      renderInspector();
+    }
+
+    function collectModalData() {
+      const active = getActiveClass();
+      const year = document.getElementById('modal-field-year')?.value.trim() || String(currentYear);
+      const className = document.getElementById('modal-field-name')?.value.trim() || '우리반';
+      const ageGroup = document.getElementById('modal-field-age')?.value || '만 4세';
+      const teacherName = document.getElementById('modal-field-teacher')?.value.trim() || '';
+
+      const rows = document.querySelectorAll('#children-table-body tr');
+      const children = Array.from(rows).map((row, idx) => ({
+        id: row.dataset.childId || 'c_' + idx,
+        num: Number(row.querySelector('.child-num')?.value) || (idx + 1),
+        name: row.querySelector('.child-name')?.value.trim() || '원아' + (idx + 1),
+        gender: row.querySelector('.child-gender')?.value || '남',
+        birth: row.querySelector('.child-birth')?.value || ''
+      }));
+
+      active.year = year;
+      active.className = className;
+      active.ageGroup = ageGroup;
+      active.teacherName = teacherName;
+      active.children = children;
+      active.updatedAt = new Date().toISOString();
+
+      saveClassStore();
+      return active;
+    }
+
+    function bindModalEvents() {
+      document.getElementById('btn-modal-close')?.addEventListener('click', () => {
+        collectModalData();
+        closeModal();
+      });
+      document.getElementById('btn-modal-done')?.addEventListener('click', () => {
+        collectModalData();
+        closeModal();
+      });
+
+      const toggleBtn = document.getElementById('btn-toggle-batch-paste');
+      const pasteArea = document.getElementById('batch-paste-area');
+      toggleBtn?.addEventListener('click', () => {
+        pasteArea.style.display = pasteArea.style.display === 'none' ? 'flex' : 'none';
+      });
+
+      document.getElementById('btn-apply-batch-paste')?.addEventListener('click', () => {
+        const text = document.getElementById('batch-paste-textarea')?.value || '';
+        if (!text.trim()) return;
+        const names = text.split(/[\n,]+/).map(n => n.trim()).filter(Boolean);
+        const tbody = document.getElementById('children-table-body');
+        const startNum = tbody.querySelectorAll('tr').length + 1;
+
+        names.forEach((name, i) => {
+          const tr = document.createElement('tr');
+          tr.dataset.childId = 'c_b_' + Date.now() + '_' + i;
+          tr.innerHTML = `
+            <td><input type="text" class="child-num" value="${startNum + i}" style="text-align:center"></td>
+            <td><input type="text" class="child-name" value="${escapeHtml(name)}"></td>
+            <td><select class="child-gender"><option value="남">남</option><option value="여">여</option></select></td>
+            <td><input type="date" class="child-birth" value=""></td>
+            <td style="text-align:center"><button class="children-remove-btn" type="button" data-action="remove-child">삭제</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById('batch-paste-textarea').value = '';
+        pasteArea.style.display = 'none';
+        const badge = document.getElementById('children-count-badge');
+        if (badge) badge.textContent = tbody.querySelectorAll('tr').length + '명';
+      });
+
+      document.getElementById('btn-add-one-child')?.addEventListener('click', () => {
+        const tbody = document.getElementById('children-table-body');
+        const nextNum = tbody.querySelectorAll('tr').length + 1;
+        const tr = document.createElement('tr');
+        tr.dataset.childId = 'c_' + Date.now();
+        tr.innerHTML = `
+          <td><input type="text" class="child-num" value="${nextNum}" style="text-align:center"></td>
+          <td><input type="text" class="child-name" value="" placeholder="새 원아"></td>
+          <td><select class="child-gender"><option value="남">남</option><option value="여">여</option></select></td>
+          <td><input type="date" class="child-birth" value=""></td>
+          <td style="text-align:center"><button class="children-remove-btn" type="button" data-action="remove-child">삭제</button></td>
+        `;
+        tbody.appendChild(tr);
+        const badge = document.getElementById('children-count-badge');
+        if (badge) badge.textContent = nextNum + '명';
+        tr.querySelector('.child-name')?.focus();
+      });
+
+      document.getElementById('children-table-body')?.addEventListener('click', e => {
+        if (e.target.dataset.action === 'remove-child') {
+          const tr = e.target.closest('tr');
+          if (tr) {
+            tr.remove();
+            const badge = document.getElementById('children-count-badge');
+            if (badge) badge.textContent = document.querySelectorAll('#children-table-body tr').length + '명';
+          }
+        }
+      });
+
+      document.getElementById('btn-modal-save-file')?.addEventListener('click', () => {
+        const active = collectModalData();
+        saveClassToFile(active);
+      });
+    }
+
+    async function saveClassToFile(targetClass) {
+      const fileName = `${targetClass.year}학년도_${targetClass.className}.json`;
+      const dataStr = JSON.stringify(targetClass, null, 2);
+
+      if ('showDirectoryPicker' in window) {
+        try {
+          const rootDirHandle = await window.showDirectoryPicker({ id: 'kinder-docs', startIn: 'documents' });
+          const targetDir = await rootDirHandle.getDirectoryHandle('classcreation', { create: true });
+          const fileHandle = await targetDir.getFileHandle(fileName, { create: true });
+          const writable = await fileHandle.createWritable();
+          await writable.write(dataStr);
+          await writable.close();
+          alert(`✅ [내 문서/classcreation] 폴더에 "${fileName}" 파일이 안전하게 저장되었습니다!`);
+          return;
+        } catch (err) {
+          if (err.name === 'AbortError') return;
+        }
+      }
+
+      const blob = new Blob([dataStr], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      alert(`📁 "${fileName}" 파일이 다운로드되었습니다.\n내 문서 안의 'classcreation' 폴더에 저장해 두시면 됩니다.`);
+    }
+
+    function executeBatchPrint() {
+      const active = getActiveClass();
+      const children = active.children || [];
+      const state = values();
+
+      if (children.length === 0) {
+        alert('등록된 원아가 없습니다. 먼저 원아를 등록해주세요.');
+        return;
+      }
+
+      if (!batchPrintStage) return;
+      batchPrintStage.innerHTML = children.map(c => `
+        <div class="batch-print-card" style="border-color:${state.color || '#7dbb91'}">
+          <p style="font-size:12pt;font-weight:bold;color:#79877e">${escapeHtml(active.year)}학년도 ${escapeHtml(active.className)}</p>
+          <h2 style="color:${state.color || '#2e6040'}">${escapeHtml(c.name)}</h2>
+          <p>${escapeHtml(state.message || currentTemplate.category)}</p>
+        </div>
+      `).join('');
+
+      window.print();
+    }
+
+    function selectTemplate(id) {
+      currentTemplate = data.templates.find(item => item.id === id);
+      scale = 1;
+      list.querySelectorAll('.template-item').forEach(item => {
+        item.classList.toggle('is-active', item.dataset.template === id);
+      });
+      renderCanvas();
+      renderInspector();
+    }
+
+    list.addEventListener('click', event => {
+      const item = event.target.closest('[data-template]');
+      if (item) selectTemplate(item.dataset.template);
+    });
+
+    canvas.addEventListener('click', event => {
+      if (event.target.closest('#btn-class-trigger')) {
+        isClassDropdownOpen = !isClassDropdownOpen;
+        renderCanvas();
+        return;
+      }
+
+      const classItem = event.target.closest('.canvas-class-item');
+      if (classItem) {
+        const id = classItem.dataset.classId;
+        if (id) {
+          classStore.activeId = id;
+          saveClassStore();
+          isClassDropdownOpen = false;
+          renderCanvas();
+          renderInspector();
+        }
+        return;
+      }
+
+      if (event.target.closest('#btn-menu-new-class')) {
+        isClassDropdownOpen = false;
+        openClassModal(true);
+        return;
+      }
+
+      if (event.target.closest('#btn-quick-manage-class')) {
+        isClassDropdownOpen = false;
+        openClassModal(false);
+        return;
+      }
+
+      if (event.target.closest('#btn-quick-save-class')) {
+        saveClassToFile(getActiveClass());
+        return;
+      }
+
+      const zoom = event.target.closest('[data-zoom]');
+      if (zoom) {
+        scale = Number(zoom.dataset.zoom);
+        canvas.querySelector('.canvas-paper')?.style.setProperty('--canvas-scale', scale);
+      }
+
+      if (event.target.closest('#btn-print-preview')) {
+        window.print();
+      }
+    });
+
+    document.addEventListener('click', event => {
+      if (isClassDropdownOpen && !event.target.closest('#btn-class-trigger') && !event.target.closest('#canvas-class-menu')) {
+        isClassDropdownOpen = false;
+        renderCanvas();
+      }
+    });
+
+    inspector.addEventListener('change', event => {
+      if (event.target.id === 'select-child-quick') {
+        const name = event.target.value;
+        if (!name) return;
+        const nameField = currentTemplate.fields.find(f => f.key === 'name' || f.key === 'title');
+        if (nameField) {
+          nameField.value = name;
+          const input = inspector.querySelector(`[data-field="${nameField.key}"]`);
+          if (input) input.value = name;
+          const title = canvas.querySelector('[data-canvas-title]');
+          if (title) title.textContent = name;
+        }
+      }
+    });
+
+    inspector.addEventListener('click', event => {
+      if (event.target.closest('#btn-batch-print-all')) {
+        executeBatchPrint();
+      }
+    });
+
+    inspector.addEventListener('input', event => {
+      const input = event.target.closest('[data-field]');
+      if (!input) return;
+      const field = currentTemplate.fields.find(item => item.key === input.dataset.field);
+      if (field) field.value = input.value;
+      const state = values();
+      const title = canvas.querySelector('[data-canvas-title]');
+      const message = canvas.querySelector('[data-canvas-message]');
+      if (title) title.textContent = state.name || state.title || currentTemplate.title;
+      if (message) message.textContent = state.message || currentTemplate.category;
+      if (state.color) {
+        canvas.querySelector('.canvas-paper')?.style.setProperty('--template-color', state.color);
+      }
+    });
+
+    selectTemplate(currentTemplate.id);
   }
 
   function initWebtoon() {
