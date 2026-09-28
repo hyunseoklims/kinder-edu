@@ -1670,3 +1670,9 @@ body.prototype-home{display:flex;align-items:center;justify-content:center;min-h
   opacity:0!important;
   transform:none!important;
 }
+
+/* Grid 2 uses only the six card surfaces; remove the surrounding panel frame. */
+.prototype-services{
+  background:transparent;
+  border-color:transparent;
+}

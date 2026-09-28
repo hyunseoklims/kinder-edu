@@ -92,6 +92,9 @@
     const list = document.querySelector('#program-list');
     const workspace = document.querySelector('#program-workspace');
     const context = document.querySelector('#program-context');
+    const zoomMin = 0.8;
+    const zoomMax = 1.5;
+    const zoomStep = 0.1;
     let activeId = null;
     list.className = 'program-list';
     list.innerHTML = data.programs.map(item => `<button class="program-item" type="button" data-program="${item.id}">${escapeHtml(item.name)}</button>`).join('');
@@ -102,7 +105,33 @@
       list.querySelectorAll('.program-item').forEach(button => button.classList.toggle('is-active', button.dataset.program === id));
       if (item.entry) {
         const entry = encodeURI(item.entry);
-        workspace.innerHTML = `<div class="workspace-app workspace-app--embedded"><iframe class="program-frame" src="${entry}" title="${escapeHtml(item.name)}" allow="${escapeHtml(item.permissions || 'fullscreen')}" allowfullscreen></iframe></div>`;
+        let zoom = 1;
+        try { zoom = Number(localStorage.getItem(`kinder-program-zoom:${id}`)) || 1; } catch (_) {}
+        zoom = Math.min(zoomMax, Math.max(zoomMin, zoom));
+        workspace.innerHTML = `<div class="workspace-app workspace-app--embedded">
+          <div class="program-zoom" role="group" aria-label="프로그램 화면 배율">
+            <button type="button" data-program-zoom="out" aria-label="화면 축소">−</button>
+            <output aria-live="polite">100%</output>
+            <button type="button" data-program-zoom="in" aria-label="화면 확대">+</button>
+          </div>
+          <div class="program-frame-viewport"><iframe class="program-frame" src="${entry}" title="${escapeHtml(item.name)}" allow="${escapeHtml(item.permissions || 'fullscreen')}" allowfullscreen></iframe></div>
+        </div>`;
+        const frame = workspace.querySelector('.program-frame');
+        const output = workspace.querySelector('.program-zoom output');
+        const zoomOut = workspace.querySelector('[data-program-zoom="out"]');
+        const zoomIn = workspace.querySelector('[data-program-zoom="in"]');
+        function applyZoom() {
+          const rounded = Math.round(zoom * 10) / 10;
+          frame.style.setProperty('--program-zoom', String(rounded));
+          output.value = `${Math.round(rounded * 100)}%`;
+          output.textContent = output.value;
+          zoomOut.disabled = rounded <= zoomMin;
+          zoomIn.disabled = rounded >= zoomMax;
+          try { localStorage.setItem(`kinder-program-zoom:${id}`, String(rounded)); } catch (_) {}
+        }
+        zoomOut.addEventListener('click', () => { zoom = Math.max(zoomMin, zoom - zoomStep); applyZoom(); });
+        zoomIn.addEventListener('click', () => { zoom = Math.min(zoomMax, zoom + zoomStep); applyZoom(); });
+        applyZoom();
         return;
       }
       workspace.innerHTML = `<div class="workspace-app"><div class="workspace-app__window"><div><p class="panel-kicker">PROGRAM WORKSPACE</p><h2>${escapeHtml(item.name)}</h2><p>${escapeHtml(item.status)}</p></div></div></div>`;
