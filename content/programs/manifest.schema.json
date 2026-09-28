@@ -1,8 +1,9 @@
 {
-  "id": "program-id",
-  "name": "프로그램명",
+  "id": "photo-twinsweep",
+  "name": "포토 트윈 스윕",
   "icon": "icon.webp",
-  "summary": "한 줄 설명",
-  "entry": "프로그램 mount 또는 embed 경로",
-  "status": "ready"
+  "summary": "로컬 폴더의 중복 사진을 찾는 프로그램",
+  "entry": "../../programs/photo-twinsweep/index.html",
+  "status": "ready",
+  "permissions": "fullscreen"
 }

@@ -95,8 +95,18 @@
     let activeId = null;
     list.className = 'program-list';
     list.innerHTML = data.programs.map(item => `<button class="program-item" type="button" data-program="${item.id}">${escapeHtml(item.name)}</button>`).join('');
-    function showContext(id) { const item = data.programs.find(entry => entry.id === id); context.innerHTML = `<p class="panel-kicker">CONTEXT</p><h2>${escapeHtml(item.name)}</h2><div class="program-context__art">PROGRAM IMAGE SLOT</div><p>${escapeHtml(item.summary)}</p><p class="meta">${escapeHtml(item.status)}</p>`; }
-    function showWorkspace(id) { const item = data.programs.find(entry => entry.id === id); activeId = id; list.querySelectorAll('.program-item').forEach(button => button.classList.toggle('is-active', button.dataset.program === id)); workspace.innerHTML = `<div class="workspace-app"><div class="workspace-app__window"><div><p class="panel-kicker">PROGRAM WORKSPACE</p><h2>${escapeHtml(item.name)}</h2><p>${escapeHtml(item.status)}</p></div></div></div>`; }
+    function showContext(id) { const item = data.programs.find(entry => entry.id === id); context.innerHTML = `<p class="panel-kicker">CONTEXT</p><h2>${escapeHtml(item.name)}</h2><div class="program-context__art" aria-hidden="true"><span>${item.entry ? 'READY' : 'PROGRAM'}</span></div><p>${escapeHtml(item.summary)}</p><p class="meta">${escapeHtml(item.status)}</p>`; }
+    function showWorkspace(id) {
+      const item = data.programs.find(entry => entry.id === id);
+      activeId = id;
+      list.querySelectorAll('.program-item').forEach(button => button.classList.toggle('is-active', button.dataset.program === id));
+      if (item.entry) {
+        const entry = encodeURI(item.entry);
+        workspace.innerHTML = `<div class="workspace-app workspace-app--embedded"><iframe class="program-frame" src="${entry}" title="${escapeHtml(item.name)}" allow="${escapeHtml(item.permissions || 'fullscreen')}" allowfullscreen></iframe></div>`;
+        return;
+      }
+      workspace.innerHTML = `<div class="workspace-app"><div class="workspace-app__window"><div><p class="panel-kicker">PROGRAM WORKSPACE</p><h2>${escapeHtml(item.name)}</h2><p>${escapeHtml(item.status)}</p></div></div></div>`;
+    }
     list.addEventListener('pointerover', event => { const button = event.target.closest('[data-program]'); if (button) showContext(button.dataset.program); });
     list.addEventListener('focusin', event => { const button = event.target.closest('[data-program]'); if (button) showContext(button.dataset.program); });
     list.addEventListener('pointerleave', () => showContext(activeId || data.programs[0].id));

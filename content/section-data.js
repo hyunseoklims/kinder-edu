@@ -25,7 +25,14 @@
       ]
     },
     programs: [
-      { id: 'photo-tools', name: '사진 정리 도구', summary: '교실 사진을 정리하는 프로그램 연결 슬롯', status: '프로그램 연결 준비 중' },
+      {
+        id: 'photo-twinsweep',
+        name: '포토 트윈 스윕',
+        summary: '로컬 폴더에서 내용이 완전히 같은 중복 사진을 찾아 선택적으로 정리하는 프로그램',
+        status: '사용 가능 · 사진은 서버에 업로드되지 않습니다.',
+        entry: './programs/photo-twinsweep/index.html',
+        permissions: 'fullscreen'
+      },
       { id: 'font-tools', name: '한글 제작 도구', summary: '한글 결과물을 만드는 프로그램 연결 슬롯', status: '프로그램 연결 준비 중' },
       { id: 'play-tools', name: '놀이 기록 도구', summary: '놀이 기록 프로그램 연결 슬롯', status: '프로그램 연결 준비 중' }
     ],
