@@ -120,6 +120,16 @@
         const output = workspace.querySelector('.program-zoom output');
         const zoomOut = workspace.querySelector('[data-program-zoom="out"]');
         const zoomIn = workspace.querySelector('[data-program-zoom="in"]');
+        function enforceTransparentEmbed() {
+          try {
+            const frameDocument = frame.contentDocument;
+            if (!frameDocument || frameDocument.querySelector('#kinder-program-transparent-embed')) return;
+            const style = frameDocument.createElement('style');
+            style.id = 'kinder-program-transparent-embed';
+            style.textContent = 'html,body,#root{background:transparent!important;}';
+            (frameDocument.head || frameDocument.documentElement).appendChild(style);
+          } catch (_) {}
+        }
         function applyZoom() {
           const rounded = Math.round(zoom * 10) / 10;
           frame.style.setProperty('--program-zoom', String(rounded));
@@ -131,6 +141,7 @@
         }
         zoomOut.addEventListener('click', () => { zoom = Math.max(zoomMin, zoom - zoomStep); applyZoom(); });
         zoomIn.addEventListener('click', () => { zoom = Math.min(zoomMax, zoom + zoomStep); applyZoom(); });
+        frame.addEventListener('load', enforceTransparentEmbed);
         applyZoom();
         return;
       }
