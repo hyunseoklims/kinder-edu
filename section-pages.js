@@ -793,7 +793,6 @@
 
       canvas.innerHTML = `
         <div class="canvas-toolbar">
-          <strong class="canvas-toolbar__title">우리학급</strong>
           <button class="canvas-class-trigger ${isClassDropdownOpen ? 'is-active' : ''}" id="btn-class-trigger" type="button" title="학급 전환 / 새 학급 만들기">
             <span>🏫 ${escapeHtml(active.year)}학년도 ${escapeHtml(active.className)} (${childCount}명)</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
