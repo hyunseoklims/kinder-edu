@@ -1,0 +1,16 @@
+{
+  "id": "acorn-collector",
+  "title": "다람쥐의 가을 준비",
+  "description": "도토리 다섯 개를 바구니에 옮기며 하나부터 다섯까지 함께 세는 놀이",
+  "version": "1.0.0",
+  "entry": "./index.html",
+  "thumbnail": "./assets/concept.png",
+  "cover": "./assets/concept.png",
+  "category": ["수·과학", "자연탐구"],
+  "age": [4],
+  "orientation": "landscape",
+  "baseWidth": 1600,
+  "baseHeight": 900,
+  "fullscreen": true,
+  "status": "ready"
+}

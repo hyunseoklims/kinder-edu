@@ -175,7 +175,7 @@
     }
 
     // registry.json 비동기 로드 시도
-    fetch('./games/registry.json')
+    fetch('./games/registry.json', { cache: 'no-store' })
       .then(res => res.ok ? res.json() : null)
       .then(reg => {
         if (reg && Array.isArray(reg.games) && reg.games.length) {

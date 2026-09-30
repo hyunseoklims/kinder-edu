@@ -39,15 +39,15 @@
     games: [
       {
         id: 'acorn-collector',
-        title: '다람쥐의 도토리 모으기',
+        title: '다람쥐의 가을 준비',
         age: '만 3~5세',
         category: '수·과학',
         theme: '가을',
         time: '약 3분',
         description: '가을 숲속 낙엽 사이에서 도토리를 찾아 세며 다람쥐 바구니에 담는 놀이',
-        entry: './games/acorn-collector/index.html',
-        thumbnail: './assets/games/acorn-collector/thumbnail.jpg',
-        cover: './assets/games/acorn-collector/cover.jpg',
+        entry: './games/autumn-preparation/index.html',
+        thumbnail: './games/autumn-preparation/assets/concept.png',
+        cover: './games/autumn-preparation/assets/concept.png',
         featured: true,
         teacherGuide: {
           nuriArea: '자연탐구 > 탐구하는 태도 기르기 > 주변 사물과 자연환경에 관심 갖기',

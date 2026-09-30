@@ -1,23 +1,40 @@
 {
-  "version": "1.1.0",
-  "updatedAt": "2026-09-28",
-  "categories": ["전체", "수·과학", "자연탐구", "신체운동", "의사소통", "예술경험"],
-  "ages": ["전체", "만 3세", "만 4세", "만 5세"],
-  "themes": ["전체", "가을", "사계절", "자연·동식물"],
+  "version": "1.2.0",
+  "updatedAt": "2026-10-01",
+  "categories": [
+    "전체",
+    "수·과학",
+    "자연탐구",
+    "신체운동",
+    "의사소통",
+    "예술경험"
+  ],
+  "ages": [
+    "전체",
+    "만 3세",
+    "만 4세",
+    "만 5세"
+  ],
+  "themes": [
+    "전체",
+    "가을",
+    "사계절",
+    "자연·동식물"
+  ],
   "games": [
     {
       "id": "acorn-collector",
-      "title": "다람쥐의 도토리 모으기",
-      "summary": "가을 숲속 낙엽 사이에서 도토리를 찾아 세며 다람쥐 바구니에 담는 놀이",
+      "title": "다람쥐의 가을 준비",
+      "summary": "도토리 다섯 개를 바구니에 옮기며 하나부터 다섯까지 함께 세는 놀이",
       "category": "수·과학",
-      "age": "만 3~5세",
-      "ageGroup": "만 3세, 만 4세, 만 5세",
+      "age": "만 4세",
+      "ageGroup": "만 4세",
       "theme": "가을",
-      "playTime": "약 3분",
-      "entry": "./games/acorn-collector/index.html",
-      "manifest": "./games/acorn-collector/manifest.json",
-      "thumbnail": "./assets/games/acorn-collector/thumbnail.jpg",
-      "cover": "./assets/games/acorn-collector/cover.jpg",
+      "playTime": "자유롭게",
+      "entry": "./games/autumn-preparation/index.html",
+      "manifest": "./games/autumn-preparation/manifest.json",
+      "thumbnail": "./games/autumn-preparation/assets/concept.png",
+      "cover": "./games/autumn-preparation/assets/concept.png",
       "featured": true,
       "status": "ready",
       "teacherGuide": {
