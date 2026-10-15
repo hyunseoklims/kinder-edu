@@ -6,6 +6,8 @@ window.initMakingHub = async function () {
   const uid = () => crypto.randomUUID();
   let db, state = {classes:[], activeId:null, updatedAt:null, backedUpAt:null}, selected = new Set();
   let draft = null, dirty = false, busy = false, timer;
+  // The selected program is session-only. Every page load starts with the guide.
+  let activeProgram = null, faceModulePromise = null, faceMountPromise = null;
   const dialog = $('#making-manager');
   const activeClass = () => state.classes.find(c => c.id === state.activeId);
   const notify = message => { $('#making-notice').textContent = message; $('#making-notice').classList.add('is-visible'); clearTimeout(timer); timer = setTimeout(() => $('#making-notice').classList.remove('is-visible'), 5000); };
@@ -80,9 +82,61 @@ window.initMakingHub = async function () {
       ${c ? `<div class="making-class-summary"><strong>${esc(c.className)}</strong><p>${esc(c.year)}학년도${c.ageGroup?' · '+esc(c.ageGroup):''} · ${c.children.length}명</p></div><div class="making-roster-head"><b>학급원 <span id="making-selected-count">${selected.size}</span>명 선택</b><button type="button" data-action="select-all">${selected.size===c.children.length && c.children.length?'선택 해제':'전체 선택'}</button></div><div class="making-roster">${c.children.length ? c.children.map(child => `<label class="making-child"> <input type="checkbox" data-child="${esc(child.id)}" ${selected.has(child.id)?'checked':''}>${avatar(child)}<b>${esc(child.name)}</b><small>${child.num}번</small></label>`).join('') : '<p class="making-empty">학급 관리에서 이름과 사진을<br>등록해주세요.</p>'}</div>` : '<p class="making-empty">학급을 만들고<br>아이들의 이름을 등록해보세요.<br>사진은 나중에 추가해도 괜찮아요.</p>'}
       <div class="making-backup"><div class="making-actions">${btn('export','백업 내보내기')}${btn('import','백업 가져오기')}</div><p>${state.updatedAt && (!state.backedUpAt || state.updatedAt > state.backedUpAt) ? '백업하지 않은 변경 사항이 있어요.' : state.backedUpAt ? '마지막 백업: '+esc(new Date(state.backedUpAt).toLocaleString('ko-KR')) : '학급 정보와 사진을 파일로 보관할 수 있어요.'}<br>사이트 데이터 삭제 전에는 꼭 백업해주세요.</p></div>`;
   }
-  function renderWorkspace() {
+  function getProgramSnapshot() {
+    const c = activeClass();
+    return {
+      activeId: c?.id || null,
+      classes: c ? [{id:c.id,year:c.year,className:c.className,children:c.children.filter(child=>selected.has(child.id)).map(({id,num,name,image})=>({id,num,name,image}))}] : [],
+      selectedIds:[...selected]
+    };
+  }
+  async function loadFaceSsok() {
+    if (!faceModulePromise) {
+      faceModulePromise = (async () => {
+        if (!window.FaceSsok) await import('./making-face-ssok-bridge.js?v=20261016-independent');
+        if (!window.FaceSsok?.mount) throw new Error('얼굴 쏙을 불러오지 못했습니다.');
+      })().catch(error=>{faceModulePromise=null;throw error;});
+    }
+    await faceModulePromise;
+  }
+  async function showFaceSsok(preferredChildId) {
+    const stage = $('#making-tool-stage');
+    if (!stage.querySelector('[data-making-frame]') && !faceMountPromise) {
+      stage.innerHTML='<div class="making-tool-status" role="status"><h2>얼굴 쏙을 열고 있어요</h2><p>잠시만 기다려주세요.</p></div>';
+      faceMountPromise=(async()=>{
+        await loadFaceSsok();
+        if(activeProgram!=='face-ssok') return;
+        await window.FaceSsok.mount(stage,{getSnapshot:getProgramSnapshot,openManager:(isNew=false)=>openManager(isNew||!activeClass())});
+      })();
+      try { await faceMountPromise; } finally { faceMountPromise=null; }
+    } else if (faceMountPromise) {
+      await faceMountPromise;
+    }
+    if (activeProgram==='face-ssok' && stage.querySelector('[data-making-frame]')) {
+      await window.FaceSsok.update(getProgramSnapshot());
+      if(preferredChildId && selected.has(preferredChildId)) await window.FaceSsok.selectPerson(preferredChildId);
+    }
+  }
+  function renderWorkspace(preferredChildId = null) {
     const workspace = $('#making-workspace');
-    workspace.innerHTML = `<div class="making-welcome"><div class="making-welcome-icon">✂</div><span class="making-eyebrow">OUR CLASS, OUR CREATION</span><h2>우리 반의 이야기를<br>만들어보세요</h2><p>학급을 등록하고 아이들의 이름과 사진을 모아두세요.<br>만들기 도구에서 우리 반 자료를 활용할 수 있어요.</p><div class="making-steps"><span>01 학급 등록</span><span>02 학급원 선택</span><span>03 만들기 시작</span></div>${btn(activeClass()?'edit':'new',activeClass()?'우리 반 관리하기':'첫 학급 만들기','primary')}<p class="making-help">학급 정보와 사진은 서버로 업로드하지 않습니다.</p></div>`;
+    if (!$('#making-tool-stage')) {
+      workspace.innerHTML = '<div class="making-welcome"><div class="making-welcome-icon"><img src="./assets/making/icons/program-select.svg" alt="" width="64" height="64"></div><span class="making-eyebrow">LET’S CREATE</span><h2>만들기를 시작해보세요</h2><div class="making-guide"><section><img src="./assets/making/icons/program-select.svg" alt="" width="48" height="48"><h3>좌측에서 프로그램 선택</h3><p>사용할 만들기 프로그램을 골라주세요.</p></section><section><img src="./assets/making/icons/class-manage.svg" alt="" width="48" height="48"><h3>우측에서 학급 입력</h3><p>학급과 아이들의 이름·사진을 등록해주세요.</p></section></div><p class="making-help">선택한 프로그램은 이 창에서 열립니다.<br>학급 정보와 사진은 이 브라우저에서 관리됩니다.</p></div><div class="making-workspace making-tool-stage" id="making-tool-stage" hidden></div>';
+    }
+    const isGuide = !activeProgram;
+    workspace.querySelector('.making-welcome').hidden=isGuide===false;
+    $('#making-tool-stage').hidden=isGuide;
+    const home=$('[data-making-home]');
+    home.classList.toggle('is-active',isGuide);
+    if(isGuide)home.setAttribute('aria-current','page');else home.removeAttribute('aria-current');
+    document.querySelectorAll('[data-making-program]').forEach(button=>{
+      const isActive=button.dataset.makingProgram===activeProgram;
+      button.classList.toggle('is-active',isActive);button.setAttribute('aria-pressed',String(isActive));
+    });
+    if(activeProgram==='face-ssok') showFaceSsok(preferredChildId).catch(()=>{
+      if(activeProgram!=='face-ssok') return;
+      if($('#making-tool-stage').querySelector('[data-making-frame]')) {notify('얼굴 쏙의 학급 자료를 반영하지 못했습니다. 시작 안내로 돌아간 뒤 다시 선택해주세요.');return;}
+      $('#making-tool-stage').innerHTML=`<div class="making-tool-status" role="alert"><h2>얼굴 쏙을 열지 못했어요</h2><p>프로그램 연결을 확인한 뒤 다시 실행해주세요.</p>${btn('retry-program','다시 실행','primary')}</div>`;
+    });
   }
   function readDraft() {
     if (!draft) return;
@@ -157,7 +211,8 @@ window.initMakingHub = async function () {
     if (name==='new') { if (state.classes.length>=100) throw new Error('학급은 최대 100개까지 등록할 수 있습니다.'); openManager(true); }
     if (name==='edit') openManager();
     if (name==='close') closeManager();
-    if (name==='select-all') { const c=activeClass(); selected=selected.size===c.children.length ? new Set() : new Set(c.children.map(ch=>ch.id));renderSidebar(); }
+    if (name==='select-all') { const c=activeClass(); selected=selected.size===c.children.length ? new Set() : new Set(c.children.map(ch=>ch.id));renderSidebar();renderWorkspace(); }
+    if (name==='retry-program') renderWorkspace();
     if (name==='export') await exportBackup();
     if (name==='import') await importBackup();
     if (['add','bulk','photo','remove-photo','remove-child'].includes(name)) {
@@ -185,9 +240,14 @@ window.initMakingHub = async function () {
     if (target.dataset.action==='close') busy=false;
     try { await action(target.dataset.action,target); } catch(error) {report(error);} finally {busy=false;}
   });
+  $('.making-nav').addEventListener('click',event=>{
+    if(event.target.closest('[data-making-home]')) {activeProgram=null;renderWorkspace();return;}
+    const button=event.target.closest('[data-making-program]');
+    if(button?.dataset.makingProgram==='face-ssok') {activeProgram='face-ssok';renderWorkspace();}
+  });
   $('#making-classes').addEventListener('change',async event=>{
     if (busy) {renderSidebar();return;}
-    if (event.target.matches('[data-child]')) {event.target.checked?selected.add(event.target.dataset.child):selected.delete(event.target.dataset.child);renderSidebar();}
+    if (event.target.matches('[data-child]')) {const id=event.target.dataset.child;event.target.checked?selected.add(id):selected.delete(id);renderSidebar();renderWorkspace(selected.has(id)?id:null);}
     if (event.target.id==='making-class-select') {
       busy=true;
       try {await persist({...state,activeId:event.target.value},false);selected.clear();renderSidebar();renderWorkspace();} catch(error){report(error);renderSidebar();} finally {busy=false;}
