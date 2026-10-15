@@ -2,14 +2,13 @@
 .making-layout{grid-template-columns:220fr 1012fr 320fr}
 .making-nav,.making-classes{padding:24px;overflow:auto;min-width:0}
 .making-nav{padding:24px 16px}
-.making-nav h1{font-size:22px;margin:0 8px 24px;letter-spacing:-.04em}.making-nav>.panel-kicker{margin-left:8px}
+.making-sidebar-title{margin:0 0 24px;font:800 22px/1.25 "Manrope","Noto Sans KR",sans-serif;letter-spacing:.02em;color:var(--text-main)}
+.making-nav>.making-sidebar-title{margin-left:8px}
 .making-nav nav{display:grid;gap:12px}
-.making-home{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;color:var(--text-sub);background:transparent;font-size:12px;text-align:left}
-.making-home.is-active{background:#f7f5f2;color:var(--text-main)}
 .making-program{display:flex;align-items:center;gap:10px;width:100%;min-height:76px;padding:12px 9px;background:transparent;border:1px solid #e9e7e1;border-radius:14px;text-align:left;color:var(--text-main)}
 .making-program img{flex:none}.making-program b{display:block;font-size:14px}.making-program small{display:block;margin-top:6px;font-size:10px;line-height:1.5;color:var(--text-sub)}
 .making-program:hover,.making-program.is-active{background:var(--soft);border-color:var(--accent)}
-.making-home:focus-visible,.making-program:focus-visible{outline:2px solid var(--accent-hover);outline-offset:3px}
+.making-program:focus-visible{outline:2px solid var(--accent-hover);outline-offset:3px}
 .making-classes h1{font-size:24px;letter-spacing:-.04em;margin:0 0 12px}
 .making-workspace{position:relative;overflow:hidden;display:grid;place-items:center;background:#fff;min-width:0}
 .making-welcome{width:min(680px,100%);padding:44px;text-align:center;box-sizing:border-box}
@@ -43,7 +42,6 @@
 .making-child input{accent-color:#3e7052}.making-avatar{width:36px;height:36px;border-radius:11px;object-fit:cover;background:#f1f3ef;display:grid;place-items:center;font-size:12px;color:#7a8b7c;flex:none}
 .making-child small{color:var(--text-sub);margin-left:auto;font-size:10px}.making-empty{padding:22px 4px;color:var(--text-sub);font-size:12px;line-height:1.8;text-align:center}
 .making-backup{border-top:1px solid #eeede9;margin-top:20px;padding-top:16px}.making-backup p{font-size:11px;line-height:1.7;color:var(--text-sub)}
-.making-local{display:block;font-size:10px;color:#62816a;margin-bottom:14px}
 #making-manager{width:min(900px,calc(100vw - 32px));max-height:88vh;border:0;border-radius:22px;padding:0;color:var(--text-main);box-shadow:0 24px 80px #0003}
 #making-manager::backdrop{background:#24332a80;backdrop-filter:blur(3px)}
 .making-form{padding:28px}.making-dialog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.making-dialog-header h2{font-size:22px;margin:0}
@@ -56,5 +54,5 @@
 .making-error{font-size:12px;color:#a24038;line-height:1.5;min-height:18px}
 #making-notice{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#304a39;color:#fff;padding:12px 20px;border-radius:12px;z-index:1000;font-size:13px;max-width:90vw;display:none}
 #making-notice.is-visible{display:block}
-@media(max-width:1200px){.making-layout{grid-template-columns:1fr;grid-template-rows:auto minmax(520px,1fr) auto}.making-nav{padding:20px}.making-nav h1{margin-bottom:12px}.making-nav nav{grid-template-columns:auto minmax(180px,280px);align-items:center}.making-classes{overflow:visible}.making-roster{max-height:240px}.making-workspace{min-height:520px}}
+@media(max-width:1200px){.making-layout{grid-template-columns:1fr;grid-template-rows:auto minmax(520px,1fr) auto}.making-nav{padding:20px}.making-sidebar-title{margin-bottom:16px}.making-nav nav{grid-template-columns:minmax(180px,280px);align-items:center}.making-classes{overflow:visible}.making-roster{max-height:240px}.making-workspace{min-height:520px}}
 @media(max-width:600px){.making-welcome{padding:28px 18px}.making-welcome h2{font-size:26px}.making-guide{grid-template-columns:1fr;gap:10px;margin-top:24px}.making-guide section{display:grid;grid-template-columns:44px 1fr;column-gap:12px;padding:16px}.making-guide img{width:44px;height:44px;grid-row:span 2;margin:0}.making-guide h3{margin-bottom:4px}.making-guide p{font-size:11px}.making-nav nav{grid-template-columns:1fr}.making-info-fields{grid-template-columns:1fr 1fr}.making-form{padding:18px}.making-edit-row{grid-template-columns:36px 36px minmax(70px,1fr) auto}.making-edit-row .making-avatar{width:36px;height:36px}.making-edit-row input[type=date]{grid-column:3}.making-edit-row .making-btn{padding:7px}.making-dialog-header h2{font-size:18px}}
