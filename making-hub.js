@@ -45,13 +45,26 @@ window.initMakingHub = async function () {
       return;
     }
     if (state.classes.length >= 100) { notify('예시 학급을 추가하려면 보관 중인 학급을 100개 미만으로 정리해주세요.'); return; }
+    const example = await createExampleClass();
+    // Keep every existing class. Mark the seed separately so deletion stays final.
+    await persist({...state,exampleClassAdded:true,examplePhotoVersion:2,classes:[...state.classes,example],activeId:example.id});
+  }
+  async function createExampleClass() {
     const names = ['김하준','이서윤','박도윤','최지우','정서아','강예준','윤하린','장시우','임지안','한도현'];
     const children = await Promise.all(names.map(async (name, i) => {
       return {id:uid(),num:i+1,name,birth:'',image:await examplePhoto(i,'webp',396)};
     }));
-    const example = {id:uid(),year:'2026',className:'햇살반 (예시)',ageGroup:'만 4세',institution:'',teacherName:'',children};
-    // Keep every existing class. Mark the seed separately so deletion stays final.
-    await persist({...state,exampleClassAdded:true,examplePhotoVersion:2,classes:[...state.classes,example],activeId:example.id});
+    return {id:uid(),year:'2026',className:'햇살반 (예시)',ageGroup:'만 4세',institution:'',teacherName:'',children};
+  }
+  async function resetClasses() {
+    if (!confirm('저장된 모든 학급과 학급원 사진을 삭제하고 예시 학급 1개만 남길까요? 백업이 없으면 복구할 수 없습니다.')) return;
+    // Prepare all sample photos before replacing the saved state in one transaction.
+    const example = await createExampleClass();
+    await persist({classes:[example],activeId:example.id,exampleClassAdded:true,examplePhotoVersion:2,backedUpAt:null});
+    selected.clear();
+    draft=null;dirty=false;
+    renderSidebar();renderWorkspace();
+    notify('초기화했습니다. 예시 학급 1개만 남겼습니다.');
   }
   async function examplePhoto(i,format,size) {
     const image = new Image();
@@ -86,7 +99,7 @@ window.initMakingHub = async function () {
   }
   function renderSidebar() {
     const c = activeClass();
-    $('#making-classes').innerHTML = `<h2 class="making-sidebar-title">MY CLASS</h2>
+    $('#making-classes').innerHTML = `<div class="making-sidebar-head"><h2 class="making-sidebar-title">MY CLASS</h2>${btn('reset-classes','초기화','making-reset')}</div>
       <label for="making-class-select">학급 선택</label><select id="making-class-select" ${state.classes.length?'':'disabled'}>${state.classes.length ? state.classes.map(item => `<option value="${esc(item.id)}" ${item.id===state.activeId?'selected':''}>${esc(item.year)}학년도 · ${esc(item.className)}</option>`).join('') : '<option>등록된 학급이 없어요</option>'}</select>
       <div class="making-actions">${btn('new','+ 새 학급')}${c?btn('edit','학급 관리'):''}</div>
       ${c ? `<div class="making-class-summary"><strong>${esc(c.className)}</strong><p>${esc(c.year)}학년도${c.ageGroup?' · '+esc(c.ageGroup):''} · ${c.children.length}명</p></div><div class="making-roster-head"><b>학급원 <span id="making-selected-count">${selected.size}</span>명 선택</b><button type="button" data-action="select-all">${selected.size===c.children.length && c.children.length?'선택 해제':'전체 선택'}</button></div><div class="making-roster">${c.children.length ? c.children.map(child => `<label class="making-child"> <input type="checkbox" data-child="${esc(child.id)}" ${selected.has(child.id)?'checked':''}>${avatar(child)}<b>${esc(child.name)}</b><small>${child.num}번</small></label>`).join('') : '<p class="making-empty">학급 관리에서 이름과 사진을<br>등록해주세요.</p>'}</div>` : '<p class="making-empty">학급을 만들고<br>아이들의 이름을 등록해보세요.<br>사진은 나중에 추가해도 괜찮아요.</p>'}
@@ -222,6 +235,7 @@ window.initMakingHub = async function () {
     if (name==='retry-program') renderWorkspace();
     if (name==='export') await exportBackup();
     if (name==='import') await importBackup();
+    if (name==='reset-classes') await resetClasses();
     if (['add','bulk','photo','remove-photo','remove-child'].includes(name)) {
       readDraft();
       if (name==='add') { if (draft.children.length>=200) throw new Error('학급원은 200명까지 등록할 수 있습니다.'); draft.children.push({id:uid(),name:'',birth:'',image:null}); }

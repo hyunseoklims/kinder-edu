@@ -4,6 +4,9 @@
 .making-nav{padding:24px 16px}
 .making-sidebar-title{margin:0 0 24px;font:800 22px/1.25 "Manrope","Noto Sans KR",sans-serif;letter-spacing:.02em;color:var(--text-main)}
 .making-nav>.making-sidebar-title{margin-left:8px}
+.making-sidebar-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:24px}
+.making-sidebar-head .making-sidebar-title{margin:0}
+.making-btn.making-reset{flex:none;padding:5px 8px;font-size:11px;line-height:1.25;background:#fff;color:var(--text-sub);border-color:#e2e5e1}
 .making-nav nav{display:grid;gap:12px}
 .making-program{display:flex;align-items:center;gap:10px;width:100%;min-height:76px;padding:12px 9px;background:transparent;border:1px solid #e9e7e1;border-radius:14px;text-align:left;color:var(--text-main)}
 .making-program img{flex:none}.making-program b{display:block;font-size:14px}.making-program small{display:block;margin-top:6px;font-size:10px;line-height:1.5;color:var(--text-sub)}
