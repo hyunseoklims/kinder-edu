@@ -76,7 +76,7 @@ window.initMakingHub = async function () {
   }
   function renderSidebar() {
     const c = activeClass();
-    $('#making-classes').innerHTML = `<p class="panel-kicker">MY CLASS</p><span class="making-local">● 이 브라우저에만 저장됩니다</span>
+    $('#making-classes').innerHTML = `<h2 class="making-sidebar-title">MY CLASS</h2>
       <label for="making-class-select">학급 선택</label><select id="making-class-select" ${state.classes.length?'':'disabled'}>${state.classes.length ? state.classes.map(item => `<option value="${esc(item.id)}" ${item.id===state.activeId?'selected':''}>${esc(item.year)}학년도 · ${esc(item.className)}</option>`).join('') : '<option>등록된 학급이 없어요</option>'}</select>
       <div class="making-actions">${btn('new','+ 새 학급')}${c?btn('edit','학급 관리'):''}</div>
       ${c ? `<div class="making-class-summary"><strong>${esc(c.className)}</strong><p>${esc(c.year)}학년도${c.ageGroup?' · '+esc(c.ageGroup):''} · ${c.children.length}명</p></div><div class="making-roster-head"><b>학급원 <span id="making-selected-count">${selected.size}</span>명 선택</b><button type="button" data-action="select-all">${selected.size===c.children.length && c.children.length?'선택 해제':'전체 선택'}</button></div><div class="making-roster">${c.children.length ? c.children.map(child => `<label class="making-child"> <input type="checkbox" data-child="${esc(child.id)}" ${selected.has(child.id)?'checked':''}>${avatar(child)}<b>${esc(child.name)}</b><small>${child.num}번</small></label>`).join('') : '<p class="making-empty">학급 관리에서 이름과 사진을<br>등록해주세요.</p>'}</div>` : '<p class="making-empty">학급을 만들고<br>아이들의 이름을 등록해보세요.<br>사진은 나중에 추가해도 괜찮아요.</p>'}
@@ -125,16 +125,13 @@ window.initMakingHub = async function () {
     const isGuide = !activeProgram;
     workspace.querySelector('.making-welcome').hidden=isGuide===false;
     $('#making-tool-stage').hidden=isGuide;
-    const home=$('[data-making-home]');
-    home.classList.toggle('is-active',isGuide);
-    if(isGuide)home.setAttribute('aria-current','page');else home.removeAttribute('aria-current');
     document.querySelectorAll('[data-making-program]').forEach(button=>{
       const isActive=button.dataset.makingProgram===activeProgram;
       button.classList.toggle('is-active',isActive);button.setAttribute('aria-pressed',String(isActive));
     });
     if(activeProgram==='face-ssok') showFaceSsok(preferredChildId).catch(()=>{
       if(activeProgram!=='face-ssok') return;
-      if($('#making-tool-stage').querySelector('[data-making-frame]')) {notify('얼굴 쏙의 학급 자료를 반영하지 못했습니다. 시작 안내로 돌아간 뒤 다시 선택해주세요.');return;}
+      if($('#making-tool-stage').querySelector('[data-making-frame]')) {notify('얼굴 쏙의 학급 자료를 반영하지 못했습니다. 페이지를 새로고침한 뒤 다시 선택해주세요.');return;}
       $('#making-tool-stage').innerHTML=`<div class="making-tool-status" role="alert"><h2>얼굴 쏙을 열지 못했어요</h2><p>프로그램 연결을 확인한 뒤 다시 실행해주세요.</p>${btn('retry-program','다시 실행','primary')}</div>`;
     });
   }
@@ -241,7 +238,6 @@ window.initMakingHub = async function () {
     try { await action(target.dataset.action,target); } catch(error) {report(error);} finally {busy=false;}
   });
   $('.making-nav').addEventListener('click',event=>{
-    if(event.target.closest('[data-making-home]')) {activeProgram=null;renderWorkspace();return;}
     const button=event.target.closest('[data-making-program]');
     if(button?.dataset.makingProgram==='face-ssok') {activeProgram='face-ssok';renderWorkspace();}
   });
