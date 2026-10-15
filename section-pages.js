@@ -93,11 +93,13 @@
     const workspace = document.querySelector('#program-workspace');
     const context = document.querySelector('#program-context');
     const zoomMin = 0.8;
-    const zoomMax = 1.5;
+    const zoomMax = 2;
     const zoomStep = 0.1;
     let activeId = null;
     let launchSequence = 0;
     let frameObserver = null;
+    let workspaceZoom = 1;
+    try { workspaceZoom = Number(localStorage.getItem('kinder-program-workspace-zoom')) || 1; } catch (_) {}
     const isLocal = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
     const entryFor = item => (isLocal && item.localEntry) || item.entry;
     const stateFor = item => entryFor(item) ? '클릭하여 실행' : item.localEntry ? '배포 준비 중' : '준비 중';
@@ -121,8 +123,7 @@
       });
       if (entryFor(item)) {
         const entry = encodeURI(entryFor(item));
-        let zoom = 1;
-        try { zoom = Number(localStorage.getItem(`kinder-program-zoom:${id}`)) || 1; } catch (_) {}
+        let zoom = workspaceZoom;
         zoom = Math.min(zoomMax, Math.max(zoomMin, zoom));
         workspace.innerHTML = `<div class="workspace-app workspace-app--embedded">
           <div class="program-zoom" role="group" aria-label="프로그램 화면 배율">
@@ -131,7 +132,7 @@
             <button type="button" data-program-zoom="in" aria-label="화면 확대">+</button>
           </div>
           <div class="program-launch-status" role="status">프로그램을 불러오는 중입니다.</div>
-          <div class="program-frame-viewport"><iframe class="program-frame" src="${entry}" title="${escapeHtml(item.name)}" allow="${escapeHtml(item.permissions || 'fullscreen')}" allowfullscreen></iframe></div>
+          <div class="program-frame-viewport"><div class="program-frame-stage"><iframe class="program-frame" src="${entry}" title="${escapeHtml(item.name)}" allow="${escapeHtml(item.permissions || 'fullscreen')}" allowfullscreen></iframe></div></div>
         </div>`;
         const frame = workspace.querySelector('.program-frame');
         const notice = workspace.querySelector('.program-launch-status');
@@ -163,17 +164,32 @@
         const zoomOut = workspace.querySelector('[data-program-zoom="out"]');
         const zoomIn = workspace.querySelector('[data-program-zoom="in"]');
         const viewport = workspace.querySelector('.program-frame-viewport');
+        const stage = workspace.querySelector('.program-frame-stage');
         function fitProgram() {
-          const fit = Math.min(1, viewport.clientWidth / 1012, viewport.clientHeight / 692);
-          frame.style.setProperty('--program-scale', String(fit * (Math.round(zoom * 10) / 10)));
+          // Measure the outer viewport so scrollbars cannot change the fit at 200%.
+          const fit = Math.min(viewport.offsetWidth / 1012, viewport.offsetHeight / 692);
+          const scale = fit * (Math.round(zoom * 10) / 10);
+          stage.style.width = `${1012 * scale}px`;
+          stage.style.height = `${692 * scale}px`;
+          frame.style.setProperty('--program-scale', String(scale));
         }
         function enforceTransparentEmbed() {
           try {
             const frameDocument = frame.contentDocument;
             if (!frameDocument || frameDocument.querySelector('#kinder-program-transparent-embed')) return;
+            frameDocument.documentElement.classList.add('is-embedded');
             const style = frameDocument.createElement('style');
             style.id = 'kinder-program-transparent-embed';
-            style.textContent = 'html,body,#root{background:transparent!important;}';
+            const shell = {
+              'photo-twinsweep': '#root,.page-shell,.app-shell',
+              'hangeul-fontory': '.workspace,.program-frame,.program-canvas',
+              'image-crop-manager': 'body>.app',
+              'photo-date-organizer': 'body>.app-shell'
+            }[id];
+            style.textContent = 'html,body{width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important;background:transparent!important;}'
+              + (shell ? `${shell}{box-sizing:border-box!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;margin:0!important;}` : '')
+              + (id === 'photo-twinsweep' ? '.page-shell{padding:0!important;gap:0!important;}.page-footnote{display:none!important;}' : '')
+              + (id === 'hangeul-fontory' ? '.program-frame{padding:0!important;}' : '');
             (frameDocument.head || frameDocument.documentElement).appendChild(style);
           } catch (_) {}
         }
@@ -185,7 +201,8 @@
           output.textContent = output.value;
           zoomOut.disabled = rounded <= zoomMin;
           zoomIn.disabled = rounded >= zoomMax;
-          try { localStorage.setItem(`kinder-program-zoom:${id}`, String(rounded)); } catch (_) {}
+          workspaceZoom = rounded;
+          try { localStorage.setItem('kinder-program-workspace-zoom', String(rounded)); } catch (_) {}
         }
         zoomOut.addEventListener('click', () => { zoom = Math.max(zoomMin, zoom - zoomStep); applyZoom(); });
         zoomIn.addEventListener('click', () => { zoom = Math.min(zoomMax, zoom + zoomStep); applyZoom(); });
