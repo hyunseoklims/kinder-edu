@@ -4,13 +4,7 @@ window.initMakingHub = async function () {
   const $ = s => document.querySelector(s);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const uid = () => crypto.randomUUID();
-  // Add only independently deployed, reviewed tools here. Never infer an origin.
-  const tools = [
-    {id:'name-tag', name:'이름표 만들기', icon:'▤', description:'우리 반 이름을 담은 이름표'},
-    {id:'birthday-card', name:'생일 카드', icon:'✧', description:'아이의 특별한 날을 위한 카드'},
-    {id:'worksheet', name:'활동지 만들기', icon:'▧', description:'수업에 맞춰 만드는 활동 자료'}
-  ];
-  let db, state = {classes:[], activeId:null, updatedAt:null, backedUpAt:null}, selected = new Set(), activeTool = null;
+  let db, state = {classes:[], activeId:null, updatedAt:null, backedUpAt:null}, selected = new Set();
   let draft = null, dirty = false, busy = false, timer;
   const dialog = $('#making-manager');
   const activeClass = () => state.classes.find(c => c.id === state.activeId);
@@ -67,16 +61,8 @@ window.initMakingHub = async function () {
       <div class="making-backup"><div class="making-actions">${btn('export','백업 내보내기')}${btn('import','백업 가져오기')}</div><p>${state.updatedAt && (!state.backedUpAt || state.updatedAt > state.backedUpAt) ? '백업하지 않은 변경 사항이 있어요.' : state.backedUpAt ? '마지막 백업: '+esc(new Date(state.backedUpAt).toLocaleString('ko-KR')) : '학급 정보와 사진을 파일로 보관할 수 있어요.'}<br>사이트 데이터 삭제 전에는 꼭 백업해주세요.</p></div>`;
   }
   function renderWorkspace() {
-    const tool = tools.find(t=>t.id===activeTool);
-    $('#making-tools').innerHTML = tools.map(t=>`<button class="making-tool ${t.id===activeTool?'is-active':''}" data-tool="${t.id}" type="button" aria-pressed="${t.id===activeTool}"><span class="making-tool-icon">${t.icon}</span><span><b>${t.name}</b><small>${t.url?'실행 가능':'연결 준비 중'}</small></span></button>`).join('');
     const workspace = $('#making-workspace');
-    if (tool?.url) {
-      const url = new URL(tool.url);
-      if (url.protocol !== 'https:') throw new Error('프로그램 주소는 HTTPS여야 합니다.');
-      workspace.innerHTML = `<div class="making-runbar">${btn('send','선택한 학급원 전달','primary')}</div><iframe class="making-frame" title="${esc(tool.name)}" src="${esc(url.href)}" sandbox="allow-scripts allow-same-origin allow-downloads allow-modals" referrerpolicy="no-referrer"></iframe>`;
-      return;
-    }
-    workspace.innerHTML = `<div class="making-welcome"><div class="making-welcome-icon">${tool?tool.icon:'✂'}</div><span class="making-eyebrow">${tool?'COMING SOON':'OUR CLASS, OUR CREATION'}</span><h2>${tool?esc(tool.name):'우리 반의 이야기를<br>만들어보세요'}</h2><p>${tool?esc(tool.description)+'<br>독립 만들기 프로그램을 연결할 준비를 하고 있어요.':'학급을 등록하고 아이들의 이름과 사진을 모아두세요.<br>만들기 도구에서 우리 반 자료를 활용할 수 있어요.'}</p><div class="making-steps"><span>01 학급 등록</span><span>02 학급원 선택</span><span>03 만들기 시작</span></div>${btn(activeClass()?'edit':'new',activeClass()?'우리 반 관리하기':'첫 학급 만들기','primary')}<p class="making-help">학급 정보와 사진은 서버로 업로드하지 않습니다.</p></div>`;
+    workspace.innerHTML = `<div class="making-welcome"><div class="making-welcome-icon">✂</div><span class="making-eyebrow">OUR CLASS, OUR CREATION</span><h2>우리 반의 이야기를<br>만들어보세요</h2><p>학급을 등록하고 아이들의 이름과 사진을 모아두세요.<br>만들기 도구에서 우리 반 자료를 활용할 수 있어요.</p><div class="making-steps"><span>01 학급 등록</span><span>02 학급원 선택</span><span>03 만들기 시작</span></div>${btn(activeClass()?'edit':'new',activeClass()?'우리 반 관리하기':'첫 학급 만들기','primary')}<p class="making-help">학급 정보와 사진은 서버로 업로드하지 않습니다.</p></div>`;
   }
   function readDraft() {
     if (!draft) return;
@@ -154,13 +140,6 @@ window.initMakingHub = async function () {
     if (name==='select-all') { const c=activeClass(); selected=selected.size===c.children.length ? new Set() : new Set(c.children.map(ch=>ch.id));renderSidebar(); }
     if (name==='export') await exportBackup();
     if (name==='import') await importBackup();
-    if (name==='send') {
-      const tool=tools.find(t=>t.id===activeTool), c=activeClass();
-      if (!c || !selected.size) throw new Error('전달할 학급원을 먼저 선택해주세요.');
-      const frame=$('.making-frame');
-      frame.contentWindow.postMessage({type:'KINDER_MAKING_CLASS',version:1,classInfo:{className:c.className,year:c.year},children:c.children.filter(ch=>selected.has(ch.id)).map(({id,num,name,image})=>({id,num,name,image}))},new URL(tool.url).origin);
-      notify('선택한 학급원 자료를 프로그램에 전달했습니다.');
-    }
     if (['add','bulk','photo','remove-photo','remove-child'].includes(name)) {
       readDraft();
       if (name==='add') { if (draft.children.length>=200) throw new Error('학급원은 200명까지 등록할 수 있습니다.'); draft.children.push({id:uid(),name:'',birth:'',image:null}); }
@@ -186,7 +165,6 @@ window.initMakingHub = async function () {
     if (target.dataset.action==='close') busy=false;
     try { await action(target.dataset.action,target); } catch(error) {report(error);} finally {busy=false;}
   });
-  $('#making-tools').addEventListener('click',event=>{const tool=event.target.closest('[data-tool]');if(tool){activeTool=tool.dataset.tool;renderWorkspace();}});
   $('#making-classes').addEventListener('change',async event=>{
     if (busy) {renderSidebar();return;}
     if (event.target.matches('[data-child]')) {event.target.checked?selected.add(event.target.dataset.child):selected.delete(event.target.dataset.child);renderSidebar();}
