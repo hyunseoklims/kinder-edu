@@ -7,7 +7,9 @@ window.initMakingHub = async function () {
   let db, state = {classes:[], activeId:null, updatedAt:null, backedUpAt:null}, selected = new Set();
   let draft = null, dirty = false, busy = false, timer;
   // The selected program is session-only. Every page load starts with the guide.
-  let activeProgram = null, faceModulePromise = null, faceMountPromise = null;
+  const programs = {'face-ssok':{name:'얼굴 쏙',entry:'https://face-ssok.vercel.app/?embed=kinder-edu'}};
+  let activeProgram = null, programFrame = null, programReady = false, programDirty = false;
+  let programTimeout, preferredChild = null, programHeight = 692;
   const dialog = $('#making-manager');
   const activeClass = () => state.classes.find(c => c.id === state.activeId);
   const notify = message => { $('#making-notice').textContent = message; $('#making-notice').classList.add('is-visible'); clearTimeout(timer); timer = setTimeout(() => $('#making-notice').classList.remove('is-visible'), 5000); };
@@ -82,55 +84,47 @@ window.initMakingHub = async function () {
       ${c ? `<div class="making-class-summary"><strong>${esc(c.className)}</strong><p>${esc(c.year)}학년도${c.ageGroup?' · '+esc(c.ageGroup):''} · ${c.children.length}명</p></div><div class="making-roster-head"><b>학급원 <span id="making-selected-count">${selected.size}</span>명 선택</b><button type="button" data-action="select-all">${selected.size===c.children.length && c.children.length?'선택 해제':'전체 선택'}</button></div><div class="making-roster">${c.children.length ? c.children.map(child => `<label class="making-child"> <input type="checkbox" data-child="${esc(child.id)}" ${selected.has(child.id)?'checked':''}>${avatar(child)}<b>${esc(child.name)}</b><small>${child.num}번</small></label>`).join('') : '<p class="making-empty">학급 관리에서 이름과 사진을<br>등록해주세요.</p>'}</div>` : '<p class="making-empty">학급을 만들고<br>아이들의 이름을 등록해보세요.<br>사진은 나중에 추가해도 괜찮아요.</p>'}
       <div class="making-backup"><div class="making-actions">${btn('export','백업 내보내기')}${btn('import','백업 가져오기')}</div><p>${state.updatedAt && (!state.backedUpAt || state.updatedAt > state.backedUpAt) ? '백업하지 않은 변경 사항이 있어요.' : state.backedUpAt ? '마지막 백업: '+esc(new Date(state.backedUpAt).toLocaleString('ko-KR')) : '학급 정보와 사진을 파일로 보관할 수 있어요.'}<br>사이트 데이터 삭제 전에는 꼭 백업해주세요.</p></div>`;
   }
-  function getProgramSnapshot() {
+  function sendProgramClass(force = false) {
+    if(!programFrame || (!programReady && !force)) return;
     const c = activeClass();
-    return {
-      activeId: c?.id || null,
-      classes: c ? [{id:c.id,year:c.year,className:c.className,children:c.children.filter(child=>selected.has(child.id)).map(({id,num,name,image})=>({id,num,name,image}))}] : [],
-      selectedIds:[...selected]
-    };
+    programFrame.contentWindow.postMessage({
+      type:'KINDER_MAKING_CLASS',version:1,toolId:activeProgram,
+      classInfo:c?{year:c.year,className:c.className}:{year:'',className:''},
+      children:c?c.children.filter(child=>selected.has(child.id)).map(({id,num,name,image})=>({id,num,name,image})):[],
+      sentAt:new Date().toISOString()
+    },new URL(programs[activeProgram].entry).origin);
   }
-  async function loadFaceSsok() {
-    if (!faceModulePromise) {
-      faceModulePromise = (async () => {
-        if (!document.querySelector('#making-face-ssok-style')) {
-          await new Promise((resolve,reject) => {
-            const link = document.createElement('link');
-            link.id='making-face-ssok-style'; link.rel='stylesheet';
-            link.href='./making/face-ssok/style.css?v=20261015-cutout-v2';
-            link.onload=resolve;
-            link.onerror=()=>{link.remove();reject(new Error('얼굴 쏙 스타일을 불러오지 못했습니다.'));};
-            document.head.append(link);
-          });
-        }
-        if (!window.FaceSsok) await import('./making/face-ssok/app.js?v=20261015-cutout-v2');
-        if (!window.FaceSsok?.mount) throw new Error('얼굴 쏙을 불러오지 못했습니다.');
-      })().catch(error=>{faceModulePromise=null;throw error;});
-    }
-    await faceModulePromise;
+  function closeProgram() {
+    clearTimeout(programTimeout);
+    programFrame?.remove();programFrame=null;programReady=false;programDirty=false;preferredChild=null;programHeight=692;
+    const stage=$('#making-tool-stage');if(stage)stage.style.height='';
   }
-  async function showFaceSsok(preferredChildId) {
-    const stage = $('#making-tool-stage');
-    if (!stage.querySelector('.fs-app') && !faceMountPromise) {
-      stage.innerHTML='<div class="making-tool-status" role="status"><h2>얼굴 쏙을 열고 있어요</h2><p>잠시만 기다려주세요.</p></div>';
-      faceMountPromise=(async()=>{
-        await loadFaceSsok();
-        if(activeProgram!=='face-ssok') return;
-        await window.FaceSsok.mount(stage,{getSnapshot:getProgramSnapshot,openManager:(isNew=false)=>openManager(isNew||!activeClass())});
-      })();
-      try { await faceMountPromise; } finally { faceMountPromise=null; }
-    } else if (faceMountPromise) {
-      await faceMountPromise;
-    }
-    if (activeProgram==='face-ssok' && stage.querySelector('.fs-app')) {
-      await window.FaceSsok.update(getProgramSnapshot());
-      if(preferredChildId && selected.has(preferredChildId)) await window.FaceSsok.selectPerson(preferredChildId);
-    }
+  function fitProgram() {
+    const stage=$('#making-tool-stage');if(stage)stage.style.height=activeProgram&&window.matchMedia('(max-width:1200px)').matches?`${programHeight}px`:'';
+  }
+  function programFailed() {
+    if(!activeProgram)return;
+    const name=programs[activeProgram].name;
+    closeProgram();
+    $('#making-tool-stage').innerHTML=`<div class="making-tool-status" role="alert"><h2>${esc(name)}을 열지 못했어요</h2><p>프로그램 연결을 확인한 뒤 다시 실행해주세요.</p>${btn('retry-program','다시 실행','primary')}</div>`;
+  }
+  function openProgram() {
+    const stage=$('#making-tool-stage'), tool=programs[activeProgram];
+    stage.innerHTML=`<div class="making-tool-status making-program-loading" role="status"><h2>${esc(tool.name)}을 열고 있어요</h2><p>잠시만 기다려주세요.</p></div>`;
+    const frame=document.createElement('iframe');
+    frame.className='making-program-frame';frame.title=tool.name;frame.referrerPolicy='origin';
+    frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-downloads allow-popups allow-popups-to-escape-sandbox allow-modals');
+    frame.src=tool.entry;
+    programFrame=frame;
+    frame.onload=()=>{if(programFrame===frame)sendProgramClass(true);};
+    frame.onerror=()=>{if(programFrame===frame)programFailed();};
+    stage.append(frame);fitProgram();
+    programTimeout=setTimeout(()=>{if(programFrame===frame&&!programReady)programFailed();},30000);
   }
   function renderWorkspace(preferredChildId = null) {
     const workspace = $('#making-workspace');
     if (!$('#making-tool-stage')) {
-      workspace.innerHTML = '<div class="making-welcome"><div class="making-welcome-icon"><img src="./assets/making/icons/program-select.svg" alt="" width="64" height="64"></div><span class="making-eyebrow">LET’S CREATE</span><h2>만들기를 시작해보세요</h2><div class="making-guide"><section><img src="./assets/making/icons/program-select.svg" alt="" width="48" height="48"><h3>좌측에서 프로그램 선택</h3><p>사용할 만들기 프로그램을 골라주세요.</p></section><section><img src="./assets/making/icons/class-manage.svg" alt="" width="48" height="48"><h3>우측에서 학급 입력</h3><p>학급과 아이들의 이름·사진을 등록해주세요.</p></section></div><p class="making-help">선택한 프로그램은 이 창에서 열립니다.<br>학급 정보와 사진은 이 브라우저에서 관리됩니다.</p></div><div class="making-workspace making-tool-stage" id="making-tool-stage" hidden></div>';
+      workspace.innerHTML = '<div class="making-welcome"><div class="making-welcome-icon"><img src="./assets/making/icons/program-select.svg" alt="" width="64" height="64"></div><span class="making-eyebrow">LET’S CREATE</span><h2>만들기를 시작해보세요</h2><div class="making-guide"><section><img src="./assets/making/icons/program-select.svg" alt="" width="48" height="48"><h3>좌측에서 프로그램 선택</h3><p>사용할 만들기 프로그램을 골라주세요.</p></section><section><img src="./assets/making/icons/class-manage.svg" alt="" width="48" height="48"><h3>우측에서 학급 입력</h3><p>학급과 아이들의 이름·사진을 등록해주세요.</p></section></div><p class="making-help">선택한 프로그램은 이 창에서 열립니다.<br>학급 정보와 사진은 이 브라우저에서 관리됩니다.</p></div><div class="making-tool-stage" id="making-tool-stage" hidden></div>';
     }
     const isGuide = !activeProgram;
     workspace.querySelector('.making-welcome').hidden=isGuide===false;
@@ -142,11 +136,10 @@ window.initMakingHub = async function () {
       const isActive=button.dataset.makingProgram===activeProgram;
       button.classList.toggle('is-active',isActive);button.setAttribute('aria-pressed',String(isActive));
     });
-    if(activeProgram==='face-ssok') showFaceSsok(preferredChildId).catch(()=>{
-      if(activeProgram!=='face-ssok') return;
-      if($('#making-tool-stage').querySelector('.fs-app')) {notify('얼굴 쏙의 학급 자료를 반영하지 못했습니다. 시작 안내로 돌아간 뒤 다시 선택해주세요.');return;}
-      $('#making-tool-stage').innerHTML=`<div class="making-tool-status" role="alert"><h2>얼굴 쏙을 열지 못했어요</h2><p>프로그램 연결을 확인한 뒤 다시 실행해주세요.</p>${btn('retry-program','다시 실행','primary')}</div>`;
-    });
+    if(activeProgram){
+      preferredChild=preferredChildId;
+      if(!programFrame)openProgram();else sendProgramClass();
+    }
   }
   function readDraft() {
     if (!draft) return;
@@ -251,10 +244,29 @@ window.initMakingHub = async function () {
     try { await action(target.dataset.action,target); } catch(error) {report(error);} finally {busy=false;}
   });
   $('.making-nav').addEventListener('click',event=>{
-    if(event.target.closest('[data-making-home]')) {activeProgram=null;renderWorkspace();return;}
+    if(event.target.closest('[data-making-home]')) {
+      if(programDirty&&!confirm('얼굴 쏙을 닫으면 현재 창의 편집 내용이 사라집니다. 시작 안내로 돌아갈까요?'))return;
+      closeProgram();activeProgram=null;renderWorkspace();return;
+    }
     const button=event.target.closest('[data-making-program]');
     if(button?.dataset.makingProgram==='face-ssok') {activeProgram='face-ssok';renderWorkspace();}
   });
+  window.addEventListener('message',event=>{
+    if(!programFrame||event.source!==programFrame.contentWindow||event.origin!==new URL(programs[activeProgram].entry).origin)return;
+    const data=event.data;
+    if(!data||data.version!==1||data.toolId!==activeProgram)return;
+    if(data.type==='KINDER_MAKING_READY'){
+      programReady=true;clearTimeout(programTimeout);
+      $('#making-tool-stage .making-program-loading')?.remove();
+      programFrame.classList.add('is-ready');sendProgramClass();
+    }
+    if(data.type==='KINDER_MAKING_APPLIED'&&preferredChild&&selected.has(preferredChild)){
+      programFrame.contentWindow.postMessage({type:'KINDER_MAKING_SELECT',version:1,toolId:activeProgram,childId:preferredChild},event.origin);preferredChild=null;
+    }
+    if(data.type==='KINDER_MAKING_DIRTY'&&typeof data.dirty==='boolean')programDirty=data.dirty;
+    if(data.type==='KINDER_MAKING_HEIGHT'&&Number.isFinite(data.height)) {programHeight=Math.max(692,Math.min(2000,Math.ceil(data.height)));fitProgram();}
+  });
+  window.addEventListener('resize',fitProgram);
   $('#making-classes').addEventListener('change',async event=>{
     if (busy) {renderSidebar();return;}
     if (event.target.matches('[data-child]')) {const id=event.target.dataset.child;event.target.checked?selected.add(id):selected.delete(id);renderSidebar();renderWorkspace(selected.has(id)?id:null);}
@@ -269,7 +281,7 @@ window.initMakingHub = async function () {
     event.preventDefault();if(busy)return;busy=true;
     try {readDraft();const clean=normalizeClasses([draft])[0]; const classes=state.classes.filter(c=>c.id!==clean.id);classes.push(clean);await persist({...state,classes,activeId:clean.id});selected=new Set([...selected].filter(id=>clean.children.some(ch=>ch.id===id)));dirty=false;dialog.close();draft=null;renderSidebar();renderWorkspace();notify('학급 정보와 사진을 이 브라우저에 저장했습니다.');} catch(error){report(error);} finally {busy=false;}
   });
-  window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
+  window.addEventListener('beforeunload',event=>{if(dirty||programDirty){event.preventDefault();event.returnValue='';}});
   try {
     db=await openDB();
     const saved=await readState();
