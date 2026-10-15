@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="예시 학급원 6 아바타">
+<rect width="512" height="512" rx="100" fill="#E4F2F0"/>
+<circle cx="255" cy="252" r="192" fill="#FFFFFF" opacity=".37"/>
+<path d="M133 244Q96 113 206 88Q331 47 381 173L374 249Z" fill="#392D2A"/>
+<path d="M95 512L103 433Q113 361 207 349H303Q394 359 411 435L420 512Z" fill="#78AAA0"/>
+<path d="M217 328H295V374Q254 414 217 374Z" fill="#F2CCAE"/>
+<path d="M209 354L255 390L227 414L187 370Z M302 354L255 390L283 414L322 371Z" fill="#FFFDF7"/>
+<ellipse cx="145" cy="245" rx="23" ry="30" fill="#F2CCAE"/><ellipse cx="366" cy="245" rx="23" ry="30" fill="#F2CCAE"/>
+<path d="M144 205Q140 133 253 124Q372 130 368 214L361 275Q344 351 255 358Q172 349 151 279Z" fill="#F2CCAE"/>
+<path d="M143 196Q155 99 258 105Q361 103 370 203Q302 194 255 142Q206 197 143 196Z" fill="#392D2A"/>
+<path d="M185 223Q202 216 219 223 M291 223Q308 216 324 223" fill="none" stroke="#392D2A" stroke-width="7" stroke-linecap="round"/>
+<ellipse cx="203" cy="244" rx="9" ry="12" fill="#493932"/><ellipse cx="307" cy="244" rx="9" ry="12" fill="#493932"/>
+<circle cx="206" cy="240" r="3" fill="#FFFFFF"/><circle cx="310" cy="240" r="3" fill="#FFFFFF"/>
+<ellipse cx="182" cy="274" rx="19" ry="10" fill="#DD9B8C" opacity=".48"/><ellipse cx="330" cy="274" rx="19" ry="10" fill="#DD9B8C" opacity=".48"/>
+<path d="M250 250L246 270H258" fill="none" stroke="#C99479" stroke-width="4" stroke-linecap="round"/>
+<path d="M228 292Q255 317 282 292" fill="none" stroke="#995B52" stroke-width="6" stroke-linecap="round"/>
+<circle cx="255" cy="441" r="6" fill="#FFFDF7"/><circle cx="255" cy="474" r="6" fill="#FFFDF7"/>
+</svg>
