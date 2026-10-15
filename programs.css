@@ -1,0 +1,88 @@
+/* Program sidebar only: shared section styles stay unchanged. */
+[data-section="programs"] .program-nav { padding: 20px 14px; }
+[data-section="programs"] .program-nav h1 { font-size: 24px; }
+[data-section="programs"] .program-list { gap: 8px; margin-top: 20px; }
+[data-section="programs"] .program-item { gap: 10px; padding: 10px 8px; min-height: 72px; }
+[data-section="programs"] .program-item::before { display: none; }
+.program-item__icon { width: 48px; height: 48px; flex: 0 0 48px; }
+.program-item__copy { min-width: 0; display: grid; gap: 5px; }
+.program-item__name { font-size: 12px; font-weight: 750; line-height: 1.5; word-break: keep-all; }
+.program-item__state { font-size: 10px; color: #7e7872; }
+[data-section="programs"] .program-item:focus-visible { outline: 2px solid #82b0ce; outline-offset: 2px; }
+.program-item[aria-disabled="true"] { opacity: .55; cursor: default; }
+.program-context__icon { width: 100px; height: 100px; }
+.program-launch-status { position: absolute; z-index: 2; bottom: 10px; left: 10px; right: 10px; width: fit-content; max-width: calc(100% - 20px); padding: 8px 12px; background: #fffaf7; border: 1px solid #e8ddd5; border-radius: 10px; color: #4c718c; font-size: 12px; }
+.program-launch-status[hidden] { display: none; }
+[data-section="programs"] .program-frame-viewport { top: 44px; }
+[data-section="programs"] .program-frame {
+  width: 1012px;
+  height: 692px;
+  transform: translate(-50%, -50%) scale(var(--program-scale, 1));
+}
+[data-section="programs"] .program-zoom { top: 3px; right: 8px; box-shadow: none; }
+.program-retry { margin-left: 10px; color: #4c718c; background: #edf4f8; padding: 6px 10px; border-radius: 6px; }
+@media (max-width: 1200px) {
+  [data-section="programs"] .program-list { grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 12px; }
+  [data-section="programs"] .program-nav { padding: 14px; }
+}
+@media (min-width: 901px) and (max-width: 1200px) {
+  [data-section="programs"] .program-nav { padding: 12px 8px; }
+  [data-section="programs"] .program-nav h1 { font-size: 20px; }
+  [data-section="programs"] .program-item { gap: 6px; min-height: 60px; padding: 6px; }
+  [data-section="programs"] .program-list { gap: 4px; }
+  [data-section="programs"] .program-item__icon { width: 34px; height: 34px; flex-basis: 34px; }
+  [data-section="programs"] .program-item__name { font-size: 11px; }
+  [data-section="programs"] .program-item__state { font-size: 9px; }
+  [data-section="programs"] .program-context__art { height: 120px; margin: 14px 0; }
+  [data-section="programs"] .program-context p { font-size: 12px; }
+}
+@media (max-width: 600px) {
+  [data-section="programs"] .program-list { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .program-item__icon { width: 40px; height: 40px; flex-basis: 40px; }
+}
+/* Keep the desktop workspace centered in compact desktop and portrait windows. */
+@media (min-width: 901px) {
+  body[data-section="programs"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    padding: 16px 20px;
+  }
+  [data-section="programs"] .section-app {
+    width: min(100%, calc((100dvh - 32px) * 1600 / 870));
+    min-height: 0;
+    aspect-ratio: 1600 / 870;
+    grid-template-rows: 70fr 692fr 60fr;
+    padding: 12px;
+    gap: 12px;
+    border-radius: var(--app-radius);
+    overflow: hidden;
+    margin: auto;
+  }
+  [data-section="programs"] .programs-layout {
+    grid-template-columns: minmax(0, 220fr) minmax(0, 1012fr) minmax(0, 320fr);
+    grid-template-rows: minmax(0, 1fr);
+    height: auto;
+  }
+  [data-section="programs"] .program-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  [data-section="programs"] .global-nav {
+    position: static;
+    border-radius: var(--panel-radius);
+    overflow: hidden;
+  }
+  [data-section="programs"] .global-nav__brand { display: block; width: 140px; }
+  [data-section="programs"] .global-nav__link { min-width: 0; padding: 0 10px; }
+  [data-section="programs"] .program-context { padding: 18px; }
+  [data-section="programs"] .program-context h2 { font-size: 20px; }
+  [data-section="programs"] .utility-footer {
+    height: 100%;
+    min-height: 0;
+    border-radius: var(--panel-radius);
+    padding: 0 14px;
+    font-size: 10px;
+  }
+}

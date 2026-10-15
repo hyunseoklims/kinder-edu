@@ -96,15 +96,31 @@
     const zoomMax = 1.5;
     const zoomStep = 0.1;
     let activeId = null;
+    let launchSequence = 0;
+    let frameObserver = null;
+    const isLocal = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+    const entryFor = item => (isLocal && item.localEntry) || item.entry;
+    const stateFor = item => entryFor(item) ? '클릭하여 실행' : item.localEntry ? '배포 준비 중' : '준비 중';
     list.className = 'program-list';
-    list.innerHTML = data.programs.map(item => `<button class="program-item" type="button" data-program="${item.id}">${escapeHtml(item.name)}</button>`).join('');
-    function showContext(id) { const item = data.programs.find(entry => entry.id === id); context.innerHTML = `<p class="panel-kicker">CONTEXT</p><h2>${escapeHtml(item.name)}</h2><div class="program-context__art" aria-hidden="true"><span>${item.entry ? 'READY' : 'PROGRAM'}</span></div><p>${escapeHtml(item.summary)}</p><p class="meta">${escapeHtml(item.status)}</p>`; }
+    list.innerHTML = data.programs.map(item => `<button class="program-item" type="button" data-program="${escapeHtml(item.id)}" aria-label="${escapeHtml(item.name)} ${stateFor(item)}" aria-pressed="false" aria-disabled="${!entryFor(item)}"><img class="program-item__icon" src="${escapeHtml(item.icon)}" alt=""><span class="program-item__copy"><span class="program-item__name">${escapeHtml(item.name)}</span><span class="program-item__state">${stateFor(item)}</span></span></button>`).join('');
+    function showContext(id) {
+      const item = data.programs.find(entry => entry.id === id);
+      if (!item) return;
+      context.innerHTML = `<p class="panel-kicker">PROGRAM</p><h2>${escapeHtml(item.name)}</h2><div class="program-context__art" aria-hidden="true"><img class="program-context__icon" src="${escapeHtml(item.icon)}" alt=""></div><p>${escapeHtml(item.summary)}</p><p class="meta">${escapeHtml(entryFor(item) ? '아이콘을 누르면 중앙 작업 공간에서 실행됩니다.' : item.status)}</p>`;
+    }
     function showWorkspace(id) {
       const item = data.programs.find(entry => entry.id === id);
+      if (!item || !entryFor(item)) return;
+      frameObserver?.disconnect();
       activeId = id;
-      list.querySelectorAll('.program-item').forEach(button => button.classList.toggle('is-active', button.dataset.program === id));
-      if (item.entry) {
-        const entry = encodeURI(item.entry);
+      const sequence = ++launchSequence;
+      list.querySelectorAll('.program-item').forEach(button => {
+        const selected = button.dataset.program === id;
+        button.classList.toggle('is-active', selected);
+        button.setAttribute('aria-pressed', String(selected));
+      });
+      if (entryFor(item)) {
+        const entry = encodeURI(entryFor(item));
         let zoom = 1;
         try { zoom = Number(localStorage.getItem(`kinder-program-zoom:${id}`)) || 1; } catch (_) {}
         zoom = Math.min(zoomMax, Math.max(zoomMin, zoom));
@@ -114,12 +130,43 @@
             <output aria-live="polite">100%</output>
             <button type="button" data-program-zoom="in" aria-label="화면 확대">+</button>
           </div>
+          <div class="program-launch-status" role="status">프로그램을 불러오는 중입니다.</div>
           <div class="program-frame-viewport"><iframe class="program-frame" src="${entry}" title="${escapeHtml(item.name)}" allow="${escapeHtml(item.permissions || 'fullscreen')}" allowfullscreen></iframe></div>
         </div>`;
         const frame = workspace.querySelector('.program-frame');
+        const notice = workspace.querySelector('.program-launch-status');
+        let failed = false;
+        const retry = () => {
+          failed = true;
+          if (sequence !== launchSequence) return;
+          notice.hidden = false;
+          notice.textContent = '프로그램을 불러오지 못했습니다. 연결 상태를 확인해 주세요.';
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'program-retry';
+          button.textContent = '다시 실행';
+          button.addEventListener('click', () => showWorkspace(id));
+          notice.appendChild(button);
+        };
+        const timeout = window.setTimeout(retry, 20000);
+        frame.addEventListener('load', () => {
+          window.clearTimeout(timeout);
+          if (sequence === launchSequence && !failed) notice.hidden = true;
+        });
+        frame.addEventListener('error', () => { window.clearTimeout(timeout); retry(); });
+        if (new URL(entry, location.href).origin === location.origin) {
+          fetch(entry, { method: 'HEAD' }).then(response => {
+            if (!response.ok) { window.clearTimeout(timeout); retry(); }
+          }).catch(() => { window.clearTimeout(timeout); retry(); });
+        }
         const output = workspace.querySelector('.program-zoom output');
         const zoomOut = workspace.querySelector('[data-program-zoom="out"]');
         const zoomIn = workspace.querySelector('[data-program-zoom="in"]');
+        const viewport = workspace.querySelector('.program-frame-viewport');
+        function fitProgram() {
+          const fit = Math.min(1, viewport.clientWidth / 1012, viewport.clientHeight / 692);
+          frame.style.setProperty('--program-scale', String(fit * (Math.round(zoom * 10) / 10)));
+        }
         function enforceTransparentEmbed() {
           try {
             const frameDocument = frame.contentDocument;
@@ -133,6 +180,7 @@
         function applyZoom() {
           const rounded = Math.round(zoom * 10) / 10;
           frame.style.setProperty('--program-zoom', String(rounded));
+          fitProgram();
           output.value = `${Math.round(rounded * 100)}%`;
           output.textContent = output.value;
           zoomOut.disabled = rounded <= zoomMin;
@@ -142,6 +190,8 @@
         zoomOut.addEventListener('click', () => { zoom = Math.max(zoomMin, zoom - zoomStep); applyZoom(); });
         zoomIn.addEventListener('click', () => { zoom = Math.min(zoomMax, zoom + zoomStep); applyZoom(); });
         frame.addEventListener('load', enforceTransparentEmbed);
+        frameObserver = new ResizeObserver(fitProgram);
+        frameObserver.observe(viewport);
         applyZoom();
         return;
       }
@@ -151,7 +201,7 @@
     list.addEventListener('focusin', event => { const button = event.target.closest('[data-program]'); if (button) showContext(button.dataset.program); });
     list.addEventListener('pointerleave', () => showContext(activeId || data.programs[0].id));
     list.addEventListener('click', event => { const button = event.target.closest('[data-program]'); if (button) { showWorkspace(button.dataset.program); showContext(button.dataset.program); } });
-    workspace.innerHTML = `<div class="workspace-empty"><div><p class="panel-kicker">WORKSPACE</p><h2>프로그램을 선택해 실행하세요</h2><p class="meta">Hover는 우측 설명만 바꾸고 Click이 중앙 프로그램을 실행합니다.</p></div></div>`;
+    workspace.innerHTML = `<div class="workspace-empty"><div><p class="panel-kicker">WORKSPACE</p><h2>프로그램을 선택해 실행하세요</h2><p class="meta">왼쪽 아이콘을 누르면 이곳에서 프로그램이 열립니다.</p></div></div>`;
     showContext(data.programs[0].id);
   }
 

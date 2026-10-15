@@ -12,6 +12,30 @@
     {
       "source": "/programs/photo-twinsweep/:path*",
       "destination": "https://photo-twinsweep.vercel.app/:path*"
+    },
+    {
+      "source": "/programs/hangeul-fontory",
+      "destination": "https://hangeul-fontory.vercel.app/"
+    },
+    {
+      "source": "/programs/hangeul-fontory/",
+      "destination": "https://hangeul-fontory.vercel.app/"
+    },
+    {
+      "source": "/programs/hangeul-fontory/:path*",
+      "destination": "https://hangeul-fontory.vercel.app/:path*"
+    },
+    {
+      "source": "/programs/photo-date-organizer",
+      "destination": "https://photo-date-organizer.vercel.app/"
+    },
+    {
+      "source": "/programs/photo-date-organizer/",
+      "destination": "https://photo-date-organizer.vercel.app/"
+    },
+    {
+      "source": "/programs/photo-date-organizer/:path*",
+      "destination": "https://photo-date-organizer.vercel.app/:path*"
     }
   ]
 }

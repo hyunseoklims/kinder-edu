@@ -26,16 +26,66 @@
     },
     programs: [
       {
-        id: 'photo-twinsweep',
-        name: '포토 트윈 스윕',
-        summary: '로컬 폴더에서 내용이 완전히 같은 중복 사진을 찾아 선택적으로 정리하는 프로그램',
-        status: '사용 가능 · 사진은 서버에 업로드되지 않습니다.',
-        entry: './programs/photo-twinsweep/index.html',
-        permissions: 'fullscreen'
+            "id": "photo-twinsweep",
+            "name": "포토 트윈 스윕",
+            "summary": "겹친 사진을 비교해 중복 사진을 정리해요.",
+            "icon": "./assets/program-icons/photo-twinsweep.svg",
+            "status": "사용 가능",
+            "permissions": "fullscreen",
+            "entry": "./programs/photo-twinsweep/index.html",
+            "localEntry": "./programs/photo-twinsweep/index.html"
       },
-      { id: 'font-tools', name: '한글 제작 도구', summary: '한글 결과물을 만드는 프로그램 연결 슬롯', status: '프로그램 연결 준비 중' },
-      { id: 'play-tools', name: '놀이 기록 도구', summary: '놀이 기록 프로그램 연결 슬롯', status: '프로그램 연결 준비 중' }
-    ],
+      {
+            "id": "hangeul-fontory",
+            "name": "한글 제작 도구",
+            "summary": "기본 자소를 직접 쓰고 손글씨 작업을 모아요.",
+            "icon": "./assets/program-icons/hangeul-fontory.svg",
+            "status": "사용 가능",
+            "permissions": "fullscreen",
+            "entry": "./programs/hangeul-fontory/index.html",
+            "localEntry": "./programs/hangeul-fontory/index.html"
+      },
+      {
+            "id": "image-crop-manager",
+            "name": "이미지 크롭 작업실",
+            "summary": "사진에서 필요한 영역을 골라 PNG로 저장해요.",
+            "icon": "./assets/program-icons/image-crop-manager.svg",
+            "status": "로컬 실행 가능 · 배포 준비 중",
+            "permissions": "fullscreen",
+            "entry": null,
+            "localEntry": "./programs/image-crop-manager/index.html"
+      },
+      {
+            "id": "photo-date-organizer",
+            "name": "사진 날짜 정리",
+            "summary": "촬영 날짜를 기준으로 사진 폴더를 정리해요.",
+            "icon": "./assets/program-icons/photo-date-organizer.svg",
+            "status": "사용 가능",
+            "permissions": "fullscreen",
+            "entry": "./programs/photo-date-organizer/index.html",
+            "localEntry": "./programs/photo-date-organizer/index.html"
+      },
+      {
+            "id": "body-mannequin-designer",
+            "name": "마네킹 디자이너",
+            "summary": "신체 수치와 체형을 조절하고 마네킹을 비교해요.",
+            "icon": "./assets/program-icons/body-mannequin-designer.svg",
+            "status": "사용 가능",
+            "permissions": "fullscreen",
+            "entry": "https://body-mannequin-designer.vercel.app/",
+            "localEntry": "./programs/body-mannequin-designer/"
+      },
+      {
+            "id": "playstory-photo-manager",
+            "name": "놀이 사진 관리",
+            "summary": "놀이 사진을 모아 기록을 준비하는 프로그램이에요.",
+            "icon": "./assets/program-icons/playstory-photo-manager.svg",
+            "status": "준비 중 · 프로그램 소스 연결 필요",
+            "permissions": "fullscreen",
+            "entry": null,
+            "localEntry": null
+      }
+],
     games: [
       {
         id: 'acorn-collector',
