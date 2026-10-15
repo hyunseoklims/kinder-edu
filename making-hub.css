@@ -41,7 +41,7 @@
 .making-classes .making-child{display:flex;align-items:center;gap:9px;padding:8px;border:1px solid #eef0ec;border-radius:10px;font-size:12px;cursor:pointer}
 .making-child input{accent-color:#3e7052}.making-avatar{width:36px;height:36px;border-radius:11px;object-fit:cover;background:#f1f3ef;display:grid;place-items:center;font-size:12px;color:#7a8b7c;flex:none}
 .making-child small{color:var(--text-sub);margin-left:auto;font-size:10px}.making-empty{padding:22px 4px;color:var(--text-sub);font-size:12px;line-height:1.8;text-align:center}
-.making-backup{border-top:1px solid #eeede9;margin-top:20px;padding-top:16px}.making-backup p{font-size:11px;line-height:1.7;color:var(--text-sub)}
+.making-backup{border-top:1px solid #eeede9;margin-top:20px;padding-top:16px}.making-backup p{text-align:center;font-size:11px;line-height:1.7;color:var(--text-sub)}
 #making-manager{width:min(900px,calc(100vw - 32px));max-height:88vh;border:0;border-radius:22px;padding:0;color:var(--text-main);box-shadow:0 24px 80px #0003}
 #making-manager::backdrop{background:#24332a80;backdrop-filter:blur(3px)}
 .making-form{padding:28px}.making-dialog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.making-dialog-header h2{font-size:22px;margin:0}
