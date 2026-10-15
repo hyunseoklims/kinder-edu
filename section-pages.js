@@ -1807,5 +1807,5 @@
     renderFeed();
   }
 
-  ({ magazine: initMagazine, programs: initPrograms, games: initGames, making: initMaking, webtoon: initWebtoon, blog: initBlog }[sectionKey])?.();
+  ({ magazine: initMagazine, programs: initPrograms, games: initGames, making: window.initMakingHub || initMaking, webtoon: initWebtoon, blog: initBlog }[sectionKey])?.();
 })();
