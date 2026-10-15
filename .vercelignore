@@ -1,0 +1,6 @@
+.git/
+.vercel/
+scratch/
+sample/
+making/face-ssok/
+.env*
