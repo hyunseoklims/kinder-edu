@@ -36,24 +36,34 @@ window.initMakingHub = async function () {
     state = next;
   }
   async function addExampleClass() {
-    if (state.exampleClassAdded) return;
+    if (state.exampleClassAdded) {
+      if (state.examplePhotoVersion === 2) return;
+      // Replace only an exact match of an old bundled illustration. User photos stay intact.
+      const replacements = new Map(await Promise.all(Array.from({length:10}, async (_,i) => [await examplePhoto(i,'svg',256), await examplePhoto(i,'webp',396)])));
+      const classes = state.classes.map(c => ({...c, children:c.children.map(child => replacements.has(child.image) ? {...child,image:replacements.get(child.image)} : child)}));
+      await persist({...state,classes,examplePhotoVersion:2});
+      return;
+    }
     if (state.classes.length >= 100) { notify('예시 학급을 추가하려면 보관 중인 학급을 100개 미만으로 정리해주세요.'); return; }
     const names = ['김하준','이서윤','박도윤','최지우','정서아','강예준','윤하린','장시우','임지안','한도현'];
     const children = await Promise.all(names.map(async (name, i) => {
-      const image = new Image();
-      await new Promise((resolve, reject) => {
-        image.onload = resolve;
-        image.onerror = () => reject(new Error('예시 학급원 이미지를 불러오지 못했습니다.'));
-        image.src = `./assets/making/demo-class/child-${String(i + 1).padStart(2,'0')}.svg`;
-      });
-      const canvas = document.createElement('canvas');
-      canvas.width = canvas.height = 256;
-      canvas.getContext('2d').drawImage(image,0,0,256,256);
-      return {id:uid(),num:i+1,name,birth:'',image:canvas.toDataURL('image/webp',.9)};
+      return {id:uid(),num:i+1,name,birth:'',image:await examplePhoto(i,'webp',396)};
     }));
     const example = {id:uid(),year:'2026',className:'햇살반 (예시)',ageGroup:'만 4세',institution:'',teacherName:'',children};
     // Keep every existing class. Mark the seed separately so deletion stays final.
-    await persist({...state,exampleClassAdded:true,classes:[...state.classes,example],activeId:example.id});
+    await persist({...state,exampleClassAdded:true,examplePhotoVersion:2,classes:[...state.classes,example],activeId:example.id});
+  }
+  async function examplePhoto(i,format,size) {
+    const image = new Image();
+    await new Promise((resolve,reject) => {
+      image.onload=resolve;
+      image.onerror=()=>reject(new Error('예시 학급원 이미지를 불러오지 못했습니다.'));
+      image.src=`./assets/making/demo-class/child-${String(i+1).padStart(2,'0')}.${format}`;
+    });
+    const canvas=document.createElement('canvas');
+    canvas.width=canvas.height=size;
+    canvas.getContext('2d').drawImage(image,0,0,size,size);
+    return canvas.toDataURL('image/webp',.9);
   }
   function normalizeClasses(classes) {
     if (!Array.isArray(classes) || classes.length > 100) throw new Error('학급 목록 형식이 올바르지 않습니다.');
