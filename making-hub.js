@@ -74,7 +74,7 @@ window.initMakingHub = async function () {
   }
   function renderSidebar() {
     const c = activeClass();
-    $('#making-classes').innerHTML = `<p class="panel-kicker">MY CLASS</p><h1>우리 반</h1><span class="making-local">● 이 브라우저에만 저장됩니다</span>
+    $('#making-classes').innerHTML = `<p class="panel-kicker">MY CLASS</p><span class="making-local">● 이 브라우저에만 저장됩니다</span>
       <label for="making-class-select">학급 선택</label><select id="making-class-select" ${state.classes.length?'':'disabled'}>${state.classes.length ? state.classes.map(item => `<option value="${esc(item.id)}" ${item.id===state.activeId?'selected':''}>${esc(item.year)}학년도 · ${esc(item.className)}</option>`).join('') : '<option>등록된 학급이 없어요</option>'}</select>
       <div class="making-actions">${btn('new','+ 새 학급')}${c?btn('edit','학급 관리'):''}</div>
       ${c ? `<div class="making-class-summary"><strong>${esc(c.className)}</strong><p>${esc(c.year)}학년도${c.ageGroup?' · '+esc(c.ageGroup):''} · ${c.children.length}명</p></div><div class="making-roster-head"><b>학급원 <span id="making-selected-count">${selected.size}</span>명 선택</b><button type="button" data-action="select-all">${selected.size===c.children.length && c.children.length?'선택 해제':'전체 선택'}</button></div><div class="making-roster">${c.children.length ? c.children.map(child => `<label class="making-child"> <input type="checkbox" data-child="${esc(child.id)}" ${selected.has(child.id)?'checked':''}>${avatar(child)}<b>${esc(child.name)}</b><small>${child.num}번</small></label>`).join('') : '<p class="making-empty">학급 관리에서 이름과 사진을<br>등록해주세요.</p>'}</div>` : '<p class="making-empty">학급을 만들고<br>아이들의 이름을 등록해보세요.<br>사진은 나중에 추가해도 괜찮아요.</p>'}
